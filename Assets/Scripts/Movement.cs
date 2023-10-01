@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    private float maxSpeed = 0.2f;
-    private int accFrames = 9;
-    private int lookFrames = 2;
+    [SerializeField] private float maxSpeed = 0.2f;
+    [SerializeField] private int accFrames = 9;
+    [SerializeField] private int lookFrames = 2;
     private int currFrames;
     private Vector3 velo;
     private Vector3 dir;
