@@ -14,7 +14,6 @@ using UnityEngine;
     {
         data = source;
         AddtoStack();
-
     }
 
     public void AddtoStack()

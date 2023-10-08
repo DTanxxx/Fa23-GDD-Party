@@ -19,6 +19,8 @@ public class LightDirection : MonoBehaviour
     // for Gizmos
     private RaycastHit[] sphereCastHits;
     private float sphereCastHitDistance;
+    private RaycastHit[] inFlashlight;
+
 
     private void Start()
     {
@@ -56,6 +58,8 @@ public class LightDirection : MonoBehaviour
             if (Physics.Raycast(transform.position, (hit.transform.position - transform.position).normalized,
                 out hitInfo, lightComponent.range, ~playerLayer, QueryTriggerInteraction.Ignore))
             {
+                inFlashlight += hitInfo;
+
                 Debug.Log(hitInfo.transform.gameObject.layer);
                 if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
                 {
@@ -77,5 +81,10 @@ public class LightDirection : MonoBehaviour
         Gizmos.color = Color.red;
         Debug.DrawLine(transform.position, transform.position + currDir * sphereCastHitDistance);
         Gizmos.DrawWireSphere(transform.position + currDir * sphereCastHitDistance, sphereCastRadius);
+    }
+
+    public GetInRange()
+    {
+        return inFlashlight;
     }
 }
