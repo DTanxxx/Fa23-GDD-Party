@@ -8,13 +8,13 @@ public class LightDirection : MonoBehaviour
 {
     [SerializeField] private LayerMask weepingAngelLayer;
     [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private GameObject lightContainer;
+    [SerializeField] private PlayerMovement playerMovement;
 
-    private PlayerMovement parentScript;
     private Light lightComponent;
     private Vector3 currDir;
     private float damping = 20.0f;
     private float sphereCastRadius;
-
 
     // for Gizmos
     private RaycastHit[] sphereCastHits;
@@ -24,8 +24,7 @@ public class LightDirection : MonoBehaviour
 
     private void Start()
     {
-        gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
-        parentScript = GetComponentInParent<PlayerMovement>();
+        lightContainer.transform.rotation = Quaternion.Euler(0, 90, 0);
         lightComponent = GetComponent<Light>();
 
         sphereCastRadius = Mathf.Atan(lightComponent.spotAngle / 2.0f * Mathf.Deg2Rad) * lightComponent.range;
@@ -33,9 +32,9 @@ public class LightDirection : MonoBehaviour
 
     private void FixedUpdate()
     {
-        currDir = parentScript.getDir();
+        currDir = playerMovement.getDir();
         Quaternion smoothing = Quaternion.LookRotation(currDir);
-        gameObject.transform.rotation = Quaternion.Lerp(transform.rotation, smoothing,
+        lightContainer.transform.rotation = Quaternion.Lerp(lightContainer.transform.rotation, smoothing,
             Time.fixedDeltaTime * damping);
 
         sphereCastHits = Physics.SphereCastAll(transform.position, sphereCastRadius,
@@ -55,7 +54,8 @@ public class LightDirection : MonoBehaviour
         foreach (var hit in sphereCastHits)
         {
             RaycastHit hitInfo;
-            if (Physics.Raycast(transform.position, (hit.transform.position - transform.position).normalized,
+            // check for light of sight
+            if (Physics.Raycast(playerMovement.transform.position, (hit.transform.position - playerMovement.transform.position).normalized,
                 out hitInfo, lightComponent.range, ~playerLayer, QueryTriggerInteraction.Ignore))
             {
                 inFlashlight += hitInfo;
@@ -64,8 +64,9 @@ public class LightDirection : MonoBehaviour
                 if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
                 {
                     // flashlight hits enemy
-                    float cosTheta = Vector3.Dot(currDir.normalized,
-                    (hit.transform.position - transform.position).normalized);
+                    Vector3 hitDir = new Vector3(hit.transform.position.x - transform.position.x,
+                        0, hit.transform.position.z - transform.position.z);
+                    float cosTheta = Vector3.Dot(currDir.normalized, hitDir.normalized);
                     float deg = Mathf.Acos(cosTheta) * Mathf.Rad2Deg;
                     if (Mathf.Abs(deg) <= lightComponent.spotAngle / 2.0f)
                     {
@@ -79,8 +80,8 @@ public class LightDirection : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Debug.DrawLine(transform.position, transform.position + currDir * sphereCastHitDistance);
-        Gizmos.DrawWireSphere(transform.position + currDir * sphereCastHitDistance, sphereCastRadius);
+        Debug.DrawLine(lightContainer.transform.position, lightContainer.transform.position + currDir * sphereCastHitDistance);
+        Gizmos.DrawWireSphere(lightContainer.transform.position + currDir * sphereCastHitDistance, sphereCastRadius);
     }
 
     public GetInRange()
