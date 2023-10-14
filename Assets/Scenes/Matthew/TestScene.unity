@@ -544,6 +544,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed1fcd7aea99d9842a1bf730423b9f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weepingAngelLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  lightContainer: {fileID: 2052981288}
+  playerMovement: {fileID: 2052981295}
 --- !u!1 &2052981288
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,6 +728,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c4ec4081cf35024aaa160fa8d306a65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSpeed: 0.2
+  accFrames: 9
+  lookFrames: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
