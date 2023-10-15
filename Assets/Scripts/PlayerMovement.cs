@@ -8,12 +8,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxSpeed = 0.2f;
     [SerializeField] private int accFrames = 9;
     [SerializeField] private int lookFrames = 2;
+    [SerializeField] private int frameDelay = 1;
     [SerializeField] private Animator animator = null;
     [SerializeField] private SpriteRenderer spriteRenderer = null;
 
     private int currFrames;
     private Vector3 velo;
     private Vector3 dir;
+    private int curFrameDelay;
+    private Vector3 lastDirection;
     // private CharacterController controller;
 
     private void Start()
@@ -48,15 +51,25 @@ public class PlayerMovement : MonoBehaviour
             currFrames = 0;
         }
 
-        Vector3 d = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        if (curFrameDelay == frameDelay)
+        {
+            // skip this frame's input
+            curFrameDelay = 0;
+        }
+        else
+        {
+            lastDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            curFrameDelay++;
+        }
+
         // controller.Move(d * maxSpeed * currFrames / accFrames);
 
-        if (d != Vector3.zero)
+        if (lastDirection != Vector3.zero)
         {
             // walking
             animator.SetBool("Walking", true);
-            gameObject.transform.Translate(d * maxSpeed * (currFrames - lookFrames) / accFrames);
-            dir = d.normalized;
+            gameObject.transform.Translate(lastDirection * maxSpeed * (currFrames - lookFrames) / accFrames);
+            dir = lastDirection.normalized;
             if (dir.x > 0)
             {
                 // going right

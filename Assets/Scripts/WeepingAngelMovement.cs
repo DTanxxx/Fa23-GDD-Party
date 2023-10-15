@@ -9,10 +9,13 @@ public class WeepingAngelMovement : MonoBehaviour
     [SerializeField] private float chaseSpeed = 5f;
     [SerializeField] private float freezeDuration = 2f;
     [SerializeField] private LayerMask weepingAngelLayer;
+    [SerializeField] private Animator animator = null;
+    [SerializeField] private SpriteRenderer spriteRenderer = null;
 
     private GameObject player;
     private NavMeshAgent agent;
     private float freezeTimer;
+    private bool idle = true;
 
     private void Start()
     {
@@ -27,6 +30,10 @@ public class WeepingAngelMovement : MonoBehaviour
             freezeTimer -= Time.deltaTime;
             return;
         }
+        else if (!idle)
+        {
+            animator.SetBool("Freeze", false);
+        }
 
         if (Vector3.Distance(player.transform.position, transform.position) <= playerDetectionRadius)
         {
@@ -38,23 +45,35 @@ public class WeepingAngelMovement : MonoBehaviour
                 if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     // detect player
+                    idle = false;
+                    animator.SetBool("Freeze", false);
+
                     agent.isStopped = false;
                     agent.destination = player.transform.position;
                     agent.speed = chaseSpeed;
+                    if ((agent.destination.x - transform.position.x) > 0) {
+                        spriteRenderer.flipX = false;
+                    }
+                    else
+                    {
+                        spriteRenderer.flipX = true;
+                    }
                 }
             }  
         }
         else
         {
+            agent.velocity = Vector3.zero;
             agent.isStopped = true;
-            agent.speed = 0f;
         }
     }
 
     public void Freeze()
     {
         freezeTimer = freezeDuration;
+        agent.velocity = Vector3.zero;
         agent.isStopped = true;
-        agent.speed = 0f;
+
+        animator.SetBool("Freeze", true);
     }
 }

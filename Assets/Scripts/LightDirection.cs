@@ -66,7 +66,13 @@ public class LightDirection : MonoBehaviour
                     float deg = Mathf.Acos(cosTheta) * Mathf.Rad2Deg;
                     if (Mathf.Abs(deg) <= lightComponent.spotAngle / 2.0f)
                     {
-                        hit.transform.GetComponentInParent<WeepingAngelMovement>().Freeze();
+                        // check if both hitDir and actual direction from player to enemy match
+                        Vector3 dirFromPlayerToEnemy = new Vector3(hit.transform.position.x - playerMovement.transform.position.x,
+                            0, hit.transform.position.z - playerMovement.transform.position.z);
+                        if (dirFromPlayerToEnemy.x * hitDir.x >= 0 && dirFromPlayerToEnemy.z * hitDir.z >= 0)
+                        {
+                            hit.transform.GetComponentInParent<WeepingAngelMovement>().Freeze();
+                        }
                     }
                 }
             }
