@@ -5,7 +5,9 @@ using System;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public static Action onDeath;
+    public static Action<Vector3> onDeath;
+
+    private bool isDead = false;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -13,8 +15,14 @@ public class PlayerHealth : MonoBehaviour
         {
             if (onDeath != null)
             {
-                onDeath?.Invoke();
+                isDead = true;
+                onDeath?.Invoke(collision.transform.position);
             }
         }
+    }
+
+    public bool GetIsPlayerDead()
+    {
+        return isDead;
     }
 }

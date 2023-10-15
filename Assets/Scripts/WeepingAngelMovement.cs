@@ -11,8 +11,10 @@ public class WeepingAngelMovement : MonoBehaviour
     [SerializeField] private LayerMask weepingAngelLayer;
     [SerializeField] private Animator animator = null;
     [SerializeField] private SpriteRenderer spriteRenderer = null;
+    [SerializeField] private Collider collider = null;
 
     private GameObject player;
+    private bool isPlayerDead = false;
     private NavMeshAgent agent;
     private float freezeTimer;
     private bool idle = true;
@@ -23,8 +25,23 @@ public class WeepingAngelMovement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
+    private void OnEnable()
+    {
+        PlayerHealth.onDeath += OnPlayerDeath;
+    }
+
+    private void OnDisable()
+    {
+        PlayerHealth.onDeath -= OnPlayerDeath;
+    }
+
     private void Update()
     {
+        if (isPlayerDead)
+        {
+            return;
+        }
+
         if (freezeTimer > 0)
         {
             freezeTimer -= Time.deltaTime;
@@ -66,6 +83,15 @@ public class WeepingAngelMovement : MonoBehaviour
             agent.velocity = Vector3.zero;
             agent.isStopped = true;
         }
+    }
+
+    private void OnPlayerDeath(Vector3 enemyPosition)
+    {
+        spriteRenderer.enabled = false;
+        collider.enabled = false;
+        agent.velocity = Vector3.zero;
+        agent.isStopped = true;
+        isPlayerDead = true;
     }
 
     public void Freeze()

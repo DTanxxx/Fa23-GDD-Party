@@ -53,12 +53,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (curFrameDelay == frameDelay)
         {
-            // skip this frame's input
+            lastDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             curFrameDelay = 0;
         }
         else
         {
-            lastDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            // skip this frame's input
             curFrameDelay++;
         }
 
@@ -88,13 +88,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void TriggerDeathAnimation()
+    private void TriggerDeathAnimation(Vector3 enemyPosition)
     {
         Debug.Log("Player died");
         animator.SetTrigger("Die");
-
-        // SHOULD BE IN ITS OWN SCRIPT
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (enemyPosition.x < transform.position.x)
+        {
+            // flip sprite
+            spriteRenderer.flipX = true;
+        }
+        else
+        {
+            // don't flip
+            spriteRenderer.flipX = false;
+        }
     }
 
     public Vector3 getDir()

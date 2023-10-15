@@ -266,3 +266,4 @@ MonoBehaviour:
     m_Bits: 64
   animator: {fileID: 5533829823819964012}
   spriteRenderer: {fileID: 9105507997468270627}
+  collider: {fileID: 1647235373962209594}
