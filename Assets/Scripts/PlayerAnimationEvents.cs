@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class PlayerAnimationEvents : MonoBehaviour
 {
     public static Action onEndPlayerDeathAnim;
+    public static Action onFootstep;
+    public static Action onSkullCrush;
 
     // animation event
     public void OnEndDeathAnimation()
@@ -14,5 +16,17 @@ public class PlayerAnimationEvents : MonoBehaviour
         onEndPlayerDeathAnim?.Invoke();
         // SHOULD BE IN ITS OWN SCRIPT
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    // animation event
+    public void OnSkullCrush()
+    {
+        onSkullCrush?.Invoke();
+    }
+
+    // animation event
+    public void OnFootstep()
+    {
+        onFootstep?.Invoke();
     }
 }

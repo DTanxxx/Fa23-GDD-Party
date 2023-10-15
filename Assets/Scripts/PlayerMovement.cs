@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 dir;
     private int curFrameDelay;
     private Vector3 lastDirection;
+    private bool isDead = false;
     // private CharacterController controller;
 
     private void Start()
@@ -36,6 +37,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isDead)
+        {
+            return;
+        }
+
         currFrames++;
         if (currFrames >= accFrames)
         {
@@ -92,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Debug.Log("Player died");
         animator.SetTrigger("Die");
+        isDead = true;
         if (enemyPosition.x < transform.position.x)
         {
             // flip sprite
