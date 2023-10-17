@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class ShowInven : MonoBehaviour
+public class ShowObjective : MonoBehaviour
 {
     [SerializeField] public Canvas canvas;
     private CanvasGroup invenRender;
@@ -20,6 +20,11 @@ public class ShowInven : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ShowPanel();
+    }
+
+    public void ShowPanel()
+    {
         if (Input.GetKeyDown("o"))
         {
             if (!invenVisible)
@@ -35,7 +40,10 @@ public class ShowInven : MonoBehaviour
             }
 
         }
+    }
 
+    public void AddObjective(string text)
+    {
 
     }
 }

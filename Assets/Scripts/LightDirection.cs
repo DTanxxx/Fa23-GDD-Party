@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Timeline;
 
@@ -15,11 +17,12 @@ public class LightDirection : MonoBehaviour
     private Vector3 currDir;
     private float damping = 20.0f;
     private float sphereCastRadius;
+    private ClueGlow clueGlow;
+
 
     // for Gizmos
     private RaycastHit[] sphereCastHits;
     private float sphereCastHitDistance;
-    private RaycastHit[] inFlashlight;
 
 
     private void Start()
@@ -28,6 +31,9 @@ public class LightDirection : MonoBehaviour
         lightComponent = GetComponent<Light>();
 
         sphereCastRadius = Mathf.Atan(lightComponent.spotAngle / 2.0f * Mathf.Deg2Rad) * lightComponent.range;
+
+        clueGlow = GameObject.Find("EventSystem").GetComponent<ClueGlow>();
+
     }
 
     private void FixedUpdate()
@@ -58,9 +64,7 @@ public class LightDirection : MonoBehaviour
             if (Physics.Raycast(playerMovement.transform.position, (hit.transform.position - playerMovement.transform.position).normalized,
                 out hitInfo, lightComponent.range, ~playerLayer, QueryTriggerInteraction.Ignore))
             {
-                inFlashlight += hitInfo;
-
-                Debug.Log(hitInfo.transform.gameObject.layer);
+                //Debug.Log(hitInfo.transform.gameObject.layer);
                 if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
                 {
                     // flashlight hits enemy
@@ -75,6 +79,7 @@ public class LightDirection : MonoBehaviour
                 }
             }
         }
+        ClueSpot();
     }
 
     private void OnDrawGizmos()
@@ -84,8 +89,8 @@ public class LightDirection : MonoBehaviour
         Gizmos.DrawWireSphere(lightContainer.transform.position + currDir * sphereCastHitDistance, sphereCastRadius);
     }
 
-    public GetInRange()
+    public void ClueSpot()
     {
-        return inFlashlight;
+        clueGlow.clueSpot(transform.position, sphereCastRadius, currDir, lightComponent, playerLayer, playerMovement);
     }
 }

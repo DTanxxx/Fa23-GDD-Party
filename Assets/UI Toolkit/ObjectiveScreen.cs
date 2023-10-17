@@ -32,9 +32,7 @@ public class ObjectiveScreen : MonoBehaviour
 
         root.styleSheets.Add(_styleSheet);
 
-        var container = new VisualElement();
-        root.AddToClassList("container");
-
+        
 
     }
 }
