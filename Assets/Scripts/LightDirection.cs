@@ -19,11 +19,9 @@ public class LightDirection : MonoBehaviour
     private float sphereCastRadius;
     private ClueGlow clueGlow;
 
-
     // for Gizmos
     private RaycastHit[] sphereCastHits;
     private float sphereCastHitDistance;
-
 
     private void Start()
     {
@@ -97,6 +95,6 @@ public class LightDirection : MonoBehaviour
 
     public void ClueSpot()
     {
-        clueGlow.clueSpot(transform.position, sphereCastRadius, currDir, lightComponent, playerLayer, playerMovement);
+        clueGlow.ClueSpot(transform.position, sphereCastRadius, currDir, lightComponent, playerLayer, playerMovement);
     }
 }

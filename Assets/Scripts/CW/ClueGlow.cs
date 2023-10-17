@@ -1,8 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class ClueGlow : MonoBehaviour
@@ -30,7 +27,8 @@ public class ClueGlow : MonoBehaviour
         prevClue = new HashSet<Transform>();
         activeCoroutines = new List<Coroutine>();
     }
-    public void clueSpot(Vector3 currPos, float sphereCastRadius, Vector3 currDir, Light light, int layer, PlayerMovement playermovement)
+
+    public void ClueSpot(Vector3 currPos, float sphereCastRadius, Vector3 currDir, Light light, int layer, PlayerMovement playermovement)
     {
         uniqueClue = new HashSet<Transform>();
         faceClue = false;
@@ -85,7 +83,7 @@ public class ClueGlow : MonoBehaviour
 
                 foreach (var clue in uniqueClue)
                 {
-                    Coroutine a = StartCoroutine(glower(clue));
+                    Coroutine a = StartCoroutine(Glower(clue));
                     activeCoroutines.Add(a);
                 }
             }
@@ -109,8 +107,8 @@ public class ClueGlow : MonoBehaviour
             {
                 foreach (var clue in prevClue)
                 {
-                    StopCoroutine(glower(clue));
-                    faderr(clue);
+                    StopCoroutine(Glower(clue));
+                    Faderr(clue);
                 }
 
                 prevClue = new HashSet<Transform>();
@@ -118,7 +116,7 @@ public class ClueGlow : MonoBehaviour
         }
     }
 
-    public IEnumerator glower(Transform clue)
+    public IEnumerator Glower(Transform clue)
     {
         float fadeDuration = 1f;
         SpriteRenderer rend = clue.GetComponent<SpriteRenderer>();
@@ -136,14 +134,14 @@ public class ClueGlow : MonoBehaviour
         }
     }
 
-    public void faderr(Transform clue)
+    public void Faderr(Transform clue)
     {
         SpriteRenderer rend = clue.GetComponent<SpriteRenderer>();
         Color normclue = rend.color;
         Color unglowclue = new Color(normclue.r, normclue.g, normclue.b, 0f);
         rend.color = unglowclue;
     }
-    public IEnumerator fader(Transform clue)
+    public IEnumerator Fader(Transform clue)
     {
         float fadeDuration = 1f;
         SpriteRenderer rend = clue.GetComponent<SpriteRenderer>();

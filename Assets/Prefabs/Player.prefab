@@ -314,6 +314,7 @@ GameObject:
   - component: {fileID: 1925378540153279166}
   - component: {fileID: 8462875060083981290}
   - component: {fileID: 5671322162475284958}
+  - component: {fileID: 1370849412143978388}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -397,6 +398,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e8753fa2e1559247bc56129d1020d0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1370849412143978388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3201889589371621395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89dd6c35f24006c4ca4ae6b545cfba96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventorySystem: {fileID: 0}
 --- !u!1 &3355884501511464105
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,10 +648,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weepingAngelLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   playerLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
   lightContainer: {fileID: 6434771183136385183}
   playerMovement: {fileID: 1925378540153279166}
 --- !u!1 &5013555968397424085
@@ -1087,4 +1101,3 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e07a1ce1e2080164f868db19af3fe7b2, type: 3}
   - {fileID: 8300000, guid: 6cd4914d17eb00c48888ac5a32ac2938, type: 3}
   skullCrushSource: {fileID: 2340534262365148869}
-  skullCrushClip: {fileID: 8300000, guid: 1de4c41ba6394cd4e9619e6db38121e9, type: 3}

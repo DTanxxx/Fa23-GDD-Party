@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 [Serializable]
-    public class InventoryItemData
+public class InventoryItemData
 {
     public ItemData data { get; private set; }
     public int stackSize { get; private set; }

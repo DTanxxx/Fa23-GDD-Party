@@ -5,7 +5,7 @@ using UnityEngine;
 public class ItemObject : MonoBehaviour
 {
     [SerializeField] public InventorySystem inventorySystem;
-    public ItemData referenceItem;
+    [SerializeField] private ItemData referenceItem;
 
     public void PickUp()
     {
