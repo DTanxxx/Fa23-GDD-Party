@@ -5,33 +5,26 @@ using UnityEngine;
 public class ClueGlow : MonoBehaviour
 {
     [SerializeField] private string clueTile = "clueTile";
-    [SerializeField] public Sprite clueGlow;
-    [SerializeField] public Sprite clueNorm;
-    [SerializeField] public float _revealTime = 3f;
-
-    [SerializeField] public LightDirection flashlight;
+    [SerializeField] private float _revealTime = 3f;
+    [SerializeField] private LayerMask clueTrailLayerMask;
 
     private RaycastHit[] sphereHitsClue;
     private HashSet<Transform> uniqueClue;
     private HashSet<Transform> prevClue;
-    private List<Coroutine> activeCoroutines;
+    private Dictionary<Transform, Coroutine> activeCoroutines;
 
-
-    private WaitForSecondsRealtime _renderChangeTime;
-
-    private bool faceClue;
+    private WaitForSeconds _renderChangeTime;
 
     private void Start()
     {
-        _renderChangeTime = new WaitForSecondsRealtime(_revealTime);
+        _renderChangeTime = new WaitForSeconds(_revealTime);
         prevClue = new HashSet<Transform>();
-        activeCoroutines = new List<Coroutine>();
+        activeCoroutines = new Dictionary<Transform, Coroutine>();
     }
 
-    public void ClueSpot(Vector3 currPos, float sphereCastRadius, Vector3 currDir, Light light, int layer, PlayerMovement playermovement)
+    public void ClueSpot(Vector3 currPos, float sphereCastRadius, Vector3 currDir, Light light, int excludePlayerLayerMask, PlayerMovement playerMovement)
     {
         uniqueClue = new HashSet<Transform>();
-        faceClue = false;
 
         //if (faceClue && _selection == null)
         //{
@@ -41,40 +34,76 @@ public class ClueGlow : MonoBehaviour
         //    Debug.Log(faceClue);
         //}
         
-        sphereHitsClue = Physics.SphereCastAll(transform.position, sphereCastRadius,
-            currDir, light.range, layer, QueryTriggerInteraction.Ignore);
+        sphereHitsClue = Physics.SphereCastAll(currPos, sphereCastRadius, 
+            currDir, light.range, clueTrailLayerMask.value);
 
         foreach (var hit in sphereHitsClue)
         {
             RaycastHit hitInfo;
-            if (Physics.Raycast(playermovement.transform.position, (hit.transform.position - playermovement.transform.position).normalized,
-                out hitInfo, light.range, layer, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(playerMovement.transform.position, (hit.transform.position - playerMovement.transform.position).normalized,
+                out hitInfo, light.range, excludePlayerLayerMask))
             {
-                Vector3 hitDir = new Vector3(hit.transform.position.x - transform.position.x, 0, hit.transform.position.z - transform.position.z);
-                float cosTheta = Vector3.Dot(currDir.normalized, hitDir.normalized);
-                float deg = Mathf.Acos(cosTheta) * Mathf.Rad2Deg;
-                if (Mathf.Abs(deg) <= light.spotAngle / 2.0f)
+                if (hitInfo.transform.CompareTag(clueTile))
                 {
-                    var clue = hitInfo.transform;
-                    if (clue.CompareTag(clueTile))
+                    Vector3 hitDir = new Vector3(hit.transform.position.x - currPos.x, 0, hit.transform.position.z - currPos.z);
+                    float cosTheta = Vector3.Dot(currDir.normalized, hitDir.normalized);
+                    float deg = Mathf.Acos(cosTheta) * Mathf.Rad2Deg;
+                    if (Mathf.Abs(deg) <= light.spotAngle / 2.0f)
                     {
-                        faceClue = true;
-                        if (!uniqueClue.Contains(clue))
+                        // check if both hitDir and actual direction from player to clue match
+                        Vector3 dirFromPlayerToEnemy = new Vector3(hit.transform.position.x - playerMovement.transform.position.x,
+                            0, hit.transform.position.z - playerMovement.transform.position.z);
+                        if (dirFromPlayerToEnemy.x * hitDir.x >= 0 && dirFromPlayerToEnemy.z * hitDir.z >= 0)
                         {
-                            uniqueClue.Add(clue);
+                            if (!uniqueClue.Contains(hitInfo.transform))
+                            {
+                                uniqueClue.Add(hitInfo.transform);
+                            }
                         }
                     }
                 }
             }
         }
 
-        if (faceClue)
+        if (!prevClue.SetEquals(uniqueClue))
         {
-            Debug.Log("clue");           
+            //Debug.Log("stoped");
+            //foreach (var clue in prevClue)
+            //{
+            //    StopCoroutine(glower(clue));
+            //    faderr(clue);
+            //}
 
+            foreach (var clue in uniqueClue)
+            {
+                // check if this clue is in prevClue
+                if (!prevClue.Contains(clue))
+                {
+                    // start this coroutine
+                    Coroutine a = StartCoroutine(Glower(clue));
+                    activeCoroutines.Add(clue, a);
+                }
+            }
+
+            foreach (var clue in prevClue)
+            {
+                // check if this clue is in uniqueClue
+                if (!uniqueClue.Contains(clue))
+                {
+                    // stop this coroutine
+                    StopCoroutine(activeCoroutines[clue]);
+                    activeCoroutines.Remove(clue);
+                    Faderr(clue);
+                }
+            }
+        }
+        prevClue = uniqueClue;
+
+        /*if (faceClue)
+        {
             if (!prevClue.SetEquals(uniqueClue))
             {
-                Debug.Log("stoped");
+                //Debug.Log("stoped");
                 //foreach (var clue in prevClue)
                 //{
                 //    StopCoroutine(glower(clue));
@@ -83,16 +112,20 @@ public class ClueGlow : MonoBehaviour
 
                 foreach (var clue in uniqueClue)
                 {
-                    Coroutine a = StartCoroutine(Glower(clue));
-                    activeCoroutines.Add(a);
+                    // check if this clue is in prevClue
+                    if (!prevClue.Contains(clue))
+                    {
+                        // start this coroutine
+                        Debug.Log("COROUTINE STARTS FOR: " + clue.gameObject.name);
+                        Coroutine a = StartCoroutine(Glower(clue));
+                        activeCoroutines.Add(a);
+                    }
                 }
             }
             prevClue = uniqueClue;
         }
         else
-        {
-            Debug.Log("no clue");
-            
+        {            
             if (activeCoroutines.Count > 0)
             {
                 foreach (Coroutine a in activeCoroutines)
@@ -113,7 +146,7 @@ public class ClueGlow : MonoBehaviour
 
                 prevClue = new HashSet<Transform>();
             }
-        }
+        }*/
     }
 
     public IEnumerator Glower(Transform clue)
@@ -127,7 +160,6 @@ public class ClueGlow : MonoBehaviour
 
         while (elapsedTime < fadeDuration)
         {
-            //Debug.Log(elapsedTime);
             elapsedTime += Time.deltaTime;
             rend.color = Color.Lerp(normclue, glowclue, elapsedTime / fadeDuration);
             yield return null;

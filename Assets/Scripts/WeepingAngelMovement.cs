@@ -11,7 +11,7 @@ public class WeepingAngelMovement : MonoBehaviour
     [SerializeField] private LayerMask weepingAngelLayer;
     [SerializeField] private Animator animator = null;
     [SerializeField] private SpriteRenderer spriteRenderer = null;
-    [SerializeField] private Collider collider = null;
+    [SerializeField] private Collider myCollider = null;
 
     private GameObject player;
     private bool isPlayerDead = false;
@@ -88,7 +88,7 @@ public class WeepingAngelMovement : MonoBehaviour
     private void OnPlayerDeath(Vector3 enemyPosition)
     {
         spriteRenderer.enabled = false;
-        collider.enabled = false;
+        myCollider.enabled = false;
         agent.velocity = Vector3.zero;
         agent.isStopped = true;
         isPlayerDead = true;

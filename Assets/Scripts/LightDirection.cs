@@ -12,10 +12,11 @@ public class LightDirection : MonoBehaviour
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private GameObject lightContainer;
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private float damping = 20.0f;
 
     private Light lightComponent;
-    private Vector3 currDir;
-    private float damping = 20.0f;
+    private Vector3 currDirection;
+    private Vector3 tempDirection;
     private float sphereCastRadius;
     private ClueGlow clueGlow;
 
@@ -36,13 +37,15 @@ public class LightDirection : MonoBehaviour
 
     private void FixedUpdate()
     {
-        currDir = playerMovement.getDir();
-        Quaternion smoothing = Quaternion.LookRotation(currDir);
+        currDirection = playerMovement.getDir();
+        Quaternion smoothing = Quaternion.LookRotation(currDirection);
         lightContainer.transform.rotation = Quaternion.Lerp(lightContainer.transform.rotation, smoothing,
             Time.fixedDeltaTime * damping);
 
+        tempDirection = lightContainer.transform.rotation * Vector3.forward;
+
         sphereCastHits = Physics.SphereCastAll(transform.position, sphereCastRadius,
-            currDir, lightComponent.range, weepingAngelLayer.value, QueryTriggerInteraction.Ignore);
+            tempDirection, lightComponent.range, weepingAngelLayer.value, QueryTriggerInteraction.Ignore);
         
         // for Gizmos ========================================
         if (sphereCastHits.Length > 0)
@@ -68,7 +71,7 @@ public class LightDirection : MonoBehaviour
                     // flashlight hits enemy
                     Vector3 hitDir = new Vector3(hit.transform.position.x - transform.position.x,
                         0, hit.transform.position.z - transform.position.z);
-                    float cosTheta = Vector3.Dot(currDir.normalized, hitDir.normalized);
+                    float cosTheta = Vector3.Dot(tempDirection.normalized, hitDir.normalized);
                     float deg = Mathf.Acos(cosTheta) * Mathf.Rad2Deg;
                     if (Mathf.Abs(deg) <= lightComponent.spotAngle / 2.0f)
                     {
@@ -89,12 +92,14 @@ public class LightDirection : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Debug.DrawLine(lightContainer.transform.position, lightContainer.transform.position + currDir * sphereCastHitDistance);
-        Gizmos.DrawWireSphere(lightContainer.transform.position + currDir * sphereCastHitDistance, sphereCastRadius);
+        Debug.DrawLine(lightContainer.transform.position, lightContainer.transform.position + tempDirection * sphereCastHitDistance);
+        Gizmos.DrawWireSphere(lightContainer.transform.position + tempDirection * sphereCastHitDistance, sphereCastRadius);
     }
 
     public void ClueSpot()
     {
-        clueGlow.ClueSpot(transform.position, sphereCastRadius, currDir, lightComponent, playerLayer, playerMovement);
+        clueGlow.ClueSpot(transform.position, sphereCastRadius, tempDirection, lightComponent, 
+            ~playerLayer, playerMovement);
     }
+
 }

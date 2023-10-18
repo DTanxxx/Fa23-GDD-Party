@@ -258,12 +258,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3db14fd316e384541b14852ba4b49ce5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDetectionRadius: 25
+  playerDetectionRadius: 30
   chaseSpeed: 18
   freezeDuration: 1.5
   weepingAngelLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   animator: {fileID: 5533829823819964012}
   spriteRenderer: {fileID: 9105507997468270627}
-  collider: {fileID: 1647235373962209594}
+  myCollider: {fileID: 1647235373962209594}

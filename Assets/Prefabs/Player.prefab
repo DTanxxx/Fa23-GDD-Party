@@ -356,7 +356,7 @@ MonoBehaviour:
   maxSpeed: 0.2
   accFrames: 9
   lookFrames: 2
-  frameDelay: 3
+  frameDelay: 5
   animator: {fileID: 455378559866287369}
   spriteRenderer: {fileID: 1721017842326989836}
 --- !u!54 &8462875060083981290
@@ -648,12 +648,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weepingAngelLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   lightContainer: {fileID: 6434771183136385183}
   playerMovement: {fileID: 1925378540153279166}
+  damping: 20
 --- !u!1 &5013555968397424085
 GameObject:
   m_ObjectHideFlags: 0
