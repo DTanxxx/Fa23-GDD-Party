@@ -7,6 +7,8 @@ public class ClueGlow : MonoBehaviour
     [SerializeField] private string clueTile = "clueTile";
     [SerializeField] private float _revealTime = 3f;
     [SerializeField] private LayerMask clueTrailLayerMask;
+    [SerializeField] private float fadeInDuration = 1f;
+    [SerializeField] private float fadeOutDuration = 0.1f;
 
     private RaycastHit[] sphereHitsClue;
     private HashSet<Transform> uniqueClue;
@@ -79,7 +81,13 @@ public class ClueGlow : MonoBehaviour
                 // check if this clue is in prevClue
                 if (!prevClue.Contains(clue))
                 {
-                    // start this coroutine
+                    // stop fade out coroutine
+                    if (activeCoroutines.ContainsKey(clue))
+                    {
+                        StopCoroutine(activeCoroutines[clue]);
+                        activeCoroutines.Remove(clue);
+                    }
+                    // then start fade in coroutine
                     Coroutine a = StartCoroutine(Glower(clue));
                     activeCoroutines.Add(clue, a);
                 }
@@ -90,10 +98,13 @@ public class ClueGlow : MonoBehaviour
                 // check if this clue is in uniqueClue
                 if (!uniqueClue.Contains(clue))
                 {
-                    // stop this coroutine
+                    // stop fade in coroutine
                     StopCoroutine(activeCoroutines[clue]);
                     activeCoroutines.Remove(clue);
-                    Faderr(clue);
+                    // then start fade out coroutine
+                    //Faderr(clue);
+                    Coroutine a = StartCoroutine(Fader(clue));
+                    activeCoroutines.Add(clue, a);
                 }
             }
         }
@@ -151,17 +162,16 @@ public class ClueGlow : MonoBehaviour
 
     public IEnumerator Glower(Transform clue)
     {
-        float fadeDuration = 1f;
         SpriteRenderer rend = clue.GetComponent<SpriteRenderer>();
         Color normclue = rend.color;
         Color glowclue = new Color(normclue.r, normclue.g, normclue.b, 1f);
         float elapsedTime = 0f;
         yield return _renderChangeTime;
 
-        while (elapsedTime < fadeDuration)
+        while (elapsedTime < fadeInDuration)
         {
             elapsedTime += Time.deltaTime;
-            rend.color = Color.Lerp(normclue, glowclue, elapsedTime / fadeDuration);
+            rend.color = Color.Lerp(normclue, glowclue, elapsedTime / fadeInDuration);
             yield return null;
         }
     }
@@ -175,18 +185,16 @@ public class ClueGlow : MonoBehaviour
     }
     public IEnumerator Fader(Transform clue)
     {
-        float fadeDuration = 1f;
         SpriteRenderer rend = clue.GetComponent<SpriteRenderer>();
         Color normclue = rend.color;
         Color glowclue = new Color(normclue.r, normclue.g, normclue.b, 0f);
         float elapsedTime = 0f;
-        yield return _renderChangeTime;
+        //yield return _renderChangeTime;
 
-        while (elapsedTime < fadeDuration)
+        while (elapsedTime < fadeOutDuration)
         {
-            Debug.Log(elapsedTime);
             elapsedTime += Time.deltaTime;
-            rend.color = Color.Lerp(normclue, glowclue, elapsedTime / fadeDuration);
+            rend.color = Color.Lerp(normclue, glowclue, elapsedTime / fadeOutDuration);
             yield return null;
         }
     }
