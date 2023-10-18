@@ -13,8 +13,11 @@ public class DetectItem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log('e');
-            item.PickUp();
-            inventorySystem.CloseGUI();
+            if (item != null)
+            {
+                item.PickUp();
+                inventorySystem.CloseGUI();
+            }
         }
         
     }

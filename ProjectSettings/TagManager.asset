@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - clueTile
+  - FlashLight
+  - ClueTrail
   layers:
   - Default
   - TransparentFX
@@ -12,9 +13,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - WeepingAngel
+  - Player
+  - Clue
   - 
   - 
   - 
@@ -41,4 +42,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Floor
+    uniqueID: 1388736813
+    locked: 0
+  - name: Props
+    uniqueID: 1280697863
+    locked: 0
+  - name: Characters
+    uniqueID: 963813051
     locked: 0

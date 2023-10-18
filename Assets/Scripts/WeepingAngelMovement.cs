@@ -9,10 +9,15 @@ public class WeepingAngelMovement : MonoBehaviour
     [SerializeField] private float chaseSpeed = 5f;
     [SerializeField] private float freezeDuration = 2f;
     [SerializeField] private LayerMask weepingAngelLayer;
+    [SerializeField] private Animator animator = null;
+    [SerializeField] private SpriteRenderer spriteRenderer = null;
+    [SerializeField] private Collider myCollider = null;
 
     private GameObject player;
+    private bool isPlayerDead = false;
     private NavMeshAgent agent;
     private float freezeTimer;
+    private bool idle = true;
 
     private void Start()
     {
@@ -20,12 +25,31 @@ public class WeepingAngelMovement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
+    private void OnEnable()
+    {
+        PlayerHealth.onDeath += OnPlayerDeath;
+    }
+
+    private void OnDisable()
+    {
+        PlayerHealth.onDeath -= OnPlayerDeath;
+    }
+
     private void Update()
     {
+        if (isPlayerDead)
+        {
+            return;
+        }
+
         if (freezeTimer > 0)
         {
             freezeTimer -= Time.deltaTime;
             return;
+        }
+        else if (!idle)
+        {
+            animator.SetBool("Freeze", false);
         }
 
         if (Vector3.Distance(player.transform.position, transform.position) <= playerDetectionRadius)
@@ -38,23 +62,44 @@ public class WeepingAngelMovement : MonoBehaviour
                 if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     // detect player
+                    idle = false;
+                    animator.SetBool("Freeze", false);
+
                     agent.isStopped = false;
                     agent.destination = player.transform.position;
                     agent.speed = chaseSpeed;
+                    if ((agent.destination.x - transform.position.x) > 0) {
+                        spriteRenderer.flipX = false;
+                    }
+                    else
+                    {
+                        spriteRenderer.flipX = true;
+                    }
                 }
             }  
         }
         else
         {
+            agent.velocity = Vector3.zero;
             agent.isStopped = true;
-            agent.speed = 0f;
         }
+    }
+
+    private void OnPlayerDeath(Vector3 enemyPosition)
+    {
+        spriteRenderer.enabled = false;
+        myCollider.enabled = false;
+        agent.velocity = Vector3.zero;
+        agent.isStopped = true;
+        isPlayerDead = true;
     }
 
     public void Freeze()
     {
         freezeTimer = freezeDuration;
+        agent.velocity = Vector3.zero;
         agent.isStopped = true;
-        agent.speed = 0f;
+
+        animator.SetBool("Freeze", true);
     }
 }

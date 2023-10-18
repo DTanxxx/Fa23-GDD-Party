@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class InventorySystem : MonoBehaviour
 {
-    public static InventorySystem instance;
-
     [SerializeField] private GameObject pickupGUI;
 
     private Dictionary<ItemData, InventoryItemData> m_itemDictionary;
+
     public List<InventoryItemData> inventory { get; private set; }
+
+    public static InventorySystem instance;
 
     private void Awake()
     {
+        instance = this;
         inventory = new List<InventoryItemData>();
         m_itemDictionary = new Dictionary<ItemData, InventoryItemData>();
         pickupGUI.SetActive(false);
