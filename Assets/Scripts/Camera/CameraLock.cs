@@ -7,24 +7,22 @@ public class CameraLock : MonoBehaviour
     [SerializeField] private Vector3 position;
     [SerializeField] private float degrees;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         
     }
 
-    public Vector3 getPosition() 
+    public Vector3 GetPosition() 
     { 
         return position; 
     }
 
-    public float getDegrees() 
+    public float GetDegrees() 
     {
         return degrees;
     }

@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
-
 {
+    [SerializeField] private int mode; // mode 0 = follow player, mode 1 = lock to room position
+    [SerializeField] private Vector3 camOffset = new Vector3(0, 15, -25);
+
     private Vector3 playerPos;
     private GameObject player;
-    [SerializeField] private int mode; // mode 0 = follow player, mode 1 = lock to room position
     private GameObject room;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerPos = player.transform.position;
@@ -20,34 +20,34 @@ public class CameraFollow : MonoBehaviour
         this.mode = 0;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         playerPos = player.transform.position;
         if (mode == 0) 
         {
-            this.transform.position = playerPos + new Vector3(0, 15, -25);
+            this.transform.position = playerPos + camOffset;
             if (room != null)
             {
                 GameObject hideGroup = room.transform.Find("HideGroup").gameObject;
                 hideGroup.SetActive(true);
             }
-        } else if (mode == 1)
+        } 
+        else if (mode == 1)
         {
             CameraLock cameraLock = room.transform.Find("RoomCameraPosHolder").GetComponent<CameraLock>();
-            this.transform.position = cameraLock.getPosition();
-            this.transform.rotation = Quaternion.Euler(cameraLock.getDegrees(), 0, 0);
+            this.transform.position = cameraLock.GetPosition();
+            this.transform.rotation = Quaternion.Euler(cameraLock.GetDegrees(), 0, 0);
             GameObject hideGroup = room.transform.Find("HideGroup").gameObject;
             hideGroup.SetActive(false);
         }
     }
 
-    public int getMode()
+    public int GetMode()
     {
         return mode;
     }
 
-    public void setMode(int mode, GameObject room)
+    public void SetMode(int mode, GameObject room)
     {
         this.mode = mode;
         this.room = room;
