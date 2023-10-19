@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CameraLock : MonoBehaviour
 {
-    [SerializeField] private Vector3 position;
     [SerializeField] private float degrees;
 
     private void Start()
@@ -19,7 +18,7 @@ public class CameraLock : MonoBehaviour
 
     public Vector3 GetPosition() 
     { 
-        return position; 
+        return transform.position; 
     }
 
     public float GetDegrees() 

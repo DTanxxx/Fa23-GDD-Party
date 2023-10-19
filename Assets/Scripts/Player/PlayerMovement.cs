@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private int frameDelay = 1;
     [SerializeField] private Animator animator = null;
     [SerializeField] private SpriteRenderer spriteRenderer = null;
+    [SerializeField] private Collider myCollider = null;
+    [SerializeField] private Rigidbody myRigidbody = null;
 
     private int currFrames;
     private Vector3 velo;
@@ -100,6 +102,8 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Player died");
         animator.SetTrigger("Die");
         isDead = true;
+        myCollider.enabled = false;
+        myRigidbody.velocity = Vector3.zero;
         if (enemyPosition.x < transform.position.x)
         {
             // flip sprite
