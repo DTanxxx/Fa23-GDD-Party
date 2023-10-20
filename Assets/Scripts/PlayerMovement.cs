@@ -1,15 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float maxSpeed = 0.2f;
     [SerializeField] private int accFrames = 9;
     [SerializeField] private int lookFrames = 2;
+    [SerializeField] private int frameDelay = 1;
+    [SerializeField] private Animator animator = null;
+    [SerializeField] private SpriteRenderer spriteRenderer = null;
+
     private int currFrames;
     private Vector3 velo;
     private Vector3 dir;
+    private int curFrameDelay;
+    private Vector3 lastDirection;
+    private bool isDead = false;
     // private CharacterController controller;
 
     private void Start()
@@ -17,8 +25,23 @@ public class PlayerMovement : MonoBehaviour
         dir = new Vector3(1, 0, 0);
     }
 
-    void FixedUpdate()
+    private void OnEnable()
     {
+        PlayerHealth.onDeath += TriggerDeathAnimation;
+    }
+
+    private void OnDisable()
+    {
+        PlayerHealth.onDeath -= TriggerDeathAnimation;
+    }
+
+    private void FixedUpdate()
+    {
+        if (isDead)
+        {
+            return;
+        }
+
         currFrames++;
         if (currFrames >= accFrames)
         {
@@ -34,14 +57,58 @@ public class PlayerMovement : MonoBehaviour
             currFrames = 0;
         }
 
+        if (curFrameDelay == frameDelay)
+        {
+            lastDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            curFrameDelay = 0;
+        }
+        else
+        {
+            // skip this frame's input
+            curFrameDelay++;
+        }
 
-        Vector3 d = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         // controller.Move(d * maxSpeed * currFrames / accFrames);
 
-        if (d != Vector3.zero)
+        if (lastDirection != Vector3.zero)
         {
-            gameObject.transform.Translate(d * maxSpeed * (currFrames - lookFrames) / accFrames);
-            dir = d.normalized;
+            // walking
+            animator.SetBool("Walking", true);
+
+            gameObject.transform.Translate(lastDirection * maxSpeed * (currFrames - lookFrames) / accFrames);
+            dir = lastDirection.normalized;
+            if (dir.x > 0)
+            {
+                // going right
+                spriteRenderer.flipX = true;
+            }
+            else if (dir.x < 0)
+            {
+                // going left
+                spriteRenderer.flipX = false;
+            }
+        }
+        else
+        {
+            // not walking
+            animator.SetBool("Walking", false);
+        }
+    }
+
+    private void TriggerDeathAnimation(Vector3 enemyPosition)
+    {
+        Debug.Log("Player died");
+        animator.SetTrigger("Die");
+        isDead = true;
+        if (enemyPosition.x < transform.position.x)
+        {
+            // flip sprite
+            spriteRenderer.flipX = true;
+        }
+        else
+        {
+            // don't flip
+            spriteRenderer.flipX = false;
         }
     }
 

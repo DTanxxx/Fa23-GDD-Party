@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class ObjectiveManager : MonoBehaviour
 {
-    [SerializeField] Goal[] goals;
+    [SerializeField] private Goal[] goals;
 
     private void Awake()
     {
         goals = GetComponents<Goal>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         foreach (Goal goal in goals)
         {

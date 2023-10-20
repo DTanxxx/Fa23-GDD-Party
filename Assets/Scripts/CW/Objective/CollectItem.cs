@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CollectItem : Goal
 {
-    [SerializeField] ItemData key;
+    [SerializeField] private ItemData key;
+
     public override void AddtoUI()
     {
         throw new System.NotImplementedException();
