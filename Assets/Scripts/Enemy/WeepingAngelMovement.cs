@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class WeepingAngelMovement : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class WeepingAngelMovement : MonoBehaviour
     private NavMeshAgent agent;
     private float freezeTimer;
     private bool idle = true;
+    private bool enemyActive = false;
 
     private void Start()
     {
@@ -37,7 +39,7 @@ public class WeepingAngelMovement : MonoBehaviour
 
     private void Update()
     {
-        if (isPlayerDead)
+        if (isPlayerDead | !enemyActive)
         {
             return;
         }
@@ -101,5 +103,20 @@ public class WeepingAngelMovement : MonoBehaviour
         agent.isStopped = true;
 
         animator.SetBool("Freeze", true);
+    }
+
+    public void SetActive()
+    {
+        enemyActive = true;
+    }
+
+    public void SetInActive()
+    {
+        enemyActive = false;
+    }
+
+    public bool EnemyActivated()
+    {
+        return enemyActive;
     }
 }

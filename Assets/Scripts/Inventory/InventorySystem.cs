@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class InventorySystem : MonoBehaviour
@@ -57,8 +58,9 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    public void OpenGUI()
+    public void OpenGUI(string input = "Press E to pick up item")
     {
+        pickupGUI.GetComponentInChildren<TextMeshProUGUI>().text = input;
         pickupGUI.SetActive(true);
     }
 

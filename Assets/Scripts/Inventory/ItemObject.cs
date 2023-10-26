@@ -12,4 +12,9 @@ public class ItemObject : MonoBehaviour
         inventorySystem.Add(referenceItem);
         Destroy(gameObject);
     }
+
+    public ItemData GetItemData()
+    {
+        return referenceItem;
+    }
 }

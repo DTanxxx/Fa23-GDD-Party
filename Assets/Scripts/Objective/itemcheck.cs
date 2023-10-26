@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ItemCheck : MonoBehaviour
 {
-    [SerializeField] InventorySystem inventorySystem;
-    [SerializeField] ItemData requiredItem;
+    [SerializeField] private InventorySystem inventorySystem;
+    [SerializeField] private ItemData requiredItem;
 
     private void OnCollisionEnter(Collision collision)
     {
