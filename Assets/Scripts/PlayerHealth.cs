@@ -13,7 +13,8 @@ public class PlayerHealth : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
         {
-            if (onDeath != null)
+            bool enemyActive = collision.gameObject.GetComponentInParent<WeepingAngelMovement>().EnemyActivated();
+            if (onDeath != null && enemyActive)
             {
                 isDead = true;
                 onDeath?.Invoke(collision.transform.position);
