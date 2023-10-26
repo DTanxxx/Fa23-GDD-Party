@@ -16,10 +16,10 @@ TagManager:
   - WeepingAngel
   - Player
   - Clue
-  - 
-  - 
-  - 
-  - 
+  - PlayerColliderWithEnemy
+  - PlayerColliderWithEnvironment
+  - PlayerCameraShiftTrigger
+  - CameraShiftTrigger
   - 
   - 
   - 

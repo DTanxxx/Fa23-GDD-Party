@@ -990,7 +990,7 @@ TilemapRenderer:
   m_GameObject: {fileID: 723750531}
   m_Enabled: 1
   m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -1001,7 +1001,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0568c75a3a1ab2d4db81b24bda9416e2, type: 2}
+  - {fileID: 2100000, guid: 2acf9924bc565214cbb419f25b55d7a7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10354,6 +10354,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3094257462327680966, guid: 89135fe578189ac4e91db817199b18e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 3201889589371621395, guid: 89135fe578189ac4e91db817199b18e8, type: 3}
       propertyPath: m_Name
       value: Player
@@ -11850,7 +11854,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0568c75a3a1ab2d4db81b24bda9416e2, type: 2}
+  - {fileID: 2100000, guid: 2acf9924bc565214cbb419f25b55d7a7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
