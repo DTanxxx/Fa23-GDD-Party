@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class DetectItem : MonoBehaviour
@@ -10,16 +11,14 @@ public class DetectItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (item != null)
         {
-            Debug.Log('e');
-            if (item != null)
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 item.PickUp();
                 inventorySystem.CloseGUI();
             }
         }
-        
     }
 
     private void OnCollisionEnter(Collision collision)

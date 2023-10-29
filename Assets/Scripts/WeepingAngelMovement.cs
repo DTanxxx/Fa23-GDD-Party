@@ -108,6 +108,7 @@ public class WeepingAngelMovement : MonoBehaviour
     public void SetActive()
     {
         enemyActive = true;
+        animator.SetBool("Active", true);
     }
 
     public void SetInActive()

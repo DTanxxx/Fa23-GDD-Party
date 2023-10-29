@@ -11,6 +11,9 @@ public class PullLever : MonoBehaviour
     [SerializeField] private AudioSource electricitySource = null;
     [SerializeField] private Animator animator;
 
+
+    private GameObject item;
+
     private void Awake()
     {
         inventorySystem = FindObjectOfType<InventorySystem>();
@@ -20,20 +23,23 @@ public class PullLever : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (item != null)
         {
-            Debug.Log('e');
-            LeverPulled();
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                LeverPulled();
+            }
         }
-
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        item = collision.gameObject;
+
         Debug.Log("collide");
         if (collision != null)
         {
-            Debug.Log("touch");
+            Debug.Log(item);
             inventorySystem.OpenGUI("Press E to pull lever");
         }
     }
@@ -44,6 +50,7 @@ public class PullLever : MonoBehaviour
         {
             Debug.Log("out");
             inventorySystem.CloseGUI();
+            item = null;
         }
     }
 
