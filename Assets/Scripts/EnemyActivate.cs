@@ -1,25 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UI;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class EnemyActivate : MonoBehaviour
 {
     [SerializeField] private InventorySystem inventorySystem;
     [SerializeField] private ItemObject activationItem;
+    [SerializeField] private WeepingAngelMovement[] weepingAngels;
 
-    private WeepingAngelMovement[] weepingAngels;
     private ItemData itemData;
     private bool active = false;
 
     private void Awake()
     {
-        weepingAngels = FindObjectsOfType<WeepingAngelMovement>();
+        //weepingAngels = FindObjectsOfType<WeepingAngelMovement>();
         Debug.Log(weepingAngels.Length);
         itemData = activationItem.GetItemData();
     }
-    // Update is called once per frame
-    void Update()
+    
+    private void Update()
     {
         if (active)
         {

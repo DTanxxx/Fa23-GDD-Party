@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
+using System;
 
 public class PullLever : MonoBehaviour
 {
     [SerializeField] InventorySystem inventorySystem;
+    //[SerializeField] private WeepingAngelMovement[] enemies;
     [SerializeField] EnemyActivate enemyActivate;
     [SerializeField] private AudioSource leverSource = null;
     [SerializeField] private AudioSource electricitySource = null;
     [SerializeField] private Animator animator;
+
+    public static Action onLeverPulled;
 
     private void Awake()
     {
@@ -56,6 +59,14 @@ public class PullLever : MonoBehaviour
             electricitySource.Play();
         }
 
+        onLeverPulled?.Invoke();
+
         enemyActivate.SetActive();
+
+        /*foreach (var enemy in enemies)
+        {
+            enemy.gameObject.SetActive(true);
+            enemy.SetActive();
+        }*/
     }
 }

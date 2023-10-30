@@ -21,7 +21,7 @@ TagManager:
   - PlayerColliderWithEnvironment
   - PlayerCameraShiftTrigger
   - CameraShiftTrigger
-  - 
+  - Debris
   - 
   - 
   - 

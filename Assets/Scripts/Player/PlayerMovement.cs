@@ -77,8 +77,9 @@ public class PlayerMovement : MonoBehaviour
             // walking
             animator.SetBool("Walking", true);
 
-            gameObject.transform.Translate(lastDirection * maxSpeed * (currFrames - lookFrames) / accFrames);
             dir = lastDirection.normalized;
+            gameObject.transform.Translate(dir * maxSpeed * (currFrames - lookFrames) / accFrames);
+            
             if (dir.x > 0)
             {
                 // going right

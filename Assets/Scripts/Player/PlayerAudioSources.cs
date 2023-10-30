@@ -21,26 +21,18 @@ public class PlayerAudioSources : MonoBehaviour
         heartbeatSource.Play();
     }
 
-    private void Update()
-    {
-        // TEMPORARY CODE TO TEST OUT DIFFERENT SFX
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            // P for panic
-            EnterPanicPhase();
-        }
-    }
-
     private void OnEnable()
     {
         PlayerAnimationEvents.onFootstep += PlayFootstepSFX;
         PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
+        PullLever.onLeverPulled += EnterPanicPhase;
     }
 
     private void OnDisable()
     {
         PlayerAnimationEvents.onFootstep -= PlayFootstepSFX;
         PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
+        PullLever.onLeverPulled -= EnterPanicPhase;
     }
 
     private void EnterPanicPhase()

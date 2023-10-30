@@ -6,8 +6,10 @@ public class ElevatorOpen : MonoBehaviour
 {
     [SerializeField] private Animator animator = null;
     [SerializeField] private GameObject nextLevelTrigger = null;
+    [SerializeField] private AudioSource audioSource = null;
+    [SerializeField] private AudioClip openCloseSFX = null;
 
-    private bool goalAchieved = false;
+    public bool goalAchieved = false;
 
     private void Start()
     {
@@ -24,6 +26,11 @@ public class ElevatorOpen : MonoBehaviour
         nextLevelTrigger.SetActive(true);
     }
 
+    public void DisableNextLevelTrigger()
+    {
+        nextLevelTrigger.SetActive(false);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!goalAchieved || !other.gameObject.CompareTag("Player"))
@@ -32,6 +39,7 @@ public class ElevatorOpen : MonoBehaviour
         }
 
         // play animation
+        audioSource.PlayOneShot(openCloseSFX);
         animator.SetTrigger("Open");
     }
 }

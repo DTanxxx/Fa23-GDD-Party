@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CameraMode : MonoBehaviour
 {
-    [SerializeField] private CameraFollow cameraFollow;
+    [SerializeField] private CameraFollow[] cameraFollows;
     [SerializeField] private int modeSet;
 
     private GameObject room;
@@ -21,6 +21,9 @@ public class CameraMode : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        cameraFollow.SetMode(modeSet, room);
+        foreach (var cam in cameraFollows)
+        {
+            cam.SetMode(modeSet, room);
+        }       
     }
 }

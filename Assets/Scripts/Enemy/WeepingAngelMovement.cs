@@ -39,7 +39,7 @@ public class WeepingAngelMovement : MonoBehaviour
 
     private void Update()
     {
-        if (isPlayerDead | !enemyActive)
+        if (isPlayerDead || !enemyActive)
         {
             return;
         }
@@ -107,7 +107,10 @@ public class WeepingAngelMovement : MonoBehaviour
 
     public void SetActive()
     {
+        Debug.Log("SET ACTIVE");
         enemyActive = true;
+        // animation transition
+        animator.SetTrigger("Activate");
     }
 
     public void SetInActive()
