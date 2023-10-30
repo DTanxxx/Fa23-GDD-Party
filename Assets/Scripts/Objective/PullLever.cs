@@ -6,13 +6,13 @@ using System;
 public class PullLever : MonoBehaviour
 {
     [SerializeField] InventorySystem inventorySystem;
-    //[SerializeField] private WeepingAngelMovement[] enemies;
     [SerializeField] EnemyActivate enemyActivate;
     [SerializeField] private AudioSource leverSource = null;
     [SerializeField] private AudioSource electricitySource = null;
     [SerializeField] private Animator animator;
 
     public static Action onLeverPulled;
+    private GameObject item;
 
     private void Awake()
     {
@@ -23,20 +23,23 @@ public class PullLever : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (item != null)
         {
-            Debug.Log('e');
-            LeverPulled();
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                LeverPulled();
+            }
         }
-
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        item = collision.gameObject;
+
         Debug.Log("collide");
         if (collision != null)
         {
-            Debug.Log("touch");
+            Debug.Log(item);
             inventorySystem.OpenGUI("Press E to pull lever");
         }
     }
@@ -47,6 +50,7 @@ public class PullLever : MonoBehaviour
         {
             Debug.Log("out");
             inventorySystem.CloseGUI();
+            item = null;
         }
     }
 
@@ -62,11 +66,5 @@ public class PullLever : MonoBehaviour
         onLeverPulled?.Invoke();
 
         enemyActivate.SetActive();
-
-        /*foreach (var enemy in enemies)
-        {
-            enemy.gameObject.SetActive(true);
-            enemy.SetActive();
-        }*/
     }
 }
