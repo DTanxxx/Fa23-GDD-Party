@@ -6,6 +6,7 @@ TagManager:
   tags:
   - FlashLight
   - ClueTrail
+  - clueTile
   layers:
   - Default
   - TransparentFX
@@ -16,11 +17,11 @@ TagManager:
   - WeepingAngel
   - Player
   - Clue
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PlayerColliderWithEnemy
+  - PlayerColliderWithEnvironment
+  - PlayerCameraShiftTrigger
+  - CameraShiftTrigger
+  - Debris
   - 
   - 
   - 
@@ -51,4 +52,7 @@ TagManager:
     locked: 0
   - name: Characters
     uniqueID: 963813051
+    locked: 0
+  - name: Wall
+    uniqueID: 525619777
     locked: 0
