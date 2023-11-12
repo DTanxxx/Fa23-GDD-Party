@@ -14,14 +14,15 @@ public class EnemyActivate : MonoBehaviour
 
     private void Awake()
     {
-        //weepingAngels = FindObjectsOfType<WeepingAngelMovement>();
-        Debug.Log(weepingAngels.Length);
-        itemData = activationItem.GetItemData();
+        if (activationItem != null)
+        {
+            itemData = activationItem.GetItemData();
+        }
     }
     
     private void Update()
     {
-        if (active)
+        if (active || activationItem == null)
         {
             return;
         }
@@ -30,7 +31,7 @@ public class EnemyActivate : MonoBehaviour
         {
             if (inventorySystem.Get(itemData).stackSize == 1)
             {
-                Debug.Log("awake the beasts");
+                //Debug.Log("awake the beasts");
                 SetActive();
             }
         }

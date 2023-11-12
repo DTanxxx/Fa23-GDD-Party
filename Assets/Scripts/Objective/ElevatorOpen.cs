@@ -16,6 +16,16 @@ public class ElevatorOpen : MonoBehaviour
         nextLevelTrigger.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        PullLever.onLeverPulled += AchieveGoal;
+    }
+
+    private void OnDisable()
+    {
+        PullLever.onLeverPulled -= AchieveGoal;
+    }
+
     public void AchieveGoal()
     {
         goalAchieved = true;

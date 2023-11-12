@@ -788,7 +788,7 @@ GameObject:
   - component: {fileID: 6535557658834384389}
   - component: {fileID: 2828688694804396838}
   - component: {fileID: 5529811757808454130}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: RoomToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1688,7 +1688,7 @@ GameObject:
   - component: {fileID: 6980958875192702351}
   - component: {fileID: 6162839320362284481}
   - component: {fileID: 6396082497052565886}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: LevelToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

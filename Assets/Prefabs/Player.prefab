@@ -425,6 +425,7 @@ GameObject:
   - component: {fileID: 5671322162475284958}
   - component: {fileID: 1370849412143978388}
   - component: {fileID: 4396690762092538032}
+  - component: {fileID: 4077993872778034467}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -523,6 +524,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!114 &4077993872778034467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3201889589371621395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f5a9b6cacd885742815cacbaed56728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemySensorRadius: 6
+  weepingAngelLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &3355884501511464105
 GameObject:
   m_ObjectHideFlags: 0

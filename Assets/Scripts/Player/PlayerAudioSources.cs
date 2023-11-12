@@ -14,31 +14,50 @@ public class PlayerAudioSources : MonoBehaviour
 
     private void Start()
     {
-        breathSource.clip = breathClips[0];
-        heartbeatSource.clip = heartbeatClips[0];
-
-        breathSource.Play();
-        heartbeatSource.Play();
+        EnterCalmPhase();
     }
 
     private void OnEnable()
     {
         PlayerAnimationEvents.onFootstep += PlayFootstepSFX;
         PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
-        PullLever.onLeverPulled += EnterPanicPhase;
+        EnemyProximitySensor.onEnemyInProximity += EnterPanicPhase;
+        EnemyProximitySensor.onEnemyOutOfProximity += EnterCalmPhase;
     }
 
     private void OnDisable()
     {
         PlayerAnimationEvents.onFootstep -= PlayFootstepSFX;
         PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
-        PullLever.onLeverPulled -= EnterPanicPhase;
+        EnemyProximitySensor.onEnemyInProximity -= EnterPanicPhase;
+        EnemyProximitySensor.onEnemyOutOfProximity -= EnterCalmPhase;
     }
 
     private void EnterPanicPhase()
     {
+        if (breathSource.clip == breathClips[1])
+        {
+            // already in panic phase, return
+            return;
+        }
+
         breathSource.clip = breathClips[1];
         heartbeatSource.clip = heartbeatClips[2];
+
+        breathSource.Play();
+        heartbeatSource.Play();
+    }
+
+    private void EnterCalmPhase()
+    {
+        if (breathSource.clip == breathClips[0])
+        {
+            // already in calm phase, return
+            return;
+        }
+
+        breathSource.clip = breathClips[0];
+        heartbeatSource.clip = heartbeatClips[0];
 
         breathSource.Play();
         heartbeatSource.Play();
