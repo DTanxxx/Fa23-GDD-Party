@@ -68,7 +68,7 @@ public class CameraFollow : MonoBehaviour
         else if (mode == 1)
         {
             CameraLock cameraLock = room.transform.Find("RoomCameraPosHolder").GetComponent<CameraLock>();
-            this.transform.position = cameraLock.GetPosition() + camOffset;
+            this.transform.position = cameraLock.GetPosition();// + camOffset;
             this.transform.rotation = Quaternion.Euler(cameraLock.GetDegrees(), 0, 0);
             GameObject hideGroup = room.transform.Find("HideGroup").gameObject;
             hideGroup.SetActive(false);
