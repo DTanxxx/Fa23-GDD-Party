@@ -109,7 +109,10 @@ public class PlayerMovement : MonoBehaviour
         myCollider.enabled = false;
         myRigidbody.velocity = Vector3.zero;
         animSpeed = animator.speed;
-        animator.speed = 0f;
+        if (!isDead)
+        {
+            animator.speed = 0f;
+        }
         isFrozen = true;
     }
 
