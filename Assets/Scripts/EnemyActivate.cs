@@ -19,7 +19,17 @@ public class EnemyActivate : MonoBehaviour
             itemData = activationItem.GetItemData();
         }
     }
-    
+
+    private void OnEnable()
+    {
+        CameraFollow.onCameraRestoreComplete += SetActive;
+    }
+
+    private void OnDisable()
+    {
+        CameraFollow.onCameraRestoreComplete -= SetActive;
+    }
+
     private void Update()
     {
         if (active || activationItem == null)
@@ -43,6 +53,7 @@ public class EnemyActivate : MonoBehaviour
         {
             if (enemy != null)
             {
+                enemy.gameObject.SetActive(true);
                 enemy.SetActive();
                 active = true;
             }

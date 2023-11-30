@@ -309,6 +309,7 @@ GameObject:
   - component: {fileID: 6546173695629545384}
   - component: {fileID: 7628812911528121698}
   - component: {fileID: 2177870776001706382}
+  - component: {fileID: 6364736943160836048}
   m_Layer: 14
   m_Name: Light Source
   m_TagString: Untagged
@@ -415,7 +416,7 @@ Animator:
   m_GameObject: {fileID: 8039672135754434375}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 96fcdfcf9c2a5fe418d4e95605720043, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -426,3 +427,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6364736943160836048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8039672135754434375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba5a9ae4894dbff4387c67fe597b4e25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

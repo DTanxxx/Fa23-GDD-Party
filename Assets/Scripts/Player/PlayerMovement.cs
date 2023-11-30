@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 lastDirection;
     private bool isDead = false;
     private bool isFrozen = false;
-    // private CharacterController controller;
+    private float animSpeed;
 
     private void Start()
     {
@@ -32,12 +32,14 @@ public class PlayerMovement : MonoBehaviour
     {
         PlayerHealth.onDeath += TriggerDeathAnimation;
         LeverPullAnimationEvents.onBeginLeverCinematicSequence += FreezePlayer;
+        CameraFollow.onCameraRestoreComplete += UnfreezePlayer;
     }
 
     private void OnDisable()
     {
         PlayerHealth.onDeath -= TriggerDeathAnimation;
         LeverPullAnimationEvents.onBeginLeverCinematicSequence -= FreezePlayer;
+        CameraFollow.onCameraRestoreComplete -= UnfreezePlayer;
     }
 
     private void FixedUpdate()
@@ -106,7 +108,18 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Player frozen");
         myCollider.enabled = false;
         myRigidbody.velocity = Vector3.zero;
+        animSpeed = animator.speed;
+        animator.speed = 0f;
         isFrozen = true;
+    }
+
+    private void UnfreezePlayer()
+    {
+        Debug.Log("Player unfrozen");
+        myCollider.enabled = true;
+        myRigidbody.velocity = Vector3.zero;
+        animator.speed = animSpeed;
+        isFrozen = false;
     }
 
     private void TriggerDeathAnimation(Vector3 enemyPosition)

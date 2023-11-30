@@ -11,8 +11,30 @@ public class EnemyProximitySensor : MonoBehaviour
     public static Action onEnemyInProximity;
     public static Action onEnemyOutOfProximity;
 
+    private bool sensorEnabled = false;
+
+    private void OnEnable()
+    {
+        CameraFollow.onCameraRestoreComplete += EnableSensor;
+    }
+
+    private void OnDisable()
+    {
+        CameraFollow.onCameraRestoreComplete -= EnableSensor;
+    }
+
+    private void EnableSensor()
+    {
+        sensorEnabled = true;
+    }
+
     private void Update()
     {
+        if (!sensorEnabled)
+        {
+            return;
+        }
+
         // create a sphere raycast and check if there are any enemies within the specified radius
         RaycastHit[] hits = Physics.SphereCastAll(transform.position, enemySensorRadius, transform.forward, 0f,
             weepingAngelLayer.value, QueryTriggerInteraction.Ignore);
