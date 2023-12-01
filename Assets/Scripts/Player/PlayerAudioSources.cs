@@ -14,7 +14,7 @@ public class PlayerAudioSources : MonoBehaviour
 
     private void Start()
     {
-        EnterCalmPhase();
+        StopAllSFX();
     }
 
     private void OnEnable()
@@ -23,6 +23,9 @@ public class PlayerAudioSources : MonoBehaviour
         PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
         EnemyProximitySensor.onEnemyInProximity += EnterPanicPhase;
         EnemyProximitySensor.onEnemyOutOfProximity += EnterCalmPhase;
+        NextLevelTrigger.onBeginLevelTransition += StopAllSFX;
+        ElevatorOpen.onElevatorClose += EnterCalmPhase;
+        LevelManager.onPauseGame += PauseAllSFX;
     }
 
     private void OnDisable()
@@ -31,6 +34,29 @@ public class PlayerAudioSources : MonoBehaviour
         PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
         EnemyProximitySensor.onEnemyInProximity -= EnterPanicPhase;
         EnemyProximitySensor.onEnemyOutOfProximity -= EnterCalmPhase;
+        NextLevelTrigger.onBeginLevelTransition -= StopAllSFX;
+        ElevatorOpen.onElevatorClose -= EnterCalmPhase;
+        LevelManager.onPauseGame -= PauseAllSFX;
+    }
+
+    private void PauseAllSFX(bool toPause)
+    {
+        if (toPause)
+        {
+            breathSource.Pause();
+            heartbeatSource.Pause();
+        }
+        else
+        {
+            breathSource.UnPause();
+            heartbeatSource.UnPause();
+        }
+    }
+
+    private void StopAllSFX()
+    {
+        breathSource.Stop();
+        heartbeatSource.Stop();
     }
 
     private void EnterPanicPhase()

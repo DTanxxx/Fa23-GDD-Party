@@ -13,6 +13,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer = null;
     [SerializeField] private Collider myCollider = null;
     [SerializeField] private Rigidbody myRigidbody = null;
+    [SerializeField] private float pauseBeforeAppearance = 1f;
+    [SerializeField] private Transform beginTransform = null;
+    [SerializeField] private float tolerableOffset = 1f;
+    [SerializeField] private float playerTransitionRate = 0.25f;
 
     private int currFrames;
     private Vector3 velo;
@@ -22,24 +26,33 @@ public class PlayerMovement : MonoBehaviour
     private bool isDead = false;
     private bool isFrozen = false;
     private float animSpeed;
+    private WaitForSeconds waitForPauseBeforeAppearance;
 
     private void Start()
     {
         dir = new Vector3(1, 0, 0);
+        waitForPauseBeforeAppearance = new WaitForSeconds(pauseBeforeAppearance);
+        FreezePlayer();
     }
 
     private void OnEnable()
     {
         PlayerHealth.onDeath += TriggerDeathAnimation;
         LeverPullAnimationEvents.onBeginLeverCinematicSequence += FreezePlayer;
+        ElevatorOpen.onPlayerEntrance += TransitionIntoLevel;
         CameraFollow.onCameraRestoreComplete += UnfreezePlayer;
+        ElevatorOpen.onElevatorClose += UnfreezePlayer;
+        NextLevelTrigger.onBeginLevelTransition += FreezePlayer;
     }
 
     private void OnDisable()
     {
         PlayerHealth.onDeath -= TriggerDeathAnimation;
         LeverPullAnimationEvents.onBeginLeverCinematicSequence -= FreezePlayer;
+        ElevatorOpen.onPlayerEntrance -= TransitionIntoLevel;
         CameraFollow.onCameraRestoreComplete -= UnfreezePlayer;
+        ElevatorOpen.onElevatorClose -= UnfreezePlayer;
+        NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
     }
 
     private void FixedUpdate()
@@ -100,6 +113,24 @@ public class PlayerMovement : MonoBehaviour
         {
             // not walking
             animator.SetBool("Walking", false);
+        }
+    }
+
+    private void TransitionIntoLevel()
+    {
+        StartCoroutine(BeginTransitioning());
+    }
+
+    private IEnumerator BeginTransitioning()
+    {
+        yield return waitForPauseBeforeAppearance;
+
+        float dist = Vector3.Distance(transform.position, beginTransform.position);
+        while (dist > tolerableOffset)
+        {
+            transform.position = Vector3.Lerp(transform.position, beginTransform.position, playerTransitionRate);
+            dist = Vector3.Distance(transform.position, beginTransform.position);
+            yield return null;
         }
     }
 

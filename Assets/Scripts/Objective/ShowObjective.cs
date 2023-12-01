@@ -17,9 +17,25 @@ public class ShowObjective : MonoBehaviour
         invenRender.alpha = 0.0f;
     }
 
+    private void OnEnable()
+    {
+        ElevatorOpen.onElevatorClose += EnablePanel;
+    }
+
+    private void OnDisable()
+    {
+        ElevatorOpen.onElevatorClose -= EnablePanel;
+    }
+
     private void Update()
     {
         ShowPanel();
+    }
+
+    private void EnablePanel()
+    {
+        invenVisible = true;
+        invenRender.alpha = 1.0f;
     }
 
     public void ShowPanel()
