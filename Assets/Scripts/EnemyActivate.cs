@@ -53,6 +53,7 @@ public class EnemyActivate : MonoBehaviour
         {
             if (enemy != null)
             {
+                Debug.Log(enemy.gameObject.name + " is active!");
                 enemy.gameObject.SetActive(true);
                 enemy.SetActive();
                 active = true;

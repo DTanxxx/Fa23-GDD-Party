@@ -13,7 +13,8 @@ public class FocusLightAnimationEvents : MonoBehaviour
     // animation event
     public void TeleportEnemy()
     {
-        enemyUnderFocus.transform.position = teleportDestination.position;
+        enemyUnderFocus.gameObject.SetActive(false);
+        enemyUnderFocus.position = teleportDestination.position;
     }
 
     // animation event
