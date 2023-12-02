@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 0
-  camOffset: {x: 0, y: 3, z: -10}
+  camOffset: {x: 0, y: 10.4, z: -12.58}
   focusTransform: {fileID: 0}
   cameraPauseDuration: 2
   cameraShiftRate: 0.1
