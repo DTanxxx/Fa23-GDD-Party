@@ -24,7 +24,7 @@ public class NextLevelTrigger : MonoBehaviour
         waitForPauseBeforeRising = new WaitForSeconds(pauseBeforeRising);
         waitForRisingDuration = new WaitForSeconds(risingDuration);
         audioSource = GetComponent<AudioSource>();
-        levelManager = GetComponent<LevelManager>();
+        levelManager = FindObjectOfType<LevelManager>();
     }
 
     private void OnTriggerEnter(Collider other)

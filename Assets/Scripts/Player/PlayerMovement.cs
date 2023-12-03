@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -17,9 +17,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform beginTransform = null;
     [SerializeField] private float tolerableOffset = 1f;
     [SerializeField] private float playerTransitionRate = 0.25f;
+    [SerializeField] private Light2D[] lights;
 
     private int currFrames;
-    private Vector3 velo;
     private Vector3 dir;
     private int curFrameDelay;
     private Vector3 lastDirection;
@@ -118,7 +118,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void TransitionIntoLevel()
     {
-        StartCoroutine(BeginTransitioning());
+        //StartCoroutine(BeginTransitioning());
+
+        // for now, simply enable flashlight
+        foreach (var light in lights)
+        {
+            light.enabled = true;
+        }
     }
 
     private IEnumerator BeginTransitioning()

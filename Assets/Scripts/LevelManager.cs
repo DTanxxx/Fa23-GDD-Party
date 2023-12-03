@@ -7,10 +7,9 @@ using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] private GameObject pausePanel = null;
-
     public static Action<bool> onPauseGame;
 
+    // button event
     public void LoadNextScene()
     {
         if (SceneManager.GetActiveScene().buildIndex == 0)
@@ -21,21 +20,33 @@ public class LevelManager : MonoBehaviour
         else
         {
             // reload scene
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            ReloadScene();
         }
     }
 
+    // button event
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    // button event
+    public void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    // button event
     public void PauseGame()
     {
         Time.timeScale = 0f;
-        pausePanel.SetActive(true);
         onPauseGame?.Invoke(true);
     }
 
+    // button event
     public void UnpauseGame()
     {
         Time.timeScale = 1f;
-        pausePanel.SetActive(false);
         onPauseGame?.Invoke(false);
     }
 }

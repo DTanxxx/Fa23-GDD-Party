@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 9145144561341779292}
   - component: {fileID: 5050393800135649478}
   - component: {fileID: 1221940894567306116}
-  - component: {fileID: 4457763563734634658}
   - component: {fileID: 8394514888411826920}
   m_Layer: 0
   m_Name: Next Level Trigger
@@ -72,18 +71,6 @@ MonoBehaviour:
   fadeDuration: 3
   pauseBeforeRising: 1
   risingDuration: 6
---- !u!114 &4457763563734634658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 141931828557721922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44890cee850e71149b02f627d63169e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &8394514888411826920
 AudioSource:
   m_ObjectHideFlags: 0
@@ -293,7 +280,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 525619777
-  m_SortingLayer: 4
+  m_SortingLayer: 2
   m_SortingOrder: 3
   m_Sprite: {fileID: 683013639, guid: fbff1ff94798e564b85c3d1e81a1a0e3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -494,7 +481,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 525619777
-  m_SortingLayer: 4
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: a0325b0374e9ebc458051a5756fdef31, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
