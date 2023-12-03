@@ -19,7 +19,7 @@ public class WeepingAngelMovement : MonoBehaviour
     private NavMeshAgent agent;
     private float freezeTimer;
     private bool idle = true;
-    private bool enemyActive = false;
+    [SerializeField] private bool enemyActive = false;
 
     private void Start()
     {
