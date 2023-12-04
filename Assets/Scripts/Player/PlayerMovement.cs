@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isFrozen = false;
     private float animSpeed;
     private WaitForSeconds waitForPauseBeforeAppearance;
+    private float tempSpeed;
 
     private void Start()
     {
@@ -182,8 +183,30 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void DeathViaRed()
+    {
+        Debug.Log("Player died");
+        animator.SetTrigger("redDeath");
+        isDead = true;
+        myCollider.enabled = false;
+        myRigidbody.velocity = Vector3.zero;
+    }
+
     public Vector3 getDir()
     {
         return dir;
+    }
+
+    public void Immobile(bool onoff)
+    {
+        if (onoff)
+        {
+            tempSpeed = maxSpeed;
+            maxSpeed = 0f;
+        }
+        else
+        {
+            maxSpeed = tempSpeed;
+        }
     }
 }

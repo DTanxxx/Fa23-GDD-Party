@@ -23,6 +23,9 @@ public class EnemyActivate : MonoBehaviour
     private void OnEnable()
     {
         CameraFollow.onCameraRestoreComplete += SetActive;
+        //weepingAngels = FindObjectsOfType<WeepingAngelMovement>(true);
+        //Debug.Log(weepingAngels.Length);
+        //itemData = activationItem.GetItemData();
     }
 
     private void OnDisable()

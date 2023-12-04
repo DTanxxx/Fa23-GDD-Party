@@ -23,6 +23,7 @@ TagManager:
   - CameraShiftTrigger
   - Debris
   - Foreground
+  - ColorTile
   - 
   - 
   - 
