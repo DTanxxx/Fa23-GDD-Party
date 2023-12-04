@@ -51,6 +51,8 @@ public class ColorTileManager : MonoBehaviour
                 loc = new Vector3(col * 8.94f, 0.11f, row * 8.94f);
             }
 
+            loc += transform.position;
+
             GameObject placed = Instantiate(obj, loc, Quaternion.identity);
 
             switch (color)

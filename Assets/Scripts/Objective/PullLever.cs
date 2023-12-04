@@ -6,24 +6,24 @@ using System;
 public class PullLever : MonoBehaviour
 {
     [SerializeField] InventorySystem inventorySystem;
-    [SerializeField] EnemyActivate enemyActivate;
     [SerializeField] private AudioSource leverSource = null;
     [SerializeField] private AudioSource electricitySource = null;
     [SerializeField] private Animator animator;
 
     public static Action onLeverPulled;
+
     private GameObject item;
+    private bool pulled = false;
 
     private void Awake()
     {
         inventorySystem = FindObjectOfType<InventorySystem>();
-        enemyActivate = FindObjectOfType<EnemyActivate>();
         animator = GetComponentInChildren<Animator>();
     }
 
-    void Update()
+    private void Update()
     {
-        if (item != null)
+        if (item != null && !pulled)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -34,12 +34,15 @@ public class PullLever : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (pulled)
+        {
+            return;
+        }
+
         item = collision.gameObject;
 
-        Debug.Log("collide");
         if (collision != null)
         {
-            Debug.Log(item);
             inventorySystem.OpenGUI("Press E to pull lever");
         }
     }
@@ -48,7 +51,6 @@ public class PullLever : MonoBehaviour
     {
         if (collision != null)
         {
-            Debug.Log("out");
             inventorySystem.CloseGUI();
             item = null;
         }
@@ -56,15 +58,22 @@ public class PullLever : MonoBehaviour
 
     private void LeverPulled()
     {
+        onLeverPulled?.Invoke();
+
+        // start cinematic sequence
         if (animator != null && leverSource != null && electricitySource != null)
         {
+            pulled = true;
+            inventorySystem.CloseGUI();
+            item = null;
+
             animator.SetTrigger("Pulled");
             leverSource.Play();
             electricitySource.Play();
         }
-
-        onLeverPulled?.Invoke();
-
-        enemyActivate.SetActive();
+        else
+        {
+            Debug.LogError("One of the fields is null!");
+        }
     }
 }

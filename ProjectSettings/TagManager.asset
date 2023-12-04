@@ -22,9 +22,9 @@ TagManager:
   - PlayerCameraShiftTrigger
   - CameraShiftTrigger
   - Debris
+  - Foreground
   - ColorTile
-  - 
-  - 
+  - PlayerColliderWithTile
   - 
   - 
   - 
@@ -47,12 +47,18 @@ TagManager:
   - name: Floor
     uniqueID: 1388736813
     locked: 0
+  - name: Wall
+    uniqueID: 525619777
+    locked: 0
   - name: Props
     uniqueID: 1280697863
     locked: 0
   - name: Characters
     uniqueID: 963813051
     locked: 0
-  - name: Wall
-    uniqueID: 525619777
+  - name: Player
+    uniqueID: 105903575
+    locked: 0
+  - name: Overhang
+    uniqueID: 923572005
     locked: 0

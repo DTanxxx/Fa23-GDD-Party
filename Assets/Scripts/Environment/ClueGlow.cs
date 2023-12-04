@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class ClueGlow : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class ClueGlow : MonoBehaviour
         activeCoroutines = new Dictionary<Transform, Coroutine>();
     }
 
-    public void ClueSpot(Vector3 currPos, float sphereCastRadius, Vector3 currDir, Light light, int excludePlayerLayerMask, PlayerMovement playerMovement)
+    public void ClueSpot(Vector3 currPos, float sphereCastRadius, Vector3 currDir, Light2D light, int excludePlayerLayerMask, PlayerMovement playerMovement)
     {
         uniqueClue = new HashSet<Transform>();
 
@@ -37,20 +38,20 @@ public class ClueGlow : MonoBehaviour
         //}
         
         sphereHitsClue = Physics.SphereCastAll(currPos, sphereCastRadius, 
-            currDir, light.range, clueTrailLayerMask.value);
+            currDir, light.pointLightOuterRadius, clueTrailLayerMask.value);
 
         foreach (var hit in sphereHitsClue)
         {
             RaycastHit hitInfo;
             if (Physics.Raycast(playerMovement.transform.position, (hit.transform.position - playerMovement.transform.position).normalized,
-                out hitInfo, light.range, excludePlayerLayerMask))
+                out hitInfo, light.pointLightOuterRadius, excludePlayerLayerMask))
             {
                 if (hitInfo.transform.CompareTag(clueTile))
                 {
                     Vector3 hitDir = new Vector3(hit.transform.position.x - currPos.x, 0, hit.transform.position.z - currPos.z);
                     float cosTheta = Vector3.Dot(currDir.normalized, hitDir.normalized);
                     float deg = Mathf.Acos(cosTheta) * Mathf.Rad2Deg;
-                    if (Mathf.Abs(deg) <= light.spotAngle / 2.0f)
+                    if (Mathf.Abs(deg) <= light.pointLightOuterAngle / 2.0f)
                     {
                         // check if both hitDir and actual direction from player to clue match
                         Vector3 dirFromPlayerToEnemy = new Vector3(hit.transform.position.x - playerMovement.transform.position.x,

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class LightDirection : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class LightDirection : MonoBehaviour
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private float damping = 20.0f;
 
-    private Light lightComponent;
+    private Light2D lightComponent;
     private Vector3 currDirection;
     private Vector3 tempDirection;
     private float sphereCastRadius;
@@ -23,9 +24,9 @@ public class LightDirection : MonoBehaviour
     private void Start()
     {
         lightContainer.transform.rotation = Quaternion.Euler(0, 90, 0);
-        lightComponent = GetComponent<Light>();
+        lightComponent = GetComponent<Light2D>();
 
-        sphereCastRadius = Mathf.Atan(lightComponent.spotAngle / 2.0f * Mathf.Deg2Rad) * lightComponent.range;
+        sphereCastRadius = Mathf.Atan(lightComponent.pointLightOuterAngle / 2.0f * Mathf.Deg2Rad) * lightComponent.pointLightOuterRadius;
 
         clueGlow = GameObject.Find("EventSystem").GetComponent<ClueGlow>();
 
@@ -41,7 +42,7 @@ public class LightDirection : MonoBehaviour
         tempDirection = lightContainer.transform.rotation * Vector3.forward;
 
         sphereCastHits = Physics.SphereCastAll(transform.position, sphereCastRadius,
-            tempDirection, lightComponent.range, weepingAngelLayer.value, QueryTriggerInteraction.Ignore);
+            tempDirection, lightComponent.pointLightOuterRadius, weepingAngelLayer.value, QueryTriggerInteraction.Ignore);
         
         // for Gizmos ========================================
         if (sphereCastHits.Length > 0)
@@ -50,7 +51,7 @@ public class LightDirection : MonoBehaviour
         }
         else
         {
-            sphereCastHitDistance = lightComponent.range;
+            sphereCastHitDistance = lightComponent.pointLightOuterRadius;
         }
         // ===================================================
 
@@ -59,7 +60,7 @@ public class LightDirection : MonoBehaviour
             RaycastHit hitInfo;
             // check for light of sight
             if (Physics.Raycast(playerMovement.transform.position, (hit.transform.position - playerMovement.transform.position).normalized,
-                out hitInfo, lightComponent.range, ~playerLayer, QueryTriggerInteraction.Ignore))
+                out hitInfo, lightComponent.pointLightOuterRadius, ~playerLayer, QueryTriggerInteraction.Ignore))
             {
                 //Debug.Log(hitInfo.transform.gameObject.layer);
                 if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
@@ -69,7 +70,7 @@ public class LightDirection : MonoBehaviour
                         0, hit.transform.position.z - transform.position.z);
                     float cosTheta = Vector3.Dot(tempDirection.normalized, hitDir.normalized);
                     float deg = Mathf.Acos(cosTheta) * Mathf.Rad2Deg;
-                    if (Mathf.Abs(deg) <= lightComponent.spotAngle / 2.0f)
+                    if (Mathf.Abs(deg) <= lightComponent.pointLightOuterAngle / 2.0f)
                     {
                         // check if both hitDir and actual direction from player to enemy match
                         Vector3 dirFromPlayerToEnemy = new Vector3(hit.transform.position.x - playerMovement.transform.position.x,

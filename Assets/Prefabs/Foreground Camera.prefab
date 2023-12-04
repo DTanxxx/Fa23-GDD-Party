@@ -73,7 +73,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 16576
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -107,3 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 0
   camOffset: {x: 0, y: 15, z: -25}
+  focusTransform: {fileID: 0}
+  cameraPauseDuration: 2
+  cameraShiftRate: 0.1
+  focusReachDistance: 1
