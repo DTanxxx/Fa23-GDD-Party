@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
     private int curFrameDelay;
     private Vector3 lastDirection;
     private bool isDead = false;
+    private float tempSpeed;
+
     // private CharacterController controller;
 
     private void Start()
@@ -117,8 +119,30 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void DeathViaRed()
+    {
+        Debug.Log("Player died");
+        animator.SetTrigger("redDeath");
+        isDead = true;
+        myCollider.enabled = false;
+        myRigidbody.velocity = Vector3.zero;
+    }
+
     public Vector3 getDir()
     {
         return dir;
+    }
+
+    public void Immobile(bool onoff)
+    {
+        if (onoff)
+        {
+            tempSpeed = maxSpeed;
+            maxSpeed = 0f;
+        }
+        else
+        {
+            maxSpeed = tempSpeed;
+        }
     }
 }

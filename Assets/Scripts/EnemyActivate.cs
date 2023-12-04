@@ -14,7 +14,7 @@ public class EnemyActivate : MonoBehaviour
 
     private void Awake()
     {
-        //weepingAngels = FindObjectsOfType<WeepingAngelMovement>();
+        weepingAngels = FindObjectsOfType<WeepingAngelMovement>(true);
         Debug.Log(weepingAngels.Length);
         itemData = activationItem.GetItemData();
     }
