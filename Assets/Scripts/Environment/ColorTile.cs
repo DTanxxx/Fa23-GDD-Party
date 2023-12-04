@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
 
 public enum TileColor
 {
@@ -36,6 +37,8 @@ public class ColorTile : MonoBehaviour
     private SpriteRenderer[] spriteRenderers;
     private bool offTile = false;
     private bool onTile = false;
+
+    public static Action onIncinerate;
 
     private void Awake()
     {
@@ -86,12 +89,12 @@ public class ColorTile : MonoBehaviour
 
         GameObject player = collision.transform.parent.parent.gameObject;
         PlayerMovement pm = player.GetComponent<PlayerMovement>();
+        PlayerHealth health = player.GetComponent<PlayerHealth>();
 
-        if (!player.gameObject.CompareTag("Player"))
+        if (!player.gameObject.CompareTag("Player") || health.GetIsPlayerDead())
         {
             return;
         }
-
 
         Animator animator = player.GetComponentInChildren<Animator>();
         string enter = EnterDirection(collision);
@@ -105,7 +108,8 @@ public class ColorTile : MonoBehaviour
 
             case TileColor.Red:
                 Debug.Log("red");
-                player.GetComponent<PlayerMovement>().DeathViaRed();
+                health.SetIsPlayerDead();
+                onIncinerate?.Invoke();
                 break;
 
             case TileColor.Cyan:

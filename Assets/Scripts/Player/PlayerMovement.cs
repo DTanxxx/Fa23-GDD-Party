@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
         CameraFollow.onCameraRestoreComplete += UnfreezePlayer;
         ElevatorOpen.onElevatorClose += UnfreezePlayer;
         NextLevelTrigger.onBeginLevelTransition += FreezePlayer;
+        ColorTile.onIncinerate += Incinerate;
     }
 
     private void OnDisable()
@@ -54,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
         CameraFollow.onCameraRestoreComplete -= UnfreezePlayer;
         ElevatorOpen.onElevatorClose -= UnfreezePlayer;
         NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
+        ColorTile.onIncinerate -= Incinerate;
     }
 
     private void FixedUpdate()
@@ -183,7 +185,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void DeathViaRed()
+    private void Incinerate()
     {
         Debug.Log("Player died");
         animator.SetTrigger("redDeath");

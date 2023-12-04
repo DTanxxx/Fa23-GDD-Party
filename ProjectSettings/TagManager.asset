@@ -24,8 +24,7 @@ TagManager:
   - Debris
   - Foreground
   - ColorTile
-  - 
-  - 
+  - PlayerColliderWithTile
   - 
   - 
   - 

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2077853437189031307}
   - component: {fileID: 3243048526181686674}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: ColorTile (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 6191547374518513322}
   - component: {fileID: 8084063070992582826}
   - component: {fileID: 549952305464135449}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: ColorTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 1011796443343928042}
   - component: {fileID: 8017589322534472859}
   - component: {fileID: 6370194662273358099}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Side (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 1843939644042778923}
   - component: {fileID: 3247994430284594787}
   - component: {fileID: 7448204231240367304}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -371,8 +371,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.8564606, y: 0.82103044, z: 1.8703232}
-  m_Center: {x: -0.00031280518, y: -0.08948472, z: -0.557354}
+  m_Size: {x: 7.64, y: 0.82103044, z: 7.89}
+  m_Center: {x: -0.00031280518, y: -0.08948472, z: 0.03}
 --- !u!114 &7448204231240367304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,7 +385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 494ef6981e0898d43a5e36e518486b27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileColor: 6
+  tileColor: 1
   whiteSprite: {fileID: 21300000, guid: eb057c77f9cce0e4eb36bd84a19b32a7, type: 3}
   redSprite: {fileID: 21300000, guid: 7e996b74088422640bb743f611f72481, type: 3}
   cyanSprite: {fileID: 21300000, guid: e59c238a05b4ac249b7046131240bc77, type: 3}
@@ -405,7 +405,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7060552033729844866}
   - component: {fileID: 5932171967328512808}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: ColorTile (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -489,7 +489,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7407140411365294240}
   - component: {fileID: 481668499262083120}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: ColorTile (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -573,7 +573,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3916623402332525732}
   - component: {fileID: 8128177470645021269}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: ColorTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -657,7 +657,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5312370447506219308}
   - component: {fileID: 6127523975714564365}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: ColorTile (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -740,7 +740,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5600534516250033729}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Sides
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -776,7 +776,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7878771338152044724}
   - component: {fileID: 5687766753811110973}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: ColorTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -861,7 +861,7 @@ GameObject:
   - component: {fileID: 1032782772195171912}
   - component: {fileID: 531697717718032896}
   - component: {fileID: 3512262207538764283}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Side
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -966,7 +966,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4236905673149956888}
   - component: {fileID: 8778392598877023787}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: ColorTile (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1050,7 +1050,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2876396826851025560}
   - component: {fileID: 6010546287075217599}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: ColorTile (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1135,7 +1135,7 @@ GameObject:
   - component: {fileID: 8140567769686405798}
   - component: {fileID: 6987947748975956664}
   - component: {fileID: 4303489936128272518}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Side (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1241,7 +1241,7 @@ GameObject:
   - component: {fileID: 6185047690458752130}
   - component: {fileID: 9160658726504132262}
   - component: {fileID: 9177731279040885005}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Side (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
