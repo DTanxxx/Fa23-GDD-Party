@@ -259,7 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerDetectionRadius: 30
-  chaseSpeed: 6
+  chaseSpeed: 8
   freezeDuration: 1.5
   weepingAngelLayer:
     serializedVersion: 2

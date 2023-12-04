@@ -84,11 +84,11 @@ public class CameraFollow : MonoBehaviour
         } 
         else if (mode == 1)
         {
-            cameraLock = room.transform.Find("RoomCameraPosHolder").GetComponent<CameraLock>();
+            /*cameraLock = room.transform.Find("RoomCameraPosHolder").GetComponent<CameraLock>();
             this.transform.position = cameraLock.GetPosition();
             this.transform.rotation = Quaternion.Euler(cameraLock.GetDegrees(), 0, 0);
             GameObject hideGroup = room.transform.Find("HideGroup").gameObject;
-            hideGroup.SetActive(false);
+            hideGroup.SetActive(false);*/
         }
         else if (mode == 2)
         {
@@ -111,24 +111,25 @@ public class CameraFollow : MonoBehaviour
         }
         else if (mode == 3)
         {
-            float camDist = Vector3.Distance(transform.position, cameraLock.GetPosition());
+            Vector3 targetPos = playerPos + camOffset;
+            float camDist = Vector3.Distance(transform.position, targetPos);
             if (camDist <= focusReachDistance)
             {
                 return;
             }
 
-            cameraLock = room.transform.Find("RoomCameraPosHolder").GetComponent<CameraLock>();
+            //cameraLock = room.transform.Find("RoomCameraPosHolder").GetComponent<CameraLock>();
 
             // shift camera to go back to room pos
             transform.position = Vector3.Lerp(transform.position,
-                cameraLock.GetPosition(), cameraShiftRate);
+                targetPos, cameraShiftRate);
 
-            camDist = Vector3.Distance(transform.position, cameraLock.GetPosition());
+            camDist = Vector3.Distance(transform.position, targetPos);
             if (camDist <= focusReachDistance)
             {
                 // camera shift sequence complete
                 onCameraRestoreComplete?.Invoke();
-                mode = 1;
+                mode = 0;
             }
         }
     }

@@ -125,6 +125,8 @@ public class PlayerMovement : MonoBehaviour
         {
             light.enabled = true;
         }
+
+        transform.position = beginTransform.position;
     }
 
     private IEnumerator BeginTransitioning()
