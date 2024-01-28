@@ -24,6 +24,6 @@ public class FocusLight : MonoBehaviour
     private void BeginFlickeringSequence()
     {
         // animate the light source and overhead lamp sprite
-
+        animator.SetTrigger("Flicker");
     }
 }

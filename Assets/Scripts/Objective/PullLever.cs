@@ -6,7 +6,6 @@ using System;
 public class PullLever : MonoBehaviour
 {
     [SerializeField] InventorySystem inventorySystem;
-    [SerializeField] EnemyActivate enemyActivate;
     [SerializeField] private AudioSource leverSource = null;
     [SerializeField] private AudioSource electricitySource = null;
     [SerializeField] private Animator animator;
@@ -19,7 +18,6 @@ public class PullLever : MonoBehaviour
     private void Awake()
     {
         inventorySystem = FindObjectOfType<InventorySystem>();
-        enemyActivate = FindObjectOfType<EnemyActivate>();
         animator = GetComponentInChildren<Animator>();
     }
 
@@ -78,10 +76,4 @@ public class PullLever : MonoBehaviour
             Debug.LogError("One of the fields is null!");
         }
     }
-
-    // animation event
-    /*public void ActivateEnemies()
-    {
-        enemyActivate.SetActive();
-    }*/
 }

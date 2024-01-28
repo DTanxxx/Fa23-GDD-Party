@@ -14,8 +14,6 @@ public class PlayerAnimationEvents : MonoBehaviour
     public void OnEndDeathAnimation()
     {
         onEndPlayerDeathAnim?.Invoke();
-        // SHOULD BE IN ITS OWN SCRIPT
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     // animation event

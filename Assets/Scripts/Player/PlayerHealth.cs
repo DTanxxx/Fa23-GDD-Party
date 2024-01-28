@@ -22,6 +22,11 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public void SetIsPlayerDead()
+    {
+        isDead = true;
+    }
+
     public bool GetIsPlayerDead()
     {
         return isDead;

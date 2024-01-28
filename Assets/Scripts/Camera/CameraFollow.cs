@@ -17,8 +17,10 @@ public class CameraFollow : MonoBehaviour
     private GameObject player;
     private GameObject room;
     private WaitForSeconds waitForCameraPause;
+    private CameraLock cameraLock;
 
     public static Action onCameraShiftComplete;
+    public static Action onCameraRestoreComplete;
 
     private void Start()
     {
@@ -32,11 +34,13 @@ public class CameraFollow : MonoBehaviour
     private void OnEnable()
     {
         LeverPullAnimationEvents.onBeginLeverCinematicSequence += StartCameraSequence;
+        FocusLightAnimationEvents.onFocusLightFinishAnim += RestoreCameraSequence;
     }
 
     private void OnDisable()
     {
         LeverPullAnimationEvents.onBeginLeverCinematicSequence -= StartCameraSequence;
+        FocusLightAnimationEvents.onFocusLightFinishAnim -= RestoreCameraSequence;
     }
 
     private void StartCameraSequence()
@@ -53,6 +57,19 @@ public class CameraFollow : MonoBehaviour
         mode = 2;
     }
 
+    private void RestoreCameraSequence()
+    {
+        StartCoroutine(RestoreCamera());
+    }
+
+    private IEnumerator RestoreCamera()
+    {
+        yield return waitForCameraPause;
+
+        // camera restore
+        mode = 3;
+    }
+
     private void Update()
     {
         playerPos = player.transform.position;
@@ -67,11 +84,11 @@ public class CameraFollow : MonoBehaviour
         } 
         else if (mode == 1)
         {
-            CameraLock cameraLock = room.transform.Find("RoomCameraPosHolder").GetComponent<CameraLock>();
-            this.transform.position = cameraLock.GetPosition() + camOffset;
+            /*cameraLock = room.transform.Find("RoomCameraPosHolder").GetComponent<CameraLock>();
+            this.transform.position = cameraLock.GetPosition();
             this.transform.rotation = Quaternion.Euler(cameraLock.GetDegrees(), 0, 0);
             GameObject hideGroup = room.transform.Find("HideGroup").gameObject;
-            hideGroup.SetActive(false);
+            hideGroup.SetActive(false);*/
         }
         else if (mode == 2)
         {
@@ -90,6 +107,29 @@ public class CameraFollow : MonoBehaviour
             {
                 // camera shift sequence complete
                 onCameraShiftComplete?.Invoke();
+            }
+        }
+        else if (mode == 3)
+        {
+            Vector3 targetPos = playerPos + camOffset;
+            float camDist = Vector3.Distance(transform.position, targetPos);
+            if (camDist <= focusReachDistance)
+            {
+                return;
+            }
+
+            //cameraLock = room.transform.Find("RoomCameraPosHolder").GetComponent<CameraLock>();
+
+            // shift camera to go back to room pos
+            transform.position = Vector3.Lerp(transform.position,
+                targetPos, cameraShiftRate);
+
+            camDist = Vector3.Distance(transform.position, targetPos);
+            if (camDist <= focusReachDistance)
+            {
+                // camera shift sequence complete
+                onCameraRestoreComplete?.Invoke();
+                mode = 0;
             }
         }
     }

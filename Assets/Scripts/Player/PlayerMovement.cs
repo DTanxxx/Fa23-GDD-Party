@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,31 +13,49 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer = null;
     [SerializeField] private Collider myCollider = null;
     [SerializeField] private Rigidbody myRigidbody = null;
+    [SerializeField] private float pauseBeforeAppearance = 1f;
+    [SerializeField] private Transform beginTransform = null;
+    [SerializeField] private float tolerableOffset = 1f;
+    [SerializeField] private float playerTransitionRate = 0.25f;
+    [SerializeField] private Light2D[] lights;
 
     private int currFrames;
-    private Vector3 velo;
     private Vector3 dir;
     private int curFrameDelay;
     private Vector3 lastDirection;
     private bool isDead = false;
     private bool isFrozen = false;
-    // private CharacterController controller;
+    private float animSpeed;
+    private WaitForSeconds waitForPauseBeforeAppearance;
+    private float tempSpeed;
 
     private void Start()
     {
         dir = new Vector3(1, 0, 0);
+        waitForPauseBeforeAppearance = new WaitForSeconds(pauseBeforeAppearance);
+        FreezePlayer();
     }
 
     private void OnEnable()
     {
         PlayerHealth.onDeath += TriggerDeathAnimation;
         LeverPullAnimationEvents.onBeginLeverCinematicSequence += FreezePlayer;
+        ElevatorOpen.onPlayerEntrance += TransitionIntoLevel;
+        CameraFollow.onCameraRestoreComplete += UnfreezePlayer;
+        ElevatorOpen.onElevatorClose += UnfreezePlayer;
+        NextLevelTrigger.onBeginLevelTransition += FreezePlayer;
+        ColorTile.onIncinerate += Incinerate;
     }
 
     private void OnDisable()
     {
         PlayerHealth.onDeath -= TriggerDeathAnimation;
         LeverPullAnimationEvents.onBeginLeverCinematicSequence -= FreezePlayer;
+        ElevatorOpen.onPlayerEntrance -= TransitionIntoLevel;
+        CameraFollow.onCameraRestoreComplete -= UnfreezePlayer;
+        ElevatorOpen.onElevatorClose -= UnfreezePlayer;
+        NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
+        ColorTile.onIncinerate -= Incinerate;
     }
 
     private void FixedUpdate()
@@ -101,12 +119,52 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void TransitionIntoLevel()
+    {
+        //StartCoroutine(BeginTransitioning());
+
+        // for now, simply enable flashlight
+        foreach (var light in lights)
+        {
+            light.enabled = true;
+        }
+
+        transform.position = beginTransform.position;
+    }
+
+    private IEnumerator BeginTransitioning()
+    {
+        yield return waitForPauseBeforeAppearance;
+
+        float dist = Vector3.Distance(transform.position, beginTransform.position);
+        while (dist > tolerableOffset)
+        {
+            transform.position = Vector3.Lerp(transform.position, beginTransform.position, playerTransitionRate);
+            dist = Vector3.Distance(transform.position, beginTransform.position);
+            yield return null;
+        }
+    }
+
     private void FreezePlayer()
     {
         Debug.Log("Player frozen");
         myCollider.enabled = false;
         myRigidbody.velocity = Vector3.zero;
+        animSpeed = animator.speed;
+        if (!isDead)
+        {
+            animator.speed = 0f;
+        }
         isFrozen = true;
+    }
+
+    private void UnfreezePlayer()
+    {
+        Debug.Log("Player unfrozen");
+        myCollider.enabled = true;
+        myRigidbody.velocity = Vector3.zero;
+        animator.speed = animSpeed;
+        isFrozen = false;
     }
 
     private void TriggerDeathAnimation(Vector3 enemyPosition)
@@ -127,8 +185,30 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void Incinerate()
+    {
+        Debug.Log("Player died");
+        animator.SetTrigger("redDeath");
+        isDead = true;
+        myCollider.enabled = false;
+        myRigidbody.velocity = Vector3.zero;
+    }
+
     public Vector3 getDir()
     {
         return dir;
+    }
+
+    public void Immobile(bool onoff)
+    {
+        if (onoff)
+        {
+            tempSpeed = maxSpeed;
+            maxSpeed = 0f;
+        }
+        else
+        {
+            maxSpeed = tempSpeed;
+        }
     }
 }

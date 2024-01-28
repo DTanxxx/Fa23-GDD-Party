@@ -11,10 +11,11 @@ public class PlayerAudioSources : MonoBehaviour
     [SerializeField] private AudioSource heartbeatSource = null;
     [SerializeField] private AudioClip[] heartbeatClips;
     [SerializeField] private AudioSource skullCrushSource = null;
+    [SerializeField] private AudioSource incinerationSource = null;
 
     private void Start()
     {
-        EnterCalmPhase();
+        StopAllSFX();
     }
 
     private void OnEnable()
@@ -23,6 +24,10 @@ public class PlayerAudioSources : MonoBehaviour
         PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
         EnemyProximitySensor.onEnemyInProximity += EnterPanicPhase;
         EnemyProximitySensor.onEnemyOutOfProximity += EnterCalmPhase;
+        NextLevelTrigger.onBeginLevelTransition += StopAllSFX;
+        ElevatorOpen.onElevatorClose += EnterCalmPhase;
+        LevelManager.onPauseGame += PauseAllSFX;
+        ColorTile.onIncinerate += PlayIncinerateSFX;
     }
 
     private void OnDisable()
@@ -31,6 +36,35 @@ public class PlayerAudioSources : MonoBehaviour
         PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
         EnemyProximitySensor.onEnemyInProximity -= EnterPanicPhase;
         EnemyProximitySensor.onEnemyOutOfProximity -= EnterCalmPhase;
+        NextLevelTrigger.onBeginLevelTransition -= StopAllSFX;
+        ElevatorOpen.onElevatorClose -= EnterCalmPhase;
+        LevelManager.onPauseGame -= PauseAllSFX;
+        ColorTile.onIncinerate -= PlayIncinerateSFX;
+    }
+
+    private void PauseAllSFX(bool toPause)
+    {
+        if (toPause)
+        {
+            breathSource.Pause();
+            heartbeatSource.Pause();
+        }
+        else
+        {
+            breathSource.UnPause();
+            heartbeatSource.UnPause();
+        }
+    }
+
+    private void PlayIncinerateSFX()
+    {
+        incinerationSource.Play();
+    }
+
+    private void StopAllSFX()
+    {
+        breathSource.Stop();
+        heartbeatSource.Stop();
     }
 
     private void EnterPanicPhase()

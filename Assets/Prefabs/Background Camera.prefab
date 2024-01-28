@@ -69,11 +69,11 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 0
-  orthographic size: 20
+  orthographic size: 17
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 16183
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 0
-  camOffset: {x: 0, y: 15, z: -25}
+  camOffset: {x: 0, y: 14.2, z: -22.2}
   focusTransform: {fileID: 0}
   cameraPauseDuration: 2
   cameraShiftRate: 0.1
