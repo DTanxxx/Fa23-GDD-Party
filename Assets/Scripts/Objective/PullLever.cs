@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class PullLever : MonoBehaviour
 {
@@ -32,24 +33,24 @@ public class PullLever : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         if (pulled)
         {
             return;
         }
 
-        item = collision.gameObject;
+        item = other.gameObject;
 
-        if (collision != null)
+        if (other != null)
         {
             inventorySystem.OpenGUI("Press E to pull lever");
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
-        if (collision != null)
+        if (other != null)
         {
             inventorySystem.CloseGUI();
             item = null;
@@ -67,7 +68,16 @@ public class PullLever : MonoBehaviour
             inventorySystem.CloseGUI();
             item = null;
 
-            animator.SetTrigger("Pulled");
+            if (SceneManager.GetActiveScene().buildIndex == 2)
+            {
+                animator.SetTrigger("Pulled2");
+                FindObjectOfType<EnemyActivate>().SetActive();
+            }
+            else
+            {
+                animator.SetTrigger("Pulled");
+            }
+            
             leverSource.Play();
             electricitySource.Play();
         }
