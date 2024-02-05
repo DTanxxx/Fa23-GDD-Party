@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class ColorTileManager : MonoBehaviour
 {
+    [Tooltip("This should match the size of tile prefab's ColorTile transform scales")]
+    [SerializeField] private float tileSize = 6f;
     [SerializeField] private TileSpawner[] tileLocs;
-    [SerializeField] private int matrixSize;
+    [SerializeField] private Vector2 matrixSize;
 
     private List<GameObject> redWhiteList = new List<GameObject>();
     private List<GameObject> greenList = new List<GameObject>();
@@ -21,7 +23,7 @@ public class ColorTileManager : MonoBehaviour
     {
         if (tileLocs == null) { return; }
 
-        matrix = new GameObject[matrixSize, matrixSize];
+        matrix = new GameObject[(int)matrixSize.x, (int)matrixSize.y];
 
         foreach (TileSpawner tile in tileLocs)
         {
@@ -43,17 +45,19 @@ public class ColorTileManager : MonoBehaviour
 
             if (tile.raised)
             {
-                loc = new Vector3(col * 8.94f, 2.5f, row * 8.94f);
+                loc = new Vector3(col * tileSize, 2.5f, row * tileSize);
             }
 
             else
             {
-                loc = new Vector3(col * 8.94f, 0.11f, row * 8.94f);
+                loc = new Vector3(col * tileSize, 0.11f, row * tileSize);
             }
 
-            loc += transform.position;
+            //loc += transform.position;
 
-            GameObject placed = Instantiate(obj, loc, Quaternion.identity);
+            //GameObject placed = Instantiate(obj, loc, Quaternion.identity);
+            GameObject placed = Instantiate(obj, transform);
+            placed.transform.localPosition = loc;
 
             switch (color)
             {
@@ -108,8 +112,8 @@ public class ColorTileManager : MonoBehaviour
         int row = rowcol.Item1;
         int col = rowcol.Item2;
         
-        //search column
-        for (int i = 0; i < matrixSize; i++)
+        //search row
+        for (int i = 0; i < matrixSize.x; i++)
         {
             GameObject inMatrix = matrix[i, col];
             if (inMatrix == null) { continue; }
@@ -129,7 +133,8 @@ public class ColorTileManager : MonoBehaviour
             }
         }
 
-        for (int j = 0; j < matrixSize; j++)
+        // search column
+        for (int j = 0; j < matrixSize.y; j++)
         {
             GameObject inMatrix = matrix[row, j];
 
