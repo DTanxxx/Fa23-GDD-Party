@@ -152,6 +152,7 @@ public class ColorTileManager : MonoBehaviour
         for (int j = 0; j < matrixSize.y; j++)
         {
             GameObject inMatrix = matrix[row, j];
+            if (inMatrix == null) { continue; }
 
             if (inMatrix.TryGetComponent<ColorTile>(out var exist))
             {
@@ -220,6 +221,7 @@ public class ColorTileManager : MonoBehaviour
             }
 
             GameObject inMatrix = matrix[(int)realPos.x, (int)realPos.y];
+            if (inMatrix == null) { continue; }
 
             if (inMatrix.TryGetComponent<ColorTile>(out var exist))
             {
