@@ -31,6 +31,8 @@ public class ColorTile : MonoBehaviour
     [SerializeField] private Sprite yellowSprite;
     [SerializeField] private Sprite magentaSprite;
     [SerializeField] private Sprite purpleSprite;
+    [SerializeField] private string tileTopLayer;
+    [SerializeField] private string tileSideLayer;
 
     private ColorTileManager tileManager;
     private Collider _collider;
@@ -45,14 +47,20 @@ public class ColorTile : MonoBehaviour
         _collider = GetComponent<Collider>();
         _collider.isTrigger = true;
         offTile = false;
-        tileManager = FindObjectOfType<ColorTileManager>();
         spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+    }
+
+    public void SetColor(TileColor c, ColorTileManager manager)
+    {
+        tileColor = c;
+        tileManager = manager;
+
         switch (tileColor)
         {
             case TileColor.White:
                 SetSprite(whiteSprite);
                 break;
-            case TileColor.Red: 
+            case TileColor.Red:
                 SetSprite(redSprite);
                 break;
             case TileColor.Cyan:
@@ -79,14 +87,8 @@ public class ColorTile : MonoBehaviour
         }
     }
 
-    public void SetColor(TileColor c)
-    {
-        tileColor = c;
-    }
-
     private void OnTriggerEnter(Collider collision)
     { 
-
         GameObject player = collision.transform.parent.parent.gameObject;
         PlayerMovement pm = player.GetComponent<PlayerMovement>();
         PlayerHealth health = player.GetComponent<PlayerHealth>();
@@ -117,10 +119,6 @@ public class ColorTile : MonoBehaviour
                 tileManager.ActivateCyan();
                 break;
 
-            case TileColor.Black:
-                tileManager.ActivateBlack();
-                break;
-
             case TileColor.Green:
                 tileManager.ActivateGreen();
                 break;
@@ -130,16 +128,24 @@ public class ColorTile : MonoBehaviour
                 StartCoroutine(Mover(player, enter));
                 pm.Immobile(false);
                 break;
-
-            case TileColor.Yellow:
-                StartCoroutine(Mover(gameObject, "raise"));
-                break;
-
             case TileColor.Magenta:
                 tileManager.ActivateMagenta(gameObject);
                 break;
         }
     }
+
+    private void OnTriggerExit(Collider collision)
+    {
+        if (tileColor == TileColor.Yellow)
+        {
+            StartCoroutine(Mover(gameObject, "raise"));
+        }
+        else if (tileColor == TileColor.Black)
+        {
+            tileManager.ActivateBlack();
+        }
+    }
+
     public TileColor GetTileColor() { return tileColor; }
 
     private void SetSprite(Sprite sp)
@@ -232,6 +238,23 @@ public class ColorTile : MonoBehaviour
         float waitTime = 1.0f;
 
         var currentPos = go.transform.position;
+
+        if (state == "raise")
+        {
+            // set top surface and sides of tile's layer to tileSide
+            foreach (SpriteRenderer rend in spriteRenderers)
+            {
+                rend.sortingLayerName = tileSideLayer;
+            }
+        }
+        else if (state == "lower")
+        {
+            // set top surface and sides of tile's layer to tileTop
+            foreach (SpriteRenderer rend in spriteRenderers)
+            {
+                rend.sortingLayerName = tileTopLayer;
+            }
+        }
         
         if (onTile)
         {
