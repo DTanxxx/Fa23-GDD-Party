@@ -91,8 +91,6 @@ public class PlayerMovement : MonoBehaviour
             curFrameDelay++;
         }
 
-        // controller.Move(d * maxSpeed * currFrames / accFrames);
-
         if (lastDirection != Vector3.zero)
         {
             // walking
@@ -194,6 +192,20 @@ public class PlayerMovement : MonoBehaviour
         myRigidbody.velocity = Vector3.zero;
     }
 
+    private void Slide()
+    {
+        myRigidbody.velocity = Vector3.zero;
+        isFrozen = true;  // disable player input
+        // transition to sliding animation
+        //animator.SetTrigger("Slide");
+    }
+
+    private void RecoverFromSlide()
+    {
+        //animator.SetTrigger("Recover");
+        isFrozen = false;
+    }
+
     public Vector3 getDir()
     {
         return dir;
@@ -201,7 +213,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Immobile(bool onoff)
     {
-        if (onoff)
+        /*if (onoff)
         {
             tempSpeed = maxSpeed;
             maxSpeed = 0f;
@@ -209,6 +221,14 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             maxSpeed = tempSpeed;
+        }*/
+        if (onoff)
+        {
+            Slide();
+        }
+        else
+        {
+            RecoverFromSlide();
         }
     }
 }

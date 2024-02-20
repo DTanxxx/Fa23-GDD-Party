@@ -33,6 +33,10 @@ public class ColorTile : MonoBehaviour
     [SerializeField] private Sprite purpleSprite;
     [SerializeField] private string tileTopLayer;
     [SerializeField] private string tileSideLayer;
+    [SerializeField] private Transform leftSide = null;
+    [SerializeField] private Transform rightSide = null;
+    [SerializeField] private Transform topSide = null;
+    [SerializeField] private Transform botSide = null;
 
     private ColorTileManager tileManager;
     private Collider _collider;
@@ -124,9 +128,7 @@ public class ColorTile : MonoBehaviour
                 break;
 
             case TileColor.Blue:
-                pm.Immobile(true);
                 StartCoroutine(Mover(player, enter));
-                pm.Immobile(false);
                 break;
             case TileColor.Magenta:
                 tileManager.ActivateMagenta(gameObject);
@@ -175,7 +177,8 @@ public class ColorTile : MonoBehaviour
     private string EnterDirection(Collider collision)
     {
         var dir = collision.transform.position - transform.position;
-        var frw = transform.TransformDirection(Vector3.forward);
+        string direction;
+        /*var frw = transform.TransformDirection(Vector3.forward);
         var ri = transform.TransformDirection(Vector3.right);
 
         string direction;
@@ -202,28 +205,70 @@ public class ColorTile : MonoBehaviour
                 direction = "left";
                 //Debug.Log("Left");
             }
+        }*/
+
+        if (Mathf.Abs(dir.x) >= Mathf.Abs(dir.z))
+        {
+            // player entered from left or right
+            if (dir.x < 0)
+            {
+                // left side
+                direction = "left";
+            }
+            else
+            {
+                // right side
+                direction = "right";
+            }
         }
+        else
+        {
+            // player entered from top or bottom
+            if (dir.z < 0)
+            {
+                // bottom side
+                direction = "bottom";
+            }
+            else
+            {
+                // top side
+                direction = "top";
+            }
+        }
+        
         return direction;
     }
 
     //Move Player or Raise+lower Tile
     public IEnumerator Mover(GameObject go, string state)
     {
+        // the only case where go is the player game object is when we step on blue tile
+        PlayerMovement pm;
+        if (go.TryGetComponent<PlayerMovement>(out pm))
+        {
+            // make player immobile
+            pm.Immobile(true);
+        }
+
         var endPos = go.transform.position;
 
         switch (state)
         {
             case ("right"):
-                endPos = go.transform.position + Vector3.left * 8.94f;
+                Debug.Log("ENTERED FROM RIGHT");
+                endPos = new Vector3(leftSide.position.x, go.transform.position.y, go.transform.position.z);
                 break;
             case ("left"):
-                endPos = go.transform.position + Vector3.right * 8.94f;
+                Debug.Log("ENTERED FROM LEFT");
+                endPos = new Vector3(rightSide.position.x, go.transform.position.y, go.transform.position.z);
                 break;
             case ("top"):
-                endPos = go.transform.position + Vector3.back * 8.94f;
+                Debug.Log("ENTERED FROM TOP");
+                endPos = new Vector3(go.transform.position.x, go.transform.position.y, botSide.position.z);
                 break;
             case ("bottom"):
-                endPos = go.transform.position + Vector3.forward * 8.94f;
+                Debug.Log("ENTERED FROM BOTTOM");
+                endPos = new Vector3(go.transform.position.x, go.transform.position.y, topSide.position.z);
                 break;
 
             case "lower":
@@ -267,6 +312,7 @@ public class ColorTile : MonoBehaviour
 
         while (elapsedTime < waitTime)
         {
+            // directly update player position
             go.transform.position = Vector3.Lerp(currentPos, endPos, (elapsedTime / waitTime));
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -277,6 +323,12 @@ public class ColorTile : MonoBehaviour
         onTile = false;
 
         yield return null;
+
+        if (pm != null)
+        {
+            // mobilise player
+            pm.Immobile(false);
+        }
     }
 
     //Check exit
