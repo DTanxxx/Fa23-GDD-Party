@@ -53,17 +53,17 @@ TagManager:
   - name: Props
     uniqueID: 1280697863
     locked: 0
-  - name: Characters
-    uniqueID: 963813051
-    locked: 0
   - name: Tile
     uniqueID: 1322744307
     locked: 0
-  - name: Player
-    uniqueID: 105903575
+  - name: Character
+    uniqueID: 1489772483
     locked: 0
   - name: TileSide
     uniqueID: 423556217
+    locked: 0
+  - name: TileUnlit
+    uniqueID: 3204348789
     locked: 0
   - name: Overhang
     uniqueID: 923572005
