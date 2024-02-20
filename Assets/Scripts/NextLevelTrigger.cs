@@ -13,7 +13,6 @@ public class NextLevelTrigger : MonoBehaviour
 
     private WaitForSeconds waitForPauseBeforeRising;
     private WaitForSeconds waitForRisingDuration;
-    private AudioSource audioSource;
     private LevelManager levelManager;
 
     public static Action onBeginElevatorRise;
@@ -23,7 +22,6 @@ public class NextLevelTrigger : MonoBehaviour
     {
         waitForPauseBeforeRising = new WaitForSeconds(pauseBeforeRising);
         waitForRisingDuration = new WaitForSeconds(risingDuration);
-        audioSource = GetComponent<AudioSource>();
         levelManager = FindObjectOfType<LevelManager>();
     }
 
@@ -55,11 +53,8 @@ public class NextLevelTrigger : MonoBehaviour
         yield return waitForPauseBeforeRising;
 
         // play rising sfx
-        audioSource.Play();
-
+        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, transform, "Elevator", (float)Elevator.State.MOVING);
         yield return waitForRisingDuration;
-
-        audioSource.Stop();
         levelManager.LoadNextScene();
     }
 }

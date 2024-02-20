@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="DataFile" id="{3ba748c8-fdd4-42e4-aecc-7ac5270d13a7}">
+		<property name="assetPath">
+			<value>Rahm/SFX/Lever/Lever.mp3.meta</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b4b352ce-c43c-4ecf-b57a-abc7995858e1}</destination>
+		</relationship>
+	</object>
+</objects>

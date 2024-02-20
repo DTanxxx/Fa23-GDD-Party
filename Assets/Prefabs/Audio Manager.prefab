@@ -1,0 +1,140 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &967629994465191969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4424344836901616099}
+  - component: {fileID: 9215775738420343177}
+  m_Layer: 0
+  m_Name: Audio Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4424344836901616099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967629994465191969}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7014537356849608788}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9215775738420343177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967629994465191969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb79d35a518e40d4c8ab9f53bf055d21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &8983790728269524422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7014537356849608788}
+  - component: {fileID: 2358810111575095616}
+  m_Layer: 0
+  m_Name: FMODEvents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7014537356849608788
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8983790728269524422}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4424344836901616099}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2358810111575095616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8983790728269524422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a7cf4ca710b6e647b2c2a1ad2dc3374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <footsteps>k__BackingField:
+    Guid:
+      Data1: 910112794
+      Data2: 1122779757
+      Data3: -1298225474
+      Data4: 1139465964
+    Path: event:/Footsteps
+  <breathingAndHeartbeat>k__BackingField:
+    Guid:
+      Data1: 714018869
+      Data2: 1318029356
+      Data3: -1760223589
+      Data4: -1925585290
+    Path: event:/BreathingAndHeartbeat
+  <elevator>k__BackingField:
+    Guid:
+      Data1: 432068191
+      Data2: 1122502505
+      Data3: -59537221
+      Data4: 800691623
+    Path: event:/Elevator
+  <lever>k__BackingField:
+    Guid:
+      Data1: -471670361
+      Data2: 1083409030
+      Data3: -535558243
+      Data4: -1411033213
+    Path: event:/Lever
+  <death>k__BackingField:
+    Guid:
+      Data1: -606037044
+      Data2: 1300628115
+      Data3: 1102686601
+      Data4: 1319604264
+    Path: event:/Death
+  <gameOver>k__BackingField:
+    Guid:
+      Data1: 963464784
+      Data2: 1201077924
+      Data3: -335544695
+      Data4: 1522735892
+    Path: event:/GameOver
+  <mainMenu>k__BackingField:
+    Guid:
+      Data1: -1320322820
+      Data2: 1176238079
+      Data3: -1009121398
+      Data4: 399173593
+    Path: event:/MainMenu

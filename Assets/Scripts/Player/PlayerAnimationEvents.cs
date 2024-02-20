@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerAnimationEvents : MonoBehaviour
 {
-    public static Action onEndPlayerDeathAnim;
     public static Action onFootstep;
+    public static Action onEndPlayerDeathAnim;
     public static Action onSkullCrush;
 
     // animation event

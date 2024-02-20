@@ -7,8 +7,6 @@ public class ElevatorOpen : MonoBehaviour
 {
     [SerializeField] private Animator animator = null;
     [SerializeField] private GameObject nextLevelTrigger = null;
-    [SerializeField] private AudioSource audioSource = null;
-    [SerializeField] private AudioClip openCloseSFX = null;
 
     public bool goalAchieved = false;
 
@@ -67,6 +65,7 @@ public class ElevatorOpen : MonoBehaviour
     {
         // play animation
         animator.SetTrigger("Enter");
+        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, transform, "Elevator", (float)Elevator.State.OPEN_CLOSE);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -77,7 +76,7 @@ public class ElevatorOpen : MonoBehaviour
         }
 
         // play animation
-        audioSource.PlayOneShot(openCloseSFX);
+        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, transform, "Elevator", (float)Elevator.State.OPEN);
         animator.SetTrigger("Exit");
         opened = true;
     }
