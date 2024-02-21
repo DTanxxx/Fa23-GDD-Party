@@ -219,15 +219,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void Immobile(bool onoff)
     {
-        /*if (onoff)
-        {
-            tempSpeed = maxSpeed;
-            maxSpeed = 0f;
-        }
-        else
-        {
-            maxSpeed = tempSpeed;
-        }*/
         if (onoff)
         {
             Slide();

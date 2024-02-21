@@ -46,6 +46,8 @@ public class ColorTile : MonoBehaviour
     private bool offTile = false;
     private bool onTile = false;
     private TileAudioSources audioSources;
+    private Coroutine slideCoroutine;
+    private bool isRaised = false;
 
     public static Action onIncinerate;
 
@@ -58,10 +60,11 @@ public class ColorTile : MonoBehaviour
         audioSources = GetComponent<TileAudioSources>();
     }
 
-    public void SetColor(TileColor c, ColorTileManager manager)
+    public void SetData(TileColor c, ColorTileManager manager, bool raised)
     {
         tileColor = c;
         tileManager = manager;
+        isRaised = raised;
 
         switch (tileColor)
         {
@@ -128,12 +131,21 @@ public class ColorTile : MonoBehaviour
                 break;
 
             case TileColor.Green:
+                if (tileManager.IsAllGreenLowered())
+                {
+                    return;
+                }
                 audioSources.PlayRaiseSFX();
                 tileManager.ActivateGreen();
                 break;
 
             case TileColor.Blue:
-                StartCoroutine(Mover(player, enter));
+                if (slideCoroutine != null)
+                {
+                    StopCoroutine(slideCoroutine);
+                    RestorePlayerState(player);
+                }
+                slideCoroutine = StartCoroutine(Mover(player, enter));
                 break;
             case TileColor.Magenta:
                 tileManager.ActivateMagenta(gameObject);
@@ -218,6 +230,18 @@ public class ColorTile : MonoBehaviour
         return direction;
     }
 
+    private void RestorePlayerState(GameObject player)
+    {
+        offTile = false;
+        onTile = false;
+        //player.GetComponent<PlayerMovement>().Immobile(false);
+    }
+
+    public bool GetIsRaised()
+    {
+        return isRaised;
+    }
+
     //Move Player or Raise+lower Tile
     public IEnumerator Mover(GameObject go, string state)
     {
@@ -247,9 +271,21 @@ public class ColorTile : MonoBehaviour
                 break;
 
             case "lower":
+                // check if it's already lowered
+                if (!isRaised)
+                {
+                    yield break;
+                }
+                isRaised = false;
                 endPos = new Vector3(go.transform.position.x, 0.11f, go.transform.position.z);
                 break;
             case "raise":
+                // check if it's already raised
+                if (isRaised)
+                {
+                    yield break;
+                }
+                isRaised = true;
                 endPos = new Vector3(go.transform.position.x, 2.5f, go.transform.position.z);
                 break;
         }

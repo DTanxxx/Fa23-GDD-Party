@@ -60,11 +60,8 @@ public class ColorTileManager : MonoBehaviour
                 loc = new Vector3(col * tileSize, 0.11f, row * tileSize);
             }
 
-            //loc += transform.position;
-
-            //GameObject placed = Instantiate(obj, loc, Quaternion.identity);
             GameObject placed = Instantiate(obj, transform);
-            placed.GetComponent<ColorTile>().SetColor(color, this);
+            placed.GetComponent<ColorTile>().SetData(color, this, tile.getIsRaised());
             placed.transform.localPosition = loc;
 
             switch (color)
@@ -237,6 +234,34 @@ public class ColorTileManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public bool IsAllGreenLowered(bool isChild = false)
+    {
+        foreach (GameObject tile in greenList)
+        {
+            ColorTile colorTile = tile.GetComponent<ColorTile>();
+            if (colorTile != null)
+            {
+                if (colorTile.GetIsRaised())
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (!isChild)
+        {
+            foreach (var childTileMan in childrenTileMan)
+            {
+                if (!childTileMan.manager.IsAllGreenLowered(true))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public void ActivateGreen(bool isChild = false)

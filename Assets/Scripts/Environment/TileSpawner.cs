@@ -16,4 +16,5 @@ public class TileSpawner
     public TileColor getColor() { return tileColor; }
     public GameObject getPrefab() { return prefab; }
     public Vector2Int[] getRowCol() { return rowCol; }
+    public bool getIsRaised() { return raised; }
 }
