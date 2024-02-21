@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.Rendering.Universal;
 
 public class PlayerMovement : MonoBehaviour
@@ -28,6 +29,9 @@ public class PlayerMovement : MonoBehaviour
     private float animSpeed;
     private WaitForSeconds waitForPauseBeforeAppearance;
     private float tempSpeed;
+
+    public static Action onPlayerSlide;
+    public static Action onPlayerEndSlide;
 
     private void Start()
     {
@@ -198,10 +202,12 @@ public class PlayerMovement : MonoBehaviour
         isFrozen = true;  // disable player input
         // transition to sliding animation
         animator.SetTrigger("Slide");
+        onPlayerSlide?.Invoke();
     }
 
     private void RecoverFromSlide()
     {
+        onPlayerEndSlide?.Invoke();
         animator.SetTrigger("Recover");
         isFrozen = false;
     }

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4297504149179200887}
   - component: {fileID: 9179037272564477421}
-  - component: {fileID: 7974370816638964974}
   - component: {fileID: 1576570309475493059}
+  - component: {fileID: 4357011400269044548}
   m_Layer: 13
   m_Name: Debris 2
   m_TagString: Untagged
@@ -86,8 +86,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!135 &7974370816638964974
-SphereCollider:
+--- !u!208 &1576570309475493059
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2692694692598423306}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.31, y: 0.085, z: 0.31}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.09, y: 0.11, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!65 &4357011400269044548
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -105,21 +121,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.35
-  m_Center: {x: -0.09, y: 0.09, z: 0}
---- !u!208 &1576570309475493059
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2692694692598423306}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.31, y: 0.085, z: 0.31}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: -0.09, y: 0.11, z: 0}
-  m_TimeToStationary: 0.5
+  m_Size: {x: 0.53216153, y: 0.4330229, z: 1.0226444}
+  m_Center: {x: -0.1165927, y: 0.16720164, z: -0.4113223}

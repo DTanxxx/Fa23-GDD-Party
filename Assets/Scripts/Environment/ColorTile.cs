@@ -37,12 +37,15 @@ public class ColorTile : MonoBehaviour
     [SerializeField] private Transform rightSide = null;
     [SerializeField] private Transform topSide = null;
     [SerializeField] private Transform botSide = null;
+    [SerializeField] private float blueTileSlideDuration = 0.5f;
+    [SerializeField] private float tileRaiseDuration = 1.0f;
 
     private ColorTileManager tileManager;
     private Collider _collider;
     private SpriteRenderer[] spriteRenderers;
     private bool offTile = false;
     private bool onTile = false;
+    private TileAudioSources audioSources;
 
     public static Action onIncinerate;
 
@@ -52,6 +55,7 @@ public class ColorTile : MonoBehaviour
         _collider.isTrigger = true;
         offTile = false;
         spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+        audioSources = GetComponent<TileAudioSources>();
     }
 
     public void SetColor(TileColor c, ColorTileManager manager)
@@ -124,6 +128,7 @@ public class ColorTile : MonoBehaviour
                 break;
 
             case TileColor.Green:
+                audioSources.PlayRaiseSFX();
                 tileManager.ActivateGreen();
                 break;
 
@@ -140,10 +145,12 @@ public class ColorTile : MonoBehaviour
     {
         if (tileColor == TileColor.Yellow)
         {
+            audioSources.PlayRaiseSFX();
             StartCoroutine(Mover(gameObject, "raise"));
         }
         else if (tileColor == TileColor.Black)
         {
+            audioSources.PlayRaiseSFX();
             tileManager.ActivateBlack();
         }
     }
@@ -227,19 +234,15 @@ public class ColorTile : MonoBehaviour
         switch (state)
         {
             case ("right"):
-                Debug.Log("ENTERED FROM RIGHT");
                 endPos = new Vector3(leftSide.position.x, go.transform.position.y, go.transform.position.z);
                 break;
             case ("left"):
-                Debug.Log("ENTERED FROM LEFT");
                 endPos = new Vector3(rightSide.position.x, go.transform.position.y, go.transform.position.z);
                 break;
             case ("top"):
-                Debug.Log("ENTERED FROM TOP");
                 endPos = new Vector3(go.transform.position.x, go.transform.position.y, botSide.position.z);
                 break;
             case ("bottom"):
-                Debug.Log("ENTERED FROM BOTTOM");
                 endPos = new Vector3(go.transform.position.x, go.transform.position.y, topSide.position.z);
                 break;
 
@@ -252,7 +255,6 @@ public class ColorTile : MonoBehaviour
         }
         
         float elapsedTime = 0;
-        float waitTime = 1.0f;
 
         var currentPos = go.transform.position;
 
@@ -277,17 +279,31 @@ public class ColorTile : MonoBehaviour
         {
             if (state == "lower" | state == "raise")
             {
-                Debug.Log(offTile);
                 yield return new WaitUntil(() => offTile);
             }
         }
 
-        while (elapsedTime < waitTime)
+        if (pm != null)
         {
-            // directly update player position
-            go.transform.position = Vector3.Lerp(currentPos, endPos, (elapsedTime / waitTime));
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            // blue tile slide
+            while (elapsedTime < blueTileSlideDuration)
+            {
+                // directly update player position
+                go.transform.position = Vector3.Lerp(currentPos, endPos, (elapsedTime / blueTileSlideDuration));
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+        }
+        else
+        {
+            // tile raise/lower
+            while (elapsedTime < tileRaiseDuration)
+            {
+                // directly update tile position
+                go.transform.position = Vector3.Lerp(currentPos, endPos, (elapsedTime / tileRaiseDuration));
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
         }
 
         go.transform.position = endPos;
