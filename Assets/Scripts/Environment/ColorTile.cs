@@ -31,12 +31,23 @@ public class ColorTile : MonoBehaviour
     [SerializeField] private Sprite yellowSprite;
     [SerializeField] private Sprite magentaSprite;
     [SerializeField] private Sprite purpleSprite;
+    [SerializeField] private string tileFlatLayer;
+    [SerializeField] private string tileRaisedLayer;
+    [SerializeField] private Transform leftSide = null;
+    [SerializeField] private Transform rightSide = null;
+    [SerializeField] private Transform topSide = null;
+    [SerializeField] private Transform botSide = null;
+    [SerializeField] private float blueTileSlideDuration = 0.5f;
+    [SerializeField] private float tileRaiseDuration = 1.0f;
 
     private ColorTileManager tileManager;
     private Collider _collider;
     private SpriteRenderer[] spriteRenderers;
     private bool offTile = false;
     private bool onTile = false;
+    private TileAudioSources audioSources;
+    private Coroutine slideCoroutine;
+    private bool isRaised = false;
 
     public static Action onIncinerate;
 
@@ -45,14 +56,22 @@ public class ColorTile : MonoBehaviour
         _collider = GetComponent<Collider>();
         _collider.isTrigger = true;
         offTile = false;
-        tileManager = FindObjectOfType<ColorTileManager>();
         spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+        audioSources = GetComponent<TileAudioSources>();
+    }
+
+    public void SetData(TileColor c, ColorTileManager manager, bool raised)
+    {
+        tileColor = c;
+        tileManager = manager;
+        isRaised = raised;
+
         switch (tileColor)
         {
             case TileColor.White:
                 SetSprite(whiteSprite);
                 break;
-            case TileColor.Red: 
+            case TileColor.Red:
                 SetSprite(redSprite);
                 break;
             case TileColor.Cyan:
@@ -79,14 +98,8 @@ public class ColorTile : MonoBehaviour
         }
     }
 
-    public void SetColor(TileColor c)
-    {
-        tileColor = c;
-    }
-
     private void OnTriggerEnter(Collider collision)
     { 
-
         GameObject player = collision.transform.parent.parent.gameObject;
         PlayerMovement pm = player.GetComponent<PlayerMovement>();
         PlayerHealth health = player.GetComponent<PlayerHealth>();
@@ -117,29 +130,40 @@ public class ColorTile : MonoBehaviour
                 tileManager.ActivateCyan();
                 break;
 
-            case TileColor.Black:
-                tileManager.ActivateBlack();
-                break;
-
             case TileColor.Green:
+                if (tileManager.IsAllGreenLowered())
+                {
+                    return;
+                }
+                audioSources.PlayRaiseSFX();
                 tileManager.ActivateGreen();
                 break;
 
             case TileColor.Blue:
-                pm.Immobile(true);
-                StartCoroutine(Mover(player, enter));
-                pm.Immobile(false);
+                tileManager.ResetBlueTileCoroutines();
+                RestorePlayerState(player);
+                slideCoroutine = StartCoroutine(Mover(player, enter));
                 break;
-
-            case TileColor.Yellow:
-                StartCoroutine(Mover(gameObject, "raise"));
-                break;
-
             case TileColor.Magenta:
                 tileManager.ActivateMagenta(gameObject);
                 break;
         }
     }
+
+    private void OnTriggerExit(Collider collision)
+    {
+        if (tileColor == TileColor.Yellow)
+        {
+            audioSources.PlayRaiseSFX();
+            StartCoroutine(Mover(gameObject, "raise"));
+        }
+        else if (tileColor == TileColor.Black)
+        {
+            audioSources.PlayRaiseSFX();
+            tileManager.ActivateBlack();
+        }
+    }
+
     public TileColor GetTileColor() { return tileColor; }
 
     private void SetSprite(Sprite sp)
@@ -169,84 +193,150 @@ public class ColorTile : MonoBehaviour
     private string EnterDirection(Collider collision)
     {
         var dir = collision.transform.position - transform.position;
-        var frw = transform.TransformDirection(Vector3.forward);
-        var ri = transform.TransformDirection(Vector3.right);
-
         string direction;
 
-        if (Vector3.Dot(frw, dir) <= 2.1)
+        if (Mathf.Abs(dir.x) >= Mathf.Abs(dir.z))
         {
-            direction = "bottom";
-            //Debug.Log("bottom");
-        }
-        else if (Vector3.Dot(frw, dir) >= 4.6)
-        {
-            direction = "top";
-            //Debug.Log("top");
-        }
-        else
-        {
-            if (Vector3.Dot(ri, dir) > 0)
+            // player entered from left or right
+            if (dir.x < 0)
             {
-                direction = "right";
-                //Debug.Log("right");
+                // left side
+                direction = "left";
             }
             else
             {
-                direction = "left";
-                //Debug.Log("Left");
+                // right side
+                direction = "right";
             }
         }
+        else
+        {
+            // player entered from top or bottom
+            if (dir.z < 0)
+            {
+                // bottom side
+                direction = "bottom";
+            }
+            else
+            {
+                // top side
+                direction = "top";
+            }
+        }
+        
         return direction;
+    }
+
+    private void RestorePlayerState(GameObject player)
+    {
+        offTile = false;
+        onTile = false;
+        //player.GetComponent<PlayerMovement>().Immobile(false);
+    }
+
+    public bool GetIsRaised()
+    {
+        return isRaised;
     }
 
     //Move Player or Raise+lower Tile
     public IEnumerator Mover(GameObject go, string state)
     {
+        // the only case where go is the player game object is when we step on blue tile
+        PlayerMovement pm;
+        if (go.TryGetComponent<PlayerMovement>(out pm))
+        {
+            // make player immobile
+            pm.Immobile(true);
+        }
+
         var endPos = go.transform.position;
 
         switch (state)
         {
             case ("right"):
-                endPos = go.transform.position + Vector3.left * 8.94f;
+                endPos = new Vector3(leftSide.position.x, go.transform.position.y, go.transform.position.z);
                 break;
             case ("left"):
-                endPos = go.transform.position + Vector3.right * 8.94f;
+                endPos = new Vector3(rightSide.position.x, go.transform.position.y, go.transform.position.z);
                 break;
             case ("top"):
-                endPos = go.transform.position + Vector3.back * 8.94f;
+                endPos = new Vector3(go.transform.position.x, go.transform.position.y, botSide.position.z);
                 break;
             case ("bottom"):
-                endPos = go.transform.position + Vector3.forward * 8.94f;
+                endPos = new Vector3(go.transform.position.x, go.transform.position.y, topSide.position.z);
                 break;
 
             case "lower":
+                // check if it's already lowered
+                if (!isRaised)
+                {
+                    yield break;
+                }
+                isRaised = false;
                 endPos = new Vector3(go.transform.position.x, 0.11f, go.transform.position.z);
                 break;
             case "raise":
+                // check if it's already raised
+                if (isRaised)
+                {
+                    yield break;
+                }
+                isRaised = true;
                 endPos = new Vector3(go.transform.position.x, 2.5f, go.transform.position.z);
                 break;
         }
         
         float elapsedTime = 0;
-        float waitTime = 1.0f;
 
         var currentPos = go.transform.position;
+
+        if (state == "raise")
+        {
+            // set top surface and sides of tile's layer to tileRaised
+            foreach (SpriteRenderer rend in spriteRenderers)
+            {
+                rend.sortingLayerName = tileRaisedLayer;
+            }
+        }
+        else if (state == "lower")
+        {
+            // set top surface and sides of tile's layer to tileFlat
+            foreach (SpriteRenderer rend in spriteRenderers)
+            {
+                rend.sortingLayerName = tileFlatLayer;
+            }
+        }
         
         if (onTile)
         {
             if (state == "lower" | state == "raise")
             {
-                Debug.Log(offTile);
                 yield return new WaitUntil(() => offTile);
             }
         }
 
-        while (elapsedTime < waitTime)
+        if (pm != null)
         {
-            go.transform.position = Vector3.Lerp(currentPos, endPos, (elapsedTime / waitTime));
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            // blue tile slide
+            while (elapsedTime < blueTileSlideDuration)
+            {
+                // directly update player position
+                go.transform.position = Vector3.Lerp(currentPos, endPos, (elapsedTime / blueTileSlideDuration));
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+        }
+        else
+        {
+            // tile raise/lower
+            while (elapsedTime < tileRaiseDuration)
+            {
+                // directly update tile position
+                go.transform.position = Vector3.Lerp(currentPos, endPos, (elapsedTime / tileRaiseDuration));
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
         }
 
         go.transform.position = endPos;
@@ -254,6 +344,12 @@ public class ColorTile : MonoBehaviour
         onTile = false;
 
         yield return null;
+
+        if (pm != null)
+        {
+            // mobilise player
+            pm.Immobile(false);
+        }
     }
 
     //Check exit
@@ -265,5 +361,14 @@ public class ColorTile : MonoBehaviour
     public void EnterTile()
     {
         onTile = true;
+    }
+
+    public void StopSlideCoroutine()
+    {
+        if (slideCoroutine != null)
+        {
+            StopCoroutine(slideCoroutine);
+            slideCoroutine = null;
+        }
     }
 }

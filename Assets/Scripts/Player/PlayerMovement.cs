@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.Rendering.Universal;
 
 public class PlayerMovement : MonoBehaviour
@@ -28,6 +29,9 @@ public class PlayerMovement : MonoBehaviour
     private float animSpeed;
     private WaitForSeconds waitForPauseBeforeAppearance;
     private float tempSpeed;
+
+    public static Action onPlayerSlide;
+    public static Action onPlayerEndSlide;
 
     private void Start()
     {
@@ -90,8 +94,6 @@ public class PlayerMovement : MonoBehaviour
             // skip this frame's input
             curFrameDelay++;
         }
-
-        // controller.Move(d * maxSpeed * currFrames / accFrames);
 
         if (lastDirection != Vector3.zero)
         {
@@ -194,6 +196,22 @@ public class PlayerMovement : MonoBehaviour
         myRigidbody.velocity = Vector3.zero;
     }
 
+    private void Slide()
+    {
+        myRigidbody.velocity = Vector3.zero;
+        isFrozen = true;  // disable player input
+        // transition to sliding animation
+        animator.SetTrigger("Slide");
+        onPlayerSlide?.Invoke();
+    }
+
+    private void RecoverFromSlide()
+    {
+        onPlayerEndSlide?.Invoke();
+        animator.SetTrigger("Recover");
+        isFrozen = false;
+    }
+
     public Vector3 getDir()
     {
         return dir;
@@ -203,12 +221,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (onoff)
         {
-            tempSpeed = maxSpeed;
-            maxSpeed = 0f;
+            Slide();
         }
         else
         {
-            maxSpeed = tempSpeed;
+            RecoverFromSlide();
         }
     }
 }

@@ -5,11 +5,16 @@ using System;
 
 public class LeverPullAnimationEvents : MonoBehaviour
 {
+    [SerializeField] private bool animateLightFlicker = false;
+
     public static Action onBeginLeverCinematicSequence;
 
     // animation event
     public void BeginCinematicSequence()
     {
-        onBeginLeverCinematicSequence?.Invoke();
+        if (animateLightFlicker)
+        {
+            onBeginLeverCinematicSequence?.Invoke();
+        }
     }
 }

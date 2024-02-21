@@ -2,13 +2,24 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct ChildTileManager
+{
+    public ColorTileManager manager;
+    public Vector2 originOffset;
+}
+
 public class ColorTileManager : MonoBehaviour
 {
+    [Tooltip("This should match the size of tile prefab's ColorTile transform scales")]
+    [SerializeField] private float tileSize = 6f;
     [SerializeField] private TileSpawner[] tileLocs;
-    [SerializeField] private int matrixSize;
+    [SerializeField] private Vector2 matrixSize;
+    [SerializeField] private ChildTileManager[] childrenTileMan;
 
     private List<GameObject> redWhiteList = new List<GameObject>();
     private List<GameObject> greenList = new List<GameObject>();
+    private List<GameObject> blueList = new List<GameObject>();
     private List<(GameObject, bool)> blackList = new List<(GameObject, bool)> ();
 
     private GameObject[,] matrix;
@@ -21,7 +32,7 @@ public class ColorTileManager : MonoBehaviour
     {
         if (tileLocs == null) { return; }
 
-        matrix = new GameObject[matrixSize, matrixSize];
+        matrix = new GameObject[(int)matrixSize.x, (int)matrixSize.y];
 
         foreach (TileSpawner tile in tileLocs)
         {
@@ -32,7 +43,6 @@ public class ColorTileManager : MonoBehaviour
     private void placeTile(TileSpawner tile, TileColor color)
     {
         GameObject obj = tile.getPrefab();
-        obj.GetComponent<ColorTile>().SetColor(color);
 
         foreach (Vector2Int vec in tile.getRowCol())
         {
@@ -43,17 +53,17 @@ public class ColorTileManager : MonoBehaviour
 
             if (tile.raised)
             {
-                loc = new Vector3(col * 8.94f, 2.5f, row * 8.94f);
+                loc = new Vector3(col * tileSize, 2.5f, row * tileSize);
             }
 
             else
             {
-                loc = new Vector3(col * 8.94f, 0.11f, row * 8.94f);
+                loc = new Vector3(col * tileSize, 0.11f, row * tileSize);
             }
 
-            loc += transform.position;
-
-            GameObject placed = Instantiate(obj, loc, Quaternion.identity);
+            GameObject placed = Instantiate(obj, transform);
+            placed.GetComponent<ColorTile>().SetData(color, this, tile.getIsRaised());
+            placed.transform.localPosition = loc;
 
             switch (color)
             {
@@ -76,15 +86,18 @@ public class ColorTileManager : MonoBehaviour
                 case TileColor.Magenta:
                     magentaDictionary.TryAdd(placed, (row, col));
                     break;
+
+                case TileColor.Blue:
+                    blueList.Add(placed);
+                    break;
             }
 
             matrix[row, col] = placed;
         }
     }
 
-    public void ActivateCyan()
+    public void ActivateCyan(bool isChild = false)
     {
-        Debug.Log(redWhiteList.Count);
         if (redWhiteList != null)
         {
             foreach (GameObject tile in redWhiteList)
@@ -100,6 +113,14 @@ public class ColorTileManager : MonoBehaviour
                 }
             }
         }
+
+        if (!isChild)
+        {
+            foreach (var childTileMan in childrenTileMan)
+            {
+                childTileMan.manager.ActivateCyan(true);
+            }
+        }
     }
 
     public void ActivateMagenta(GameObject tile)
@@ -108,8 +129,8 @@ public class ColorTileManager : MonoBehaviour
         int row = rowcol.Item1;
         int col = rowcol.Item2;
         
-        //search column
-        for (int i = 0; i < matrixSize; i++)
+        //search row
+        for (int i = 0; i < matrixSize.x; i++)
         {
             GameObject inMatrix = matrix[i, col];
             if (inMatrix == null) { continue; }
@@ -129,9 +150,80 @@ public class ColorTileManager : MonoBehaviour
             }
         }
 
-        for (int j = 0; j < matrixSize; j++)
+        // search column
+        for (int j = 0; j < matrixSize.y; j++)
         {
             GameObject inMatrix = matrix[row, j];
+            if (inMatrix == null) { continue; }
+
+            if (inMatrix.TryGetComponent<ColorTile>(out var exist))
+            {
+                ColorTile found = exist;
+
+                if (found.GetTileColor() == TileColor.White)
+                {
+                    found.TurnRed();
+                }
+                else if (found.GetTileColor() == TileColor.Red)
+                {
+                    found.TurnWhite();
+                }
+            }
+        }
+
+        foreach (var childTileMan in childrenTileMan)
+        {
+            childTileMan.manager.ActivateMagentaGivenOffset(new Vector2(row, col), childTileMan.originOffset);
+        }
+    }
+
+    public void ActivateMagentaGivenOffset(Vector2 parentPos, Vector2 childOffset)
+    {
+        int row = (int)parentPos.x;
+        int col = (int)parentPos.y;
+
+        //search row
+        for (int i = 0; i < matrixSize.x; i++)
+        {
+            Vector2 realPos = new Vector2(i, col - childOffset.y);
+
+            if (realPos.y < 0 || realPos.y >= matrix.GetLength(1))
+            {
+                // child tile manager's matrix does not contain this tile from parent
+                break;
+            }
+
+            GameObject inMatrix = matrix[(int)realPos.x, (int)realPos.y];
+            if (inMatrix == null) { continue; }
+
+            if (inMatrix.TryGetComponent<ColorTile>(out var exist))
+            {
+                ColorTile found = exist;
+
+                if (found.GetTileColor() == TileColor.White)
+                {
+                    found.TurnRed();
+                }
+                else if (found.GetTileColor() == TileColor.Red)
+                {
+                    found.TurnWhite();
+                }
+            }
+        }
+
+        // search column
+        for (int j = 0; j < matrixSize.y; j++)
+        {
+            Vector2 realPos = new Vector2(row - childOffset.x, j);
+
+            if (realPos.x < 0 || realPos.x >= matrix.GetLength(0))
+            {
+                // child tile manager's matrix does not contain this tile from parent
+                break;
+            }
+
+            GameObject inMatrix = matrix[(int)realPos.x, (int)realPos.y];
+            if (inMatrix == null) { continue; }
 
             if (inMatrix.TryGetComponent<ColorTile>(out var exist))
             {
@@ -149,7 +241,35 @@ public class ColorTileManager : MonoBehaviour
         }
     }
 
-    public void ActivateGreen()
+    public bool IsAllGreenLowered(bool isChild = false)
+    {
+        foreach (GameObject tile in greenList)
+        {
+            ColorTile colorTile = tile.GetComponent<ColorTile>();
+            if (colorTile != null)
+            {
+                if (colorTile.GetIsRaised())
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (!isChild)
+        {
+            foreach (var childTileMan in childrenTileMan)
+            {
+                if (!childTileMan.manager.IsAllGreenLowered(true))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public void ActivateGreen(bool isChild = false)
     {
         Debug.Log(greenList.Count);
         foreach (GameObject tile in greenList)
@@ -160,9 +280,37 @@ public class ColorTileManager : MonoBehaviour
                 StartCoroutine(colorTile.Mover(tile, "lower"));
             }
         }
+
+        if (!isChild)
+        {
+            foreach (var childTileMan in childrenTileMan)
+            {
+                childTileMan.manager.ActivateGreen(true);
+            }
+        }
     }
 
-    public void ActivateBlack()
+    public void ResetBlueTileCoroutines(bool isChild = false)
+    {
+        foreach (GameObject tile in blueList)
+        {
+            ColorTile colorTile = tile.GetComponent<ColorTile>();
+            if (colorTile != null)
+            {
+                colorTile.StopSlideCoroutine();
+            }
+        }
+
+        if (!isChild)
+        {
+            foreach (var childTileMan in childrenTileMan)
+            {
+                childTileMan.manager.ResetBlueTileCoroutines(true);
+            }
+        }
+    }
+
+    public void ActivateBlack(bool isChild = false)
     {
         List<(GameObject tile, bool raised)> nextBlackList = new List<(GameObject tile, bool raised)>();
         foreach ((GameObject tile, bool raised) in blackList)
@@ -182,6 +330,14 @@ public class ColorTileManager : MonoBehaviour
             }
         }
         blackList = nextBlackList;
+
+        if (!isChild)
+        {
+            foreach (var childTileMan in childrenTileMan)
+            {
+                childTileMan.manager.ActivateBlack(true);
+            }
+        }
     }
 }
     

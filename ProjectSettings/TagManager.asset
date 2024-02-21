@@ -25,7 +25,7 @@ TagManager:
   - Foreground
   - ColorTile
   - PlayerColliderWithTile
-  - 
+  - TileSide
   - 
   - 
   - 
@@ -53,11 +53,11 @@ TagManager:
   - name: Props
     uniqueID: 1280697863
     locked: 0
-  - name: Characters
-    uniqueID: 963813051
+  - name: Tile
+    uniqueID: 1322744307
     locked: 0
-  - name: Player
-    uniqueID: 105903575
+  - name: Character
+    uniqueID: 1489772483
     locked: 0
   - name: Overhang
     uniqueID: 923572005

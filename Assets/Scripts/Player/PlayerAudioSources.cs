@@ -12,6 +12,7 @@ public class PlayerAudioSources : MonoBehaviour
     [SerializeField] private AudioClip[] heartbeatClips;
     [SerializeField] private AudioSource skullCrushSource = null;
     [SerializeField] private AudioSource incinerationSource = null;
+    [SerializeField] private AudioSource slideSource = null;
 
     private void Start()
     {
@@ -22,6 +23,8 @@ public class PlayerAudioSources : MonoBehaviour
     {
         PlayerAnimationEvents.onFootstep += PlayFootstepSFX;
         PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
+        PlayerMovement.onPlayerSlide += PlaySlideSFX;
+        PlayerMovement.onPlayerEndSlide += StopSlideSFX;
         EnemyProximitySensor.onEnemyInProximity += EnterPanicPhase;
         EnemyProximitySensor.onEnemyOutOfProximity += EnterCalmPhase;
         NextLevelTrigger.onBeginLevelTransition += StopAllSFX;
@@ -34,6 +37,8 @@ public class PlayerAudioSources : MonoBehaviour
     {
         PlayerAnimationEvents.onFootstep -= PlayFootstepSFX;
         PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
+        PlayerMovement.onPlayerSlide -= PlaySlideSFX;
+        PlayerMovement.onPlayerEndSlide -= StopSlideSFX;
         EnemyProximitySensor.onEnemyInProximity -= EnterPanicPhase;
         EnemyProximitySensor.onEnemyOutOfProximity -= EnterCalmPhase;
         NextLevelTrigger.onBeginLevelTransition -= StopAllSFX;
@@ -59,6 +64,16 @@ public class PlayerAudioSources : MonoBehaviour
     private void PlayIncinerateSFX()
     {
         incinerationSource.Play();
+    }
+
+    private void PlaySlideSFX()
+    {
+        slideSource.Play();
+    }
+
+    private void StopSlideSFX()
+    {
+        slideSource.Stop();
     }
 
     private void StopAllSFX()
