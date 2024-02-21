@@ -31,8 +31,8 @@ public class ColorTile : MonoBehaviour
     [SerializeField] private Sprite yellowSprite;
     [SerializeField] private Sprite magentaSprite;
     [SerializeField] private Sprite purpleSprite;
-    [SerializeField] private string tileTopLayer;
-    [SerializeField] private string tileSideLayer;
+    [SerializeField] private string tileFlatLayer;
+    [SerializeField] private string tileRaisedLayer;
     [SerializeField] private Transform leftSide = null;
     [SerializeField] private Transform rightSide = null;
     [SerializeField] private Transform topSide = null;
@@ -178,34 +178,6 @@ public class ColorTile : MonoBehaviour
     {
         var dir = collision.transform.position - transform.position;
         string direction;
-        /*var frw = transform.TransformDirection(Vector3.forward);
-        var ri = transform.TransformDirection(Vector3.right);
-
-        string direction;
-
-        if (Vector3.Dot(frw, dir) <= 2.1)
-        {
-            direction = "bottom";
-            //Debug.Log("bottom");
-        }
-        else if (Vector3.Dot(frw, dir) >= 4.6)
-        {
-            direction = "top";
-            //Debug.Log("top");
-        }
-        else
-        {
-            if (Vector3.Dot(ri, dir) > 0)
-            {
-                direction = "right";
-                //Debug.Log("right");
-            }
-            else
-            {
-                direction = "left";
-                //Debug.Log("Left");
-            }
-        }*/
 
         if (Mathf.Abs(dir.x) >= Mathf.Abs(dir.z))
         {
@@ -286,18 +258,18 @@ public class ColorTile : MonoBehaviour
 
         if (state == "raise")
         {
-            // set top surface and sides of tile's layer to tileSide
+            // set top surface and sides of tile's layer to tileRaised
             foreach (SpriteRenderer rend in spriteRenderers)
             {
-                rend.sortingLayerName = tileSideLayer;
+                rend.sortingLayerName = tileRaisedLayer;
             }
         }
         else if (state == "lower")
         {
-            // set top surface and sides of tile's layer to tileTop
+            // set top surface and sides of tile's layer to tileFlat
             foreach (SpriteRenderer rend in spriteRenderers)
             {
-                rend.sortingLayerName = tileTopLayer;
+                rend.sortingLayerName = tileFlatLayer;
             }
         }
         

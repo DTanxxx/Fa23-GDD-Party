@@ -59,12 +59,6 @@ TagManager:
   - name: Character
     uniqueID: 1489772483
     locked: 0
-  - name: TileSide
-    uniqueID: 423556217
-    locked: 0
-  - name: TileUnlit
-    uniqueID: 3204348789
-    locked: 0
   - name: Overhang
     uniqueID: 923572005
     locked: 0

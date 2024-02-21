@@ -197,12 +197,12 @@ public class PlayerMovement : MonoBehaviour
         myRigidbody.velocity = Vector3.zero;
         isFrozen = true;  // disable player input
         // transition to sliding animation
-        //animator.SetTrigger("Slide");
+        animator.SetTrigger("Slide");
     }
 
     private void RecoverFromSlide()
     {
-        //animator.SetTrigger("Recover");
+        animator.SetTrigger("Recover");
         isFrozen = false;
     }
 
