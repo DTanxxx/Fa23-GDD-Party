@@ -140,11 +140,8 @@ public class ColorTile : MonoBehaviour
                 break;
 
             case TileColor.Blue:
-                if (slideCoroutine != null)
-                {
-                    StopCoroutine(slideCoroutine);
-                    RestorePlayerState(player);
-                }
+                tileManager.ResetBlueTileCoroutines();
+                RestorePlayerState(player);
                 slideCoroutine = StartCoroutine(Mover(player, enter));
                 break;
             case TileColor.Magenta:
@@ -364,5 +361,14 @@ public class ColorTile : MonoBehaviour
     public void EnterTile()
     {
         onTile = true;
+    }
+
+    public void StopSlideCoroutine()
+    {
+        if (slideCoroutine != null)
+        {
+            StopCoroutine(slideCoroutine);
+            slideCoroutine = null;
+        }
     }
 }

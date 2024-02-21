@@ -19,6 +19,7 @@ public class ColorTileManager : MonoBehaviour
 
     private List<GameObject> redWhiteList = new List<GameObject>();
     private List<GameObject> greenList = new List<GameObject>();
+    private List<GameObject> blueList = new List<GameObject>();
     private List<(GameObject, bool)> blackList = new List<(GameObject, bool)> ();
 
     private GameObject[,] matrix;
@@ -84,6 +85,10 @@ public class ColorTileManager : MonoBehaviour
 
                 case TileColor.Magenta:
                     magentaDictionary.TryAdd(placed, (row, col));
+                    break;
+
+                case TileColor.Blue:
+                    blueList.Add(placed);
                     break;
             }
 
@@ -281,6 +286,26 @@ public class ColorTileManager : MonoBehaviour
             foreach (var childTileMan in childrenTileMan)
             {
                 childTileMan.manager.ActivateGreen(true);
+            }
+        }
+    }
+
+    public void ResetBlueTileCoroutines(bool isChild = false)
+    {
+        foreach (GameObject tile in blueList)
+        {
+            ColorTile colorTile = tile.GetComponent<ColorTile>();
+            if (colorTile != null)
+            {
+                colorTile.StopSlideCoroutine();
+            }
+        }
+
+        if (!isChild)
+        {
+            foreach (var childTileMan in childrenTileMan)
+            {
+                childTileMan.manager.ResetBlueTileCoroutines(true);
             }
         }
     }
