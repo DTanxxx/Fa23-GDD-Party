@@ -11,14 +11,12 @@ public class FadeInPanel : MonoBehaviour
     [SerializeField] private float pauseBeforeElevatorOpen = 1f;
 
     private WaitForSeconds waitForPauseBeforeElevatorOpen;
-    private AudioSource audioSource;
 
     public static Action onBeginElevatorOpen;
 
     private void Start()
     {
         waitForPauseBeforeElevatorOpen = new WaitForSeconds(pauseBeforeElevatorOpen);
-        audioSource = GetComponent<AudioSource>();
 
         StartCoroutine(OnLevelBegin());
     }
@@ -40,8 +38,7 @@ public class FadeInPanel : MonoBehaviour
 
         yield return waitForPauseBeforeElevatorOpen;
 
-        // play rising sfx and animation
+        // play rising animation
         onBeginElevatorOpen?.Invoke();
-        audioSource.Play();
     }
 }

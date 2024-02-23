@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="DataFile" id="{d35c24d2-e3ab-4301-834b-56f7607dcc82}">
+		<property name="assetPath">
+			<value>Rahm/SFX/Handbook Close.mp3.meta</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b4b352ce-c43c-4ecf-b57a-abc7995858e1}</destination>
+		</relationship>
+	</object>
+</objects>

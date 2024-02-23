@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using FMOD.Studio;
 
 public class EnemyProximitySensor : MonoBehaviour
 {
@@ -34,6 +35,11 @@ public class EnemyProximitySensor : MonoBehaviour
     private void BeginGame()
     {
         gameStarted = true;
+
+        PlayerAudioSources.breathingAndHeartbeat = AudioManager.instance.CreateEventInstance(FMODEvents.instance.breathingAndHeartbeat, transform);
+        PLAYBACK_STATE playbackState;
+        PlayerAudioSources.breathingAndHeartbeat.getPlaybackState(out playbackState);
+        if (playbackState.Equals(PLAYBACK_STATE.STOPPED)) PlayerAudioSources.breathingAndHeartbeat.start();
     }
 
     private void Update()
@@ -47,6 +53,7 @@ public class EnemyProximitySensor : MonoBehaviour
         RaycastHit[] hits = Physics.SphereCastAll(transform.position, enemySensorRadius, transform.forward, 0f,
             weepingAngelLayer.value, QueryTriggerInteraction.Ignore);
         
+        // TODO: If enemy in proximity, vary FMOD INTENSITY parameter based on distance between closest enemy and player
         if (hits.Length > 0 && sensorEnabled)
         {
             // enemy in proximity!

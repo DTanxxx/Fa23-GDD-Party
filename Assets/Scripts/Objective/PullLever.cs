@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 public class PullLever : MonoBehaviour
 {
     [SerializeField] InventorySystem inventorySystem;
-    [SerializeField] private AudioSource leverSource = null;
-    [SerializeField] private AudioSource electricitySource = null;
     [SerializeField] private Animator animator;
 
     public static Action onLeverPulled;
@@ -62,7 +60,7 @@ public class PullLever : MonoBehaviour
         onLeverPulled?.Invoke();
 
         // start cinematic sequence
-        if (animator != null && leverSource != null && electricitySource != null)
+        if (animator != null)
         {
             pulled = true;
             inventorySystem.CloseGUI();
@@ -77,9 +75,8 @@ public class PullLever : MonoBehaviour
             {
                 animator.SetTrigger("Pulled");
             }
-            
-            leverSource.Play();
-            electricitySource.Play();
+
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.lever, transform);
         }
         else
         {

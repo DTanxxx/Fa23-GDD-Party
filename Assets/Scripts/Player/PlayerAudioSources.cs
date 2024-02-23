@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMOD.Studio;
 
 public class PlayerAudioSources : MonoBehaviour
 {
-    [SerializeField] private AudioSource footstepSource = null;
+    /*[SerializeField] private AudioSource footstepSource = null;
     [SerializeField] private AudioClip[] footstepClips;
     [SerializeField] private AudioSource breathSource = null;
     [SerializeField] private AudioClip[] breathClips;
@@ -12,19 +13,23 @@ public class PlayerAudioSources : MonoBehaviour
     [SerializeField] private AudioClip[] heartbeatClips;
     [SerializeField] private AudioSource skullCrushSource = null;
     [SerializeField] private AudioSource incinerationSource = null;
-    [SerializeField] private AudioSource slideSource = null;
+    [SerializeField] private AudioSource slideSource = null;*/
 
-    private void Start()
+    public static EventInstance breathingAndHeartbeat;
+    public static EventInstance death;
+    private enum DeathType
     {
-        StopAllSFX();
+        SIGHT_MONSTER = 0,
+        RED_TILE = 1,
     }
 
     private void OnEnable()
     {
         PlayerAnimationEvents.onFootstep += PlayFootstepSFX;
         PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
-        PlayerMovement.onPlayerSlide += PlaySlideSFX;
-        PlayerMovement.onPlayerEndSlide += StopSlideSFX;
+        /*PlayerMovement.onPlayerSlide += PlaySlideSFX;
+        PlayerMovement.onPlayerEndSlide += StopSlideSFX;*/
+        PlayerAnimationEvents.onEndPlayerDeathAnim += PlayGameOverSFX;
         EnemyProximitySensor.onEnemyInProximity += EnterPanicPhase;
         EnemyProximitySensor.onEnemyOutOfProximity += EnterCalmPhase;
         NextLevelTrigger.onBeginLevelTransition += StopAllSFX;
@@ -37,8 +42,9 @@ public class PlayerAudioSources : MonoBehaviour
     {
         PlayerAnimationEvents.onFootstep -= PlayFootstepSFX;
         PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
-        PlayerMovement.onPlayerSlide -= PlaySlideSFX;
-        PlayerMovement.onPlayerEndSlide -= StopSlideSFX;
+        /*PlayerMovement.onPlayerSlide -= PlaySlideSFX;
+        PlayerMovement.onPlayerEndSlide -= StopSlideSFX;*/
+        PlayerAnimationEvents.onEndPlayerDeathAnim -= PlayGameOverSFX;
         EnemyProximitySensor.onEnemyInProximity -= EnterPanicPhase;
         EnemyProximitySensor.onEnemyOutOfProximity -= EnterCalmPhase;
         NextLevelTrigger.onBeginLevelTransition -= StopAllSFX;
@@ -51,17 +57,15 @@ public class PlayerAudioSources : MonoBehaviour
     {
         if (toPause)
         {
-            breathSource.Pause();
-            heartbeatSource.Pause();
+            AudioManager.instance.PauseAll();
         }
         else
         {
-            breathSource.UnPause();
-            heartbeatSource.UnPause();
+            AudioManager.instance.UnpauseAll();
         }
     }
 
-    private void PlayIncinerateSFX()
+/*    private void PlayIncinerateSFX()
     {
         incinerationSource.Play();
     }
@@ -74,55 +78,42 @@ public class PlayerAudioSources : MonoBehaviour
     private void StopSlideSFX()
     {
         slideSource.Stop();
-    }
+    }*/
 
     private void StopAllSFX()
     {
-        breathSource.Stop();
-        heartbeatSource.Stop();
+        AudioManager.instance.StopAll();
     }
 
     private void EnterPanicPhase()
     {
-        if (breathSource.clip == breathClips[1])
-        {
-            // already in panic phase, return
-            return;
-        }
-
-        breathSource.clip = breathClips[1];
-        heartbeatSource.clip = heartbeatClips[2];
-
-        breathSource.Play();
-        heartbeatSource.Play();
+        AudioManager.instance.SetParameter(breathingAndHeartbeat, "Intensity", 1f);
     }
 
     private void EnterCalmPhase()
     {
-        if (breathSource.clip == breathClips[0])
-        {
-            // already in calm phase, return
-            return;
-        }
-
-        breathSource.clip = breathClips[0];
-        heartbeatSource.clip = heartbeatClips[0];
-
-        breathSource.Play();
-        heartbeatSource.Play();
+        AudioManager.instance.SetParameter(breathingAndHeartbeat, "Intensity", 0f);
     }
 
     private void PlayFootstepSFX()
     {
-        int index = Random.Range(0, footstepClips.Length);
-        footstepSource.PlayOneShot(footstepClips[index]);
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.footsteps, transform);
     }
 
     private void PlaySkullCrushSFX()
     {
-        footstepSource.Stop();
-        breathSource.Stop();
-        heartbeatSource.Stop();
-        skullCrushSource.Play();
+        StopAllSFX();
+        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.death, transform, "DeathType", (float)DeathType.SIGHT_MONSTER);
+    }
+
+    private void PlayIncinerateSFX()
+    {
+        StopAllSFX();
+        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.death, transform, "DeathType", (float)DeathType.RED_TILE);
+    }
+
+    private void PlayGameOverSFX()
+    {
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.gameOver, transform);
     }
 }

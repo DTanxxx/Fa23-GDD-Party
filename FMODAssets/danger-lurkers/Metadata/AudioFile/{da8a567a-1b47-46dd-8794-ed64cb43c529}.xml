@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{da8a567a-1b47-46dd-8794-ed64cb43c529}">
+		<property name="assetPath">
+			<value>Rahm/SFX/Player/Breathing Normal.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>9.0122448979591834</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b4b352ce-c43c-4ecf-b57a-abc7995858e1}</destination>
+		</relationship>
+	</object>
+</objects>

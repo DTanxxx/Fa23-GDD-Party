@@ -9,9 +9,19 @@ public class LevelManager : MonoBehaviour
 {
     public static Action<bool> onPauseGame;
 
+    // play main menu theme
+    private void Awake()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            AudioManager.instance.Play(FMODEvents.instance.mainMenu, transform);
+        }
+    }
+
     // button event
     public void LoadNextScene()
     {
+        AudioManager.instance.StopAll();
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             // first scene
