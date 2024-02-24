@@ -5,16 +5,6 @@ using FMOD.Studio;
 
 public class PlayerAudioSources : MonoBehaviour
 {
-    /*[SerializeField] private AudioSource footstepSource = null;
-    [SerializeField] private AudioClip[] footstepClips;
-    [SerializeField] private AudioSource breathSource = null;
-    [SerializeField] private AudioClip[] breathClips;
-    [SerializeField] private AudioSource heartbeatSource = null;
-    [SerializeField] private AudioClip[] heartbeatClips;
-    [SerializeField] private AudioSource skullCrushSource = null;
-    [SerializeField] private AudioSource incinerationSource = null;
-    [SerializeField] private AudioSource slideSource = null;*/
-
     public static EventInstance breathingAndHeartbeat;
     public static EventInstance death;
     private enum DeathType
@@ -65,12 +55,7 @@ public class PlayerAudioSources : MonoBehaviour
         }
     }
 
-/*    private void PlayIncinerateSFX()
-    {
-        incinerationSource.Play();
-    }
-
-    private void PlaySlideSFX()
+/*  private void PlaySlideSFX()
     {
         slideSource.Play();
     }
