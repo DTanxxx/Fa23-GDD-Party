@@ -268,7 +268,7 @@ Transform:
   m_GameObject: {fileID: 1082065210}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.4, y: -57.353905, z: 10.7}
+  m_LocalPosition: {x: 1.4, y: 0, z: 10.7}
   m_LocalScale: {x: 3, y: 0, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -286,9 +286,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8331324f131acd341a43f7c2db93db51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileManagers:
+  - {fileID: 1353161664}
+  sensor: 0
   _displayGizmos: 1
   _showOnlyWhileSelected: 1
-  _gizmoColor: {r: 0, g: 0.15109777, b: 1, a: 0.5}
+  _gizmoColor: {r: 1, g: 0, b: 0, a: 0.5}
 --- !u!65 &1082065214
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -379,6 +382,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6ce3f724a2c815458fd22a1db541d97, type: 3}
+--- !u!1 &1353161664 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 262029635277085195, guid: b6ce3f724a2c815458fd22a1db541d97, type: 3}
+  m_PrefabInstance: {fileID: 1353161663}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2025466933
 GameObject:
   m_ObjectHideFlags: 0
