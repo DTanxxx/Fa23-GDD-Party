@@ -6,11 +6,11 @@ using UnityEngine.UIElements;
 
 public class face_hugger_movement : MonoBehaviour
 {
-    [SerializeField] private float playerDetectionRadius = 5f;
     [SerializeField] private float chaseSpeed = 5f;
     [SerializeField] private float freezeDuration = 2f;
-    [SerializeField] private LayerMask weepingAngelLayer;
+    [SerializeField] private LayerMask faceHuggerLayer;
     [SerializeField] private Animator animator = null;
+
     [SerializeField] private SpriteRenderer spriteRenderer = null;
     [SerializeField] private Collider myCollider = null;
 
@@ -18,13 +18,13 @@ public class face_hugger_movement : MonoBehaviour
     private bool isPlayerDead = false;
     private NavMeshAgent agent;
     private float freezeTimer;
-    private bool idle = true;
-    private bool enemyActive = false;
+    private bool enemyActive = true;
 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
+        SetActive(); 
     }
 
     private void OnEnable()
@@ -49,41 +49,17 @@ public class face_hugger_movement : MonoBehaviour
             freezeTimer -= Time.deltaTime;
             return;
         }
-        else if (!idle)
+        if (enemyActive) 
         {
-            animator.SetBool("Freeze", false);
-        }
-
-        if (Vector3.Distance(player.transform.position, transform.position) <= playerDetectionRadius)
-        {
-            // check for line of sight to player
-            RaycastHit hitInfo;
-            if (Physics.Raycast(transform.position, (player.transform.position - transform.position).normalized,
-                out hitInfo, playerDetectionRadius, ~weepingAngelLayer, QueryTriggerInteraction.Ignore))
-            {
-                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
-                {
-                    // detect player
-                    idle = false;
-                    animator.SetBool("Freeze", false);
-
-                    agent.isStopped = false;
-                    agent.destination = player.transform.position;
-                    agent.speed = chaseSpeed;
-                    if ((agent.destination.x - transform.position.x) > 0) {
-                        spriteRenderer.flipX = false;
-                    }
-                    else
-                    {
-                        spriteRenderer.flipX = true;
-                    }
-                }
-            }  
+        agent.destination = player.transform.position;
+        agent.speed = chaseSpeed;
+        if ((agent.destination.x - transform.position.x) > 0) {
+            spriteRenderer.flipX = false;
         }
         else
         {
-            agent.velocity = Vector3.zero;
-            agent.isStopped = true;
+            spriteRenderer.flipX = true;
+        }
         }
     }
 
@@ -94,15 +70,6 @@ public class face_hugger_movement : MonoBehaviour
         agent.velocity = Vector3.zero;
         agent.isStopped = true;
         isPlayerDead = true;
-    }
-
-    public void Freeze()
-    {
-        freezeTimer = freezeDuration;
-        agent.velocity = Vector3.zero;
-        agent.isStopped = true;
-
-        animator.SetBool("Freeze", true);
     }
 
     public void SetActive()
