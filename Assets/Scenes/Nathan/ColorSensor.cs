@@ -223,11 +223,11 @@ public class ColorSensor : MonoBehaviour
                 int row = (int)tiles.GetComponent<ColorTileManager>().matrixSize.x;
                 int col = (int)tiles.GetComponent<ColorTileManager>().matrixSize.y;
                 
-                for (int i = 0; i < row - 1; i++)
+                for (int i = 0; i < row; i++)
                 {
-                    for (int j = 0; j < col - 1; j++) // double for loop to iterate through each tile in each tileManager
+                    for (int j = 0; j < col; j++) // double for loop to iterate through each tile in each tileManager
                     {
-                        TileChangerAdd(sensor, tiles, tiles.GetComponent<ColorTileManager>());
+                        TileChangerAdd(sensor, tiles.GetComponent<ColorTileManager>().matrix[i, j], tiles.GetComponent<ColorTileManager>());
                     }
                 }
                 
@@ -242,11 +242,11 @@ public class ColorSensor : MonoBehaviour
                 int row = (int)tiles.GetComponent<ColorTileManager>().matrixSize.x;
                 int col = (int)tiles.GetComponent<ColorTileManager>().matrixSize.y;
                 
-                for (int i = 0; i < row - 1; i++)
+                for (int i = 0; i < row; i++)
                 {
-                    for (int j = 0; j < col - 1; j++) // double for loop to iterate through each tile in each tileManager
+                    for (int j = 0; j < col; j++) // double for loop to iterate through each tile in each tileManager
                     {
-                        TileChangerRemove(sensor, tiles, tiles.GetComponent<ColorTileManager>());
+                        TileChangerRemove(sensor, tiles.GetComponent<ColorTileManager>().matrix[i, j], tiles.GetComponent<ColorTileManager>());
                     }
                 }
                 
