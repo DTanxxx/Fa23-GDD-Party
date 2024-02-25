@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class face_hugger_movement : MonoBehaviour
 {
+    [SerializeField] private float playerDetectionRadius = 5f;
     [SerializeField] private float chaseSpeed = 5f;
     [SerializeField] private float freezeDuration = 2f;
     [SerializeField] private LayerMask faceHuggerLayer;
@@ -61,6 +62,12 @@ public class face_hugger_movement : MonoBehaviour
             spriteRenderer.flipX = true;
         }
         }
+        RaycastHit hitInfo;
+        if (Physics.Raycast(transform.position, (player.transform.position - transform.position).normalized,
+            out hitInfo, playerDetectionRadius, ~faceHuggerLayer, QueryTriggerInteraction.Ignore))
+        {
+            faceHuggerDeath();
+        }
     }
 
     private void OnPlayerDeath(Vector3 enemyPosition)
@@ -70,6 +77,12 @@ public class face_hugger_movement : MonoBehaviour
         agent.velocity = Vector3.zero;
         agent.isStopped = true;
         isPlayerDead = true;
+    }
+
+    private void faceHuggerDeath() 
+    {
+        // animator.SetTrigger("faceHuggerDeath");
+        // still need animation for facehugger death 
     }
 
     public void SetActive()
