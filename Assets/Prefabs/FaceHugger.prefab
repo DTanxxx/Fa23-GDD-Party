@@ -93,6 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8198372704653035024}
   - component: {fileID: -6632230608485882414}
+  - component: {fileID: 6313042941541338700}
   m_Layer: 18
   m_Name: FaceHugger
   m_TagString: Untagged
@@ -138,6 +139,28 @@ MonoBehaviour:
   animator: {fileID: 0}
   spriteRenderer: {fileID: 0}
   myCollider: {fileID: 0}
+--- !u!195 &6313042941541338700
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4562999215167679586}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 1.7
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 0
+  m_StoppingDistance: 10
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 3.49
+  m_BaseOffset: 0.99
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &5112968042885328963
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,7 +235,7 @@ SpriteRenderer:
   m_SortingLayerID: 1489772483
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: df9a45056be2ca64b823cd9e685284b0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f65e658575dd77349843d4e67b4e2461, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -233,7 +256,7 @@ Animator:
   m_GameObject: {fileID: 5112968042885328963}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ef904775434f5c548baca1a1fb0b241a, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3f951f04008350c46ab59a94f6706375, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
