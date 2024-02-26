@@ -123,7 +123,7 @@ MonoBehaviour:
       Data2: 1300628115
       Data3: 1102686601
       Data4: 1319604264
-    Path: event:/Death
+    Path: event:/Enemy
   <gameOver>k__BackingField:
     Guid:
       Data1: 963464784

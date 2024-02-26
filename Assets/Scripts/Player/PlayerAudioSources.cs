@@ -7,18 +7,23 @@ public class PlayerAudioSources : MonoBehaviour
 {
     public static EventInstance breathingAndHeartbeat;
     public static EventInstance death;
-    private enum DeathType
+    private enum Enemy
     {
-        SIGHT_MONSTER = 0,
-        RED_TILE = 1,
+        WEEPING_ANGEL = 0,
+    }
+
+    private enum TileEffect
+    {
+        BLUE = 1,
+        RED = 2,
     }
 
     private void OnEnable()
     {
         PlayerAnimationEvents.onFootstep += PlayFootstepSFX;
         PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
-        /*PlayerMovement.onPlayerSlide += PlaySlideSFX;
-        PlayerMovement.onPlayerEndSlide += StopSlideSFX;*/
+        PlayerMovement.onPlayerSlide += PlaySlideSFX;
+        PlayerMovement.onPlayerEndSlide += StopSlideSFX;
         PlayerAnimationEvents.onEndPlayerDeathAnim += PlayGameOverSFX;
         EnemyProximitySensor.onEnemyInProximity += EnterPanicPhase;
         EnemyProximitySensor.onEnemyOutOfProximity += EnterCalmPhase;
@@ -32,8 +37,8 @@ public class PlayerAudioSources : MonoBehaviour
     {
         PlayerAnimationEvents.onFootstep -= PlayFootstepSFX;
         PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
-        /*PlayerMovement.onPlayerSlide -= PlaySlideSFX;
-        PlayerMovement.onPlayerEndSlide -= StopSlideSFX;*/
+        PlayerMovement.onPlayerSlide -= PlaySlideSFX;
+        PlayerMovement.onPlayerEndSlide -= StopSlideSFX;
         PlayerAnimationEvents.onEndPlayerDeathAnim -= PlayGameOverSFX;
         EnemyProximitySensor.onEnemyInProximity -= EnterPanicPhase;
         EnemyProximitySensor.onEnemyOutOfProximity -= EnterCalmPhase;
@@ -55,15 +60,15 @@ public class PlayerAudioSources : MonoBehaviour
         }
     }
 
-/*  private void PlaySlideSFX()
+    private void PlaySlideSFX()
     {
-        slideSource.Play();
+        AudioManager.instance.SetPlaySingleton("slide", FMODEvents.instance.tileEffect, transform, "Tile", (float)TileEffect.BLUE);
     }
 
     private void StopSlideSFX()
     {
-        slideSource.Stop();
-    }*/
+        AudioManager.instance.Stop("slide");
+    }
 
     private void StopAllSFX()
     {
@@ -88,13 +93,13 @@ public class PlayerAudioSources : MonoBehaviour
     private void PlaySkullCrushSFX()
     {
         StopAllSFX();
-        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.death, transform, "DeathType", (float)DeathType.SIGHT_MONSTER);
+        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Enemy.WEEPING_ANGEL);
     }
 
     private void PlayIncinerateSFX()
     {
         StopAllSFX();
-        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.death, transform, "DeathType", (float)DeathType.RED_TILE);
+        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.tile, transform, "Tile", (float)Tile.RED);
     }
 
     private void PlayGameOverSFX()

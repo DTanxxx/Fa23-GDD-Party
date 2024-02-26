@@ -18,8 +18,14 @@ public class FMODEvents : MonoBehaviour
     [field: Header("Lever SFX")]
     [field: SerializeField] public EventReference lever { get; private set; }
 
-    [field: Header("Death SFX")]
-    [field: SerializeField] public EventReference death { get; private set; }
+    [field: Header("Tile Activation SFX")]
+    [field: SerializeField] public EventReference tileActivation { get; private set; }
+
+    [field: Header("Tile Effect SFX")]
+    [field: SerializeField] public EventReference tileEffect { get; private set; }
+
+    [field: Header("Enemy SFX")]
+    [field: SerializeField] public EventReference enemy { get; private set; }
 
     [field: Header("Game Over SFX")]
     [field: SerializeField] public EventReference gameOver { get; private set; }

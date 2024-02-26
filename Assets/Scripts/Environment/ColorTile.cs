@@ -51,6 +51,11 @@ public class ColorTile : MonoBehaviour
 
     public static Action onIncinerate;
 
+    private enum TileActivation
+    {
+        MOVE = 0,
+    }
+
     private void Awake()
     {
         _collider = GetComponent<Collider>();
@@ -135,7 +140,7 @@ public class ColorTile : MonoBehaviour
                 {
                     return;
                 }
-                audioSources.PlayRaiseSFX();
+                AudioManager.instance.SetPlayOneShot(FMODEvents.instance.tileActivation, transform, "TileActivation", (float)TileActivation.MOVE);
                 tileManager.ActivateGreen();
                 break;
 
@@ -154,12 +159,12 @@ public class ColorTile : MonoBehaviour
     {
         if (tileColor == TileColor.Yellow)
         {
-            audioSources.PlayRaiseSFX();
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.tileActivation, transform, "TileActivation", (float)TileActivation.MOVE);
             StartCoroutine(Mover(gameObject, "raise"));
         }
         else if (tileColor == TileColor.Black)
         {
-            audioSources.PlayRaiseSFX();
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.tileActivation, transform, "TileActivation", (float)TileActivation.MOVE);
             tileManager.ActivateBlack();
         }
     }

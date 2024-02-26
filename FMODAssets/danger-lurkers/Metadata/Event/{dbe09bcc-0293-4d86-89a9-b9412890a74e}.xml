@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{dbe09bcc-0293-4d86-89a9-b9412890a74e}">
 		<property name="name">
-			<value>Death</value>
+			<value>Enemy</value>
 		</property>
 		<property name="outputFormat">
 			<value>2</value>
@@ -43,7 +43,6 @@
 	<object class="MasterTrack" id="{15724a2e-42d8-4fa1-84c5-2b846313f8e2}">
 		<relationship name="modules">
 			<destination>{159a9b7b-a21f-40d0-81f4-d184d61fe56d}</destination>
-			<destination>{79586ed5-92cd-4971-8d33-580c0a90c627}</destination>
 		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{0c3f5228-b128-473f-8f92-6809b5cf4bb9}</destination>
@@ -70,7 +69,6 @@
 	<object class="ParameterProxy" id="{df5a8b9f-6fed-4d94-9c04-14b9f551187b}">
 		<relationship name="modules">
 			<destination>{159a9b7b-a21f-40d0-81f4-d184d61fe56d}</destination>
-			<destination>{79586ed5-92cd-4971-8d33-580c0a90c627}</destination>
 		</relationship>
 		<relationship name="preset">
 			<destination>{fbf65f13-c93e-4230-82c9-6c2175eafe91}</destination>
@@ -90,14 +88,6 @@
 	<object class="SingleSound" id="{159a9b7b-a21f-40d0-81f4-d184d61fe56d}">
 		<relationship name="audioFile">
 			<destination>{5bddf82b-93a3-418f-b8a3-6582d703fdba}</destination>
-		</relationship>
-	</object>
-	<object class="SingleSound" id="{79586ed5-92cd-4971-8d33-580c0a90c627}">
-		<property name="start">
-			<value>1</value>
-		</property>
-		<relationship name="audioFile">
-			<destination>{545eb5ea-3b8d-40ce-9a32-7b474c89e9ba}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{a0303d4b-cd7e-4785-aeec-a151e4832f5b}">

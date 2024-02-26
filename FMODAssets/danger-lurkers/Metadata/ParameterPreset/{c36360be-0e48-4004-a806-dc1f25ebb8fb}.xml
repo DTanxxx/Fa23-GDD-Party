@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.02.00">
-	<object class="ParameterPreset" id="{f1c0e1ca-a9ec-4be7-bc31-aa5349a540c8}">
+	<object class="ParameterPreset" id="{c36360be-0e48-4004-a806-dc1f25ebb8fb}">
 		<property name="name">
-			<value>Enemy</value>
+			<value>TileEffect</value>
 		</property>
 		<relationship name="folder">
 			<destination>{1bc22a4b-57b9-47d1-a443-7d2313f1454f}</destination>
 		</relationship>
 		<relationship name="parameter">
-			<destination>{fbf65f13-c93e-4230-82c9-6c2175eafe91}</destination>
+			<destination>{34c7940e-7f40-419d-91ea-98f2095fc7ba}</destination>
 		</relationship>
 	</object>
-	<object class="GameParameter" id="{fbf65f13-c93e-4230-82c9-6c2175eafe91}">
+	<object class="GameParameter" id="{34c7940e-7f40-419d-91ea-98f2095fc7ba}">
 		<property name="parameterType">
 			<value>2</value>
 		</property>
+		<property name="maximum">
+			<value>2</value>
+		</property>
 		<property name="enumerationLabels">
-			<value>Weeping Angel</value>
+			<value>Blue</value>
+			<value>Red</value>
 		</property>
 		<property name="initialValue">
 			<value>0</value>
