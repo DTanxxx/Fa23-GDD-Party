@@ -165,25 +165,18 @@ public class ColorSensor : MonoBehaviour
         switch(s)
         {
             case SensorColor.Red:
-                if (color == TileColor.Red)
-                {
-                    t.GetComponent<ColorTile>().TurnWhite();
-                }
-                else if (color == TileColor.Magenta)
+                if (color == TileColor.Magenta)
                 {
                     t.GetComponent<ColorTile>().SetData(TileColor.Blue, ctm, raised);
                 }
                 else if (color == TileColor.Yellow)
                 {
-                    t.GetComponent<ColorTile>().SetData(TileColor.Green, ctm, raised);
+                    StartCoroutine(t.GetComponent<ColorTile>().Mover(t, "lower"));
+                    t.GetComponent<ColorTile>().SetData(TileColor.Green, ctm, false);
                 }
                 break;
             case SensorColor.Blue:
-                if (color == TileColor.Blue)
-                {
-                    t.GetComponent<ColorTile>().TurnWhite();
-                }
-                else if (color == TileColor.Magenta)
+                if (color == TileColor.Magenta)
                 {
                     t.GetComponent<ColorTile>().TurnRed();
                 }
@@ -193,13 +186,10 @@ public class ColorSensor : MonoBehaviour
                 }
                 break;
             case SensorColor.Green:
-                if (color == TileColor.Green)
+                if (color == TileColor.Yellow)
                 {
-                    t.GetComponent<ColorTile>().TurnWhite();
-                }
-                else if (color == TileColor.Yellow)
-                {
-                    t.GetComponent<ColorTile>().TurnRed();
+                    StartCoroutine(t.GetComponent<ColorTile>().Mover(t, "lower"));
+                    t.GetComponent<ColorTile>().SetData(TileColor.Red, ctm, false);
                 }
                 else if (color == TileColor.Cyan)
                 {
