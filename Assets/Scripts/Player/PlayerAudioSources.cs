@@ -5,7 +5,6 @@ using FMOD.Studio;
 
 public class PlayerAudioSources : MonoBehaviour
 {
-    public static EventInstance breathingAndHeartbeat;
     public static EventInstance death;
     private enum Enemy
     {
@@ -14,8 +13,8 @@ public class PlayerAudioSources : MonoBehaviour
 
     private enum TileEffect
     {
-        BLUE = 1,
-        RED = 2,
+        BLUE = 0,
+        RED = 1,
     }
 
     private void OnEnable()
@@ -62,12 +61,12 @@ public class PlayerAudioSources : MonoBehaviour
 
     private void PlaySlideSFX()
     {
-        AudioManager.instance.SetPlaySingleton("slide", FMODEvents.instance.tileEffect, transform, "Tile", (float)TileEffect.BLUE);
+        AudioManager.instance.SetPlaySingleton("slide", FMODEvents.instance.tileEffect, transform, "TileEffect", (float)TileEffect.BLUE);
     }
 
     private void StopSlideSFX()
     {
-        AudioManager.instance.Stop("slide");
+        AudioManager.instance.StopSingleton("slide");
     }
 
     private void StopAllSFX()
@@ -77,12 +76,12 @@ public class PlayerAudioSources : MonoBehaviour
 
     private void EnterPanicPhase()
     {
-        AudioManager.instance.SetParameter(breathingAndHeartbeat, "Intensity", 1f);
+        AudioManager.instance.SetParameterSingleton("breathingAndHeartbeat", "Intensity", 1f);
     }
 
     private void EnterCalmPhase()
     {
-        AudioManager.instance.SetParameter(breathingAndHeartbeat, "Intensity", 0f);
+        AudioManager.instance.SetParameterSingleton("breathingAndHeartbeat", "Intensity", 0f);
     }
 
     private void PlayFootstepSFX()
@@ -99,7 +98,7 @@ public class PlayerAudioSources : MonoBehaviour
     private void PlayIncinerateSFX()
     {
         StopAllSFX();
-        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.tile, transform, "Tile", (float)Tile.RED);
+        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.tileEffect, transform, "TileEffect", (float)TileEffect.RED);
     }
 
     private void PlayGameOverSFX()

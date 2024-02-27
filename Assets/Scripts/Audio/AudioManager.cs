@@ -7,8 +7,8 @@ using FMOD.Studio;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance { get; private set; }
-    private Dictionary<string, EventInstance> eventInstances;
-    private int counter = 0;
+    private List<EventInstance> eventInstances;
+    private Dictionary<string, EventInstance> eventSingletons;
 
     private void Awake()
     {
@@ -18,7 +18,8 @@ public class AudioManager : MonoBehaviour
         } else
         {
             instance = this;
-            eventInstances = new Dictionary<string, EventInstance>();
+            eventInstances = new List<EventInstance>();
+            eventSingletons = new Dictionary<string, EventInstance>();
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -29,19 +30,18 @@ public class AudioManager : MonoBehaviour
         EventInstance eventInstance = CreateEventInstance(sound, transform);
         eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
 
-        eventInstances.Add(counter.ToString(), eventInstance);
-        counter++;
+        eventInstances.Add(eventInstance);
         eventInstance.start();
     }
 
     public void PlaySingleton(string key, EventReference sound, Transform transform)
     {
-        if (eventInstances.ContainsKey(key)) return;
+        if (eventSingletons.ContainsKey(key)) return;
 
         EventInstance eventInstance = CreateEventInstance(sound, transform);
         eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
 
-        eventInstances.Add(key, eventInstance);
+        eventSingletons.Add(key, eventInstance);
         eventInstance.start();
     }
 
@@ -50,26 +50,24 @@ public class AudioManager : MonoBehaviour
         EventInstance eventInstance = CreateEventInstance(sound, transform);
         eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
 
-        eventInstances.Add(counter.ToString(), eventInstance);
-        counter++;
+        eventInstances.Add(eventInstance);
         eventInstance.start();
 
-        eventInstances.Remove(counter.ToString());
-        counter--;
+        eventInstances.Remove(eventInstance);
         eventInstance.release();
     }
 
     public void PlayOneShotSingleton(string key, EventReference sound, Transform transform)
     {
-        if (eventInstances.ContainsKey(key)) return;
+        if (eventSingletons.ContainsKey(key)) return;
 
         EventInstance eventInstance = CreateEventInstance(sound, transform);
         eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
 
-        eventInstances.Add(key, eventInstance);
+        eventSingletons.Add(key, eventInstance);
         eventInstance.start();
 
-        eventInstances.Remove(key);
+        eventSingletons.Remove(key);
         eventInstance.release();
     }
 
@@ -79,20 +77,19 @@ public class AudioManager : MonoBehaviour
         eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
         eventInstance.setParameterByName(paramName, paramVal);
 
-        eventInstances.Add(counter.ToString(), eventInstance);
-        counter++;
+        eventInstances.Add(eventInstance);
         eventInstance.start();
     }
 
     public void SetPlaySingleton(string key, EventReference sound, Transform transform, string paramName, float paramVal)
     {
-        if (eventInstances.ContainsKey(key)) return;
+        if (eventSingletons.ContainsKey(key)) return;
 
         EventInstance eventInstance = CreateEventInstance(sound, transform);
         eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
         eventInstance.setParameterByName(paramName, paramVal);
 
-        eventInstances.Add(key, eventInstance);
+        eventSingletons.Add(key, eventInstance);
         eventInstance.start();
     }
 
@@ -102,27 +99,25 @@ public class AudioManager : MonoBehaviour
         eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
         eventInstance.setParameterByName(paramName, paramVal);
 
-        eventInstances.Add(counter.ToString(), eventInstance);
-        counter++;
+        eventInstances.Add(eventInstance);
         eventInstance.start();
 
-        eventInstances.Remove(counter.ToString());
-        counter--;
+        eventInstances.Remove(eventInstance);
         eventInstance.release();
     }
 
     public void SetPlayOneShotSingleton(string key, EventReference sound, Transform transform, string paramName, float paramVal)
     {
-        if (eventInstances.ContainsKey(key)) return;
+        if (eventSingletons.ContainsKey(key)) return;
 
         EventInstance eventInstance = CreateEventInstance(sound, transform);
         eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
         eventInstance.setParameterByName(paramName, paramVal);
 
-        eventInstances.Add(key, eventInstance);
+        eventSingletons.Add(key, eventInstance);
         eventInstance.start();
 
-        eventInstances.Remove(key);
+        eventSingletons.Remove(key);
         eventInstance.release();
     }
 
@@ -131,18 +126,17 @@ public class AudioManager : MonoBehaviour
     {
         EventInstance eventInstance = RuntimeManager.CreateInstance(sound);
         RuntimeManager.AttachInstanceToGameObject(eventInstance, transform);
-        eventInstances.Add(counter.ToString(), eventInstance);
-        counter++;
+        eventInstances.Add(eventInstance);
         return eventInstance;
     }
 
     public EventInstance CreateEventSingleton(string key, EventReference sound, Transform transform)
     {
-        if (eventInstances.ContainsKey(key)) return eventInstances[key];
+        if (eventSingletons.ContainsKey(key)) return eventSingletons[key];
 
         EventInstance eventInstance = RuntimeManager.CreateInstance(sound);
         RuntimeManager.AttachInstanceToGameObject(eventInstance, transform);
-        eventInstances.Add(key, eventInstance);
+        eventSingletons.Add(key, eventInstance);
         return eventInstance;
     }
 
@@ -151,15 +145,21 @@ public class AudioManager : MonoBehaviour
         eventInstance.setParameterByName(paramName, paramVal);
     }
 
-    public void SetParameter(string key, string paramName, float paramVal)
+    public void SetParameterSingleton(string key, string paramName, float paramVal)
     {
-        eventInstances[key].setParameterByName(paramName, paramVal);
+        if (!eventSingletons.ContainsKey(key)) return;
+        eventSingletons[key].setParameterByName(paramName, paramVal);
     }
 
     // Management
     public void PauseAll()
     {
-        foreach (EventInstance eventInstance in eventInstances.Values)
+        foreach (EventInstance eventInstance in eventInstances)
+        {
+            eventInstance.setPaused(true);
+        }
+
+        foreach (EventInstance eventInstance in eventSingletons.Values)
         {
             eventInstance.setPaused(true);
         }
@@ -167,32 +167,39 @@ public class AudioManager : MonoBehaviour
 
     public void UnpauseAll()
     {
-        foreach (EventInstance eventInstance in eventInstances.Values)
+        foreach (EventInstance eventInstance in eventInstances)
+        {
+            eventInstance.setPaused(false);
+        }
+
+        foreach (EventInstance eventInstance in eventSingletons.Values)
         {
             eventInstance.setPaused(false);
         }
     }
 
-    public void Stop(string key)
+    public void StopSingleton(string key)
     {
-        if (!eventInstances.ContainsKey(key)) return;
-        eventInstances[key].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        eventInstances[key].release();
-        eventInstances.Remove(key);
+        if (!eventSingletons.ContainsKey(key)) return;
+        eventSingletons[key].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        eventSingletons[key].release();
+        eventSingletons.Remove(key);
     }
 
     public void StopAll()
     {
-        foreach (EventInstance eventInstance in eventInstances.Values)
+        foreach (EventInstance eventInstance in eventInstances)
         {
             eventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             eventInstance.release();
         }
         eventInstances.Clear();
-    }
 
-    private void OnDestroy()
-    {
-        StopAll();
+        foreach (EventInstance eventInstance in eventSingletons.Values)
+        {
+            eventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            eventInstance.release();
+        }
+        eventSingletons.Clear();
     }
 }

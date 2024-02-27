@@ -35,11 +35,7 @@ public class EnemyProximitySensor : MonoBehaviour
     private void BeginGame()
     {
         gameStarted = true;
-
-        PlayerAudioSources.breathingAndHeartbeat = AudioManager.instance.CreateEventInstance(FMODEvents.instance.breathingAndHeartbeat, transform);
-        PLAYBACK_STATE playbackState;
-        PlayerAudioSources.breathingAndHeartbeat.getPlaybackState(out playbackState);
-        if (playbackState.Equals(PLAYBACK_STATE.STOPPED)) PlayerAudioSources.breathingAndHeartbeat.start();
+        AudioManager.instance.SetPlaySingleton("breathingAndHeartbeat", FMODEvents.instance.breathingAndHeartbeat, transform, "Intensity", 0f);
     }
 
     private void Update()
