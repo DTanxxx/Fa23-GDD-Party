@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     public static Action<bool> onPauseGame;
-
+    public static Action<bool> onNotes;
     // button event
     public void LoadNextScene()
     {
@@ -36,17 +36,32 @@ public class LevelManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    // button event
+    // pause button event
     public void PauseGame()
     {
         Time.timeScale = 0f;
         onPauseGame?.Invoke(true);
     }
 
-    // button event
+    // pause button event
     public void UnpauseGame()
     {
         Time.timeScale = 1f;
         onPauseGame?.Invoke(false);
     }
+
+    // notebook button event
+    public void OpenNote()
+    {
+        Time.timeScale = 0f;
+        onNotes?.Invoke(true);
+    }
+
+    // notebook button event
+    public void CloseNote()
+    {
+        Time.timeScale = 1f;
+        onNotes?.Invoke(false);
+    }
+
 }
