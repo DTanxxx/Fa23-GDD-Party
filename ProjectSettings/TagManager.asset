@@ -26,7 +26,7 @@ TagManager:
   - ColorTile
   - PlayerColliderWithTile
   - TileSide
-  - 
+  - DetectableObject
   - 
   - 
   - 
