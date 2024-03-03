@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
 
-public class WeepingAngelMovement : MonoBehaviour
+public class WeepingAngelMovement : MonoBehaviour, IFlashable
 {
     [SerializeField] private float playerDetectionRadius = 5f;
     [SerializeField] private float chaseSpeed = 5f;
@@ -87,22 +87,13 @@ public class WeepingAngelMovement : MonoBehaviour
         }
     }
 
-    private void OnPlayerDeath(Vector3 enemyPosition)
+    private void OnPlayerDeath(Vector3 enemyPosition, DeathCause cause)
     {
         spriteRenderer.enabled = false;
         myCollider.enabled = false;
         agent.velocity = Vector3.zero;
         agent.isStopped = true;
         isPlayerDead = true;
-    }
-
-    public void Freeze()
-    {
-        freezeTimer = freezeDuration;
-        agent.velocity = Vector3.zero;
-        agent.isStopped = true;
-
-        animator.SetBool("Freeze", true);
     }
 
     public void SetActive()
@@ -121,5 +112,14 @@ public class WeepingAngelMovement : MonoBehaviour
     public bool EnemyActivated()
     {
         return enemyActive;
+    }
+
+    public void OnFlash()
+    {
+        freezeTimer = freezeDuration;
+        agent.velocity = Vector3.zero;
+        agent.isStopped = true;
+
+        animator.SetBool("Freeze", true);
     }
 }

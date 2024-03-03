@@ -149,7 +149,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FreezePlayer()
     {
-        Debug.Log("Player frozen");
         myCollider.enabled = false;
         myRigidbody.velocity = Vector3.zero;
         animSpeed = animator.speed;
@@ -169,10 +168,24 @@ public class PlayerMovement : MonoBehaviour
         isFrozen = false;
     }
 
-    private void TriggerDeathAnimation(Vector3 enemyPosition)
+    private void TriggerDeathAnimation(Vector3 enemyPosition, DeathCause cause)
     {
-        Debug.Log("Player died");
-        animator.SetTrigger("Die");
+        switch (cause) 
+        {
+            case DeathCause.WEEPINGANGEL:
+                animator.SetTrigger("WeepingAngelDeath");
+                break;
+            case DeathCause.FACEHUGGER:
+                animator.SetTrigger("FaceHuggerDeath");
+                break;
+            case DeathCause.REDTILE:
+                animator.SetTrigger("RedDeath");
+                break;
+            default:
+                Debug.LogError("UNKNOWN DEATH CAUSE");
+                break;
+        }        
+        
         isDead = true;
         FreezePlayer();
         if (enemyPosition.x < transform.position.x)
@@ -189,11 +202,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Incinerate()
     {
-        Debug.Log("Player died");
-        animator.SetTrigger("redDeath");
-        isDead = true;
-        myCollider.enabled = false;
-        myRigidbody.velocity = Vector3.zero;
+        TriggerDeathAnimation(transform.position, DeathCause.REDTILE);
     }
 
     private void Slide()

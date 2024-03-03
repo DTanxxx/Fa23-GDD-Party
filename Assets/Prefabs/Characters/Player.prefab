@@ -640,6 +640,9 @@ MonoBehaviour:
   weepingAngelLayer:
     serializedVersion: 2
     m_Bits: 64
+  faceHuggerLayer:
+    serializedVersion: 2
+    m_Bits: 262144
 --- !u!114 &8544425621648203454
 MonoBehaviour:
   m_ObjectHideFlags: 0

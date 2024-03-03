@@ -64,7 +64,8 @@ public class LightDirection : MonoBehaviour
                 out hitInfo, lightComponent.pointLightOuterRadius, ~playerLayer, QueryTriggerInteraction.Ignore))
             {
                 //Debug.Log(hitInfo.transform.gameObject.layer);
-                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
+                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel") ||
+                    hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("FaceHugger"))
                 {
                     // flashlight hits enemy
                     Vector3 hitDir = new Vector3(hit.transform.position.x - lightTransform.position.x,
@@ -78,7 +79,7 @@ public class LightDirection : MonoBehaviour
                             0, hit.transform.position.z - lightTransform.position.z);
                         if (dirFromPlayerToEnemy.x * hitDir.x >= 0 && dirFromPlayerToEnemy.z * hitDir.z >= 0)
                         {
-                            hit.transform.GetComponentInParent<WeepingAngelMovement>().Freeze();
+                            hit.transform.GetComponentInParent<IFlashable>().OnFlash();
                         }
                     }
                 }
