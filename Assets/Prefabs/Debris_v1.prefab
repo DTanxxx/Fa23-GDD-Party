@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1868698780726302397}
   - component: {fileID: 5232863085943169556}
   m_Layer: 13
-  m_Name: Debris
+  m_Name: Debris_v1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
