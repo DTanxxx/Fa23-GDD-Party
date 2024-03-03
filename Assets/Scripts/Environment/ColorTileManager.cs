@@ -14,7 +14,7 @@ public class ColorTileManager : MonoBehaviour
     [Tooltip("This should match the size of tile prefab's ColorTile transform scales")]
     [SerializeField] private float tileSize = 6f;
     [SerializeField] private TileSpawner[] tileLocs;
-    [SerializeField] private Vector2 matrixSize;
+    [SerializeField] public Vector2 matrixSize;
     [SerializeField] private ChildTileManager[] childrenTileMan;
 
     private List<GameObject> redWhiteList = new List<GameObject>();
@@ -22,7 +22,7 @@ public class ColorTileManager : MonoBehaviour
     private List<GameObject> blueList = new List<GameObject>();
     private List<(GameObject, bool)> blackList = new List<(GameObject, bool)> ();
 
-    private GameObject[,] matrix;
+    public GameObject[,] matrix;
 
     private Dictionary<int, GameObject> rowDictionary = new Dictionary<int, GameObject>();
     private Dictionary<int, GameObject> columnDictionary = new Dictionary<int, GameObject>();
