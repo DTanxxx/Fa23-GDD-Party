@@ -9,6 +9,7 @@ public class FadeInPanel : MonoBehaviour
     [SerializeField] private Image fadeInPanel = null;
     [SerializeField] private float fadeDuration = 1f;
     [SerializeField] private float pauseBeforeElevatorOpen = 1f;
+    [SerializeField] private GameObject[] buttons;
 
     private WaitForSeconds waitForPauseBeforeElevatorOpen;
     private AudioSource audioSource;

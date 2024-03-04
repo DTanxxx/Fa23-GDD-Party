@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.IO;
-using Palmmedia.ReportGenerator.Core.Parser.Analysis;
 using TMPro;
 
 public class NotebookPanel : MonoBehaviour
@@ -12,6 +10,7 @@ public class NotebookPanel : MonoBehaviour
     private Animator animator;
     [SerializeField]
     private int maxPages = 5;
+    [SerializeField] private TextMeshProUGUI pageNumber;
 
     private CanvasGroup canvasGroup;
     public TMP_InputField inputFieldChat;
@@ -29,6 +28,7 @@ public class NotebookPanel : MonoBehaviour
         {
             notes.Add(i, "");
         }
+        pageNumber.text = CurrentPage();
     }
     private void OnEnable()
     {
@@ -85,6 +85,7 @@ public class NotebookPanel : MonoBehaviour
 
     public void LoadNotes()
     {
+        pageNumber.text = CurrentPage();
         if (notes.TryGetValue(currPage, out string currnotes))
         {
             inputFieldChat.text = currnotes;
@@ -97,5 +98,11 @@ public class NotebookPanel : MonoBehaviour
         {
             button.interactable = !button.interactable;
         }
+    }
+
+    private string CurrentPage()
+    {
+        int displayNumber = currPage + 1;
+        return displayNumber.ToString();
     }
 }
