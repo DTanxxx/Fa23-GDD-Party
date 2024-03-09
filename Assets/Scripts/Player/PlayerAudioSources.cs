@@ -14,18 +14,24 @@ namespace Lurkers.Audio.Player
     {
         public static EventInstance breathingAndHeartbeat;
         public static EventInstance death;
-        private enum DeathType
+
+        private enum Enemy
         {
-            SIGHT_MONSTER = 0,
-            RED_TILE = 1,
+            WEEPING_ANGEL = 0,
+        }
+
+        private enum TileEffect
+        {
+            BLUE = 0,
+            RED = 1,
         }
 
         private void OnEnable()
         {
             PlayerAnimationEvents.onFootstep += PlayFootstepSFX;
             PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
-            /*PlayerMovement.onPlayerSlide += PlaySlideSFX;
-            PlayerMovement.onPlayerEndSlide += StopSlideSFX;*/
+            PlayerController.onPlayerSlide += PlaySlideSFX;
+            PlayerController.onPlayerEndSlide += StopSlideSFX;
             PlayerAnimationEvents.onEndPlayerDeathAnim += PlayGameOverSFX;
             EnemyProximitySensor.onEnemyInProximity += EnterPanicPhase;
             EnemyProximitySensor.onEnemyOutOfProximity += EnterCalmPhase;
@@ -39,8 +45,8 @@ namespace Lurkers.Audio.Player
         {
             PlayerAnimationEvents.onFootstep -= PlayFootstepSFX;
             PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
-            /*PlayerMovement.onPlayerSlide -= PlaySlideSFX;
-            PlayerMovement.onPlayerEndSlide -= StopSlideSFX;*/
+            PlayerController.onPlayerSlide -= PlaySlideSFX;
+            PlayerController.onPlayerEndSlide -= StopSlideSFX;
             PlayerAnimationEvents.onEndPlayerDeathAnim -= PlayGameOverSFX;
             EnemyProximitySensor.onEnemyInProximity -= EnterPanicPhase;
             EnemyProximitySensor.onEnemyOutOfProximity -= EnterCalmPhase;
@@ -62,15 +68,15 @@ namespace Lurkers.Audio.Player
             }
         }
 
-        /*  private void PlaySlideSFX()
-            {
-                slideSource.Play();
-            }
+        private void PlaySlideSFX()
+        {
+            AudioManager.instance.SetPlaySingleton("slide", FMODEvents.instance.tileEffect, transform, "TileEffect", (float)TileEffect.BLUE);
+        }
 
-            private void StopSlideSFX()
-            {
-                slideSource.Stop();
-            }*/
+        private void StopSlideSFX()
+        {
+            AudioManager.instance.StopSingleton("slide");
+        }
 
         private void StopAllSFX()
         {
@@ -79,12 +85,12 @@ namespace Lurkers.Audio.Player
 
         private void EnterPanicPhase()
         {
-            AudioManager.instance.SetParameter(breathingAndHeartbeat, "Intensity", 1f);
+            AudioManager.instance.SetParameterSingleton("breathingAndHeartbeat", "Intensity", 1f);
         }
 
         private void EnterCalmPhase()
         {
-            AudioManager.instance.SetParameter(breathingAndHeartbeat, "Intensity", 0f);
+            AudioManager.instance.SetParameterSingleton("breathingAndHeartbeat", "Intensity", 0f);
         }
 
         private void PlayFootstepSFX()
@@ -95,13 +101,13 @@ namespace Lurkers.Audio.Player
         private void PlaySkullCrushSFX()
         {
             StopAllSFX();
-            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.death, transform, "DeathType", (float)DeathType.SIGHT_MONSTER);
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Enemy.WEEPING_ANGEL);
         }
 
         private void PlayIncinerateSFX()
         {
             StopAllSFX();
-            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.death, transform, "DeathType", (float)DeathType.RED_TILE);
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.tileEffect, transform, "TileEffect", (float)TileEffect.RED);
         }
 
         private void PlayGameOverSFX()

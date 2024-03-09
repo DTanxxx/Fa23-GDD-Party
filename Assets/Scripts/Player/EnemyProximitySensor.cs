@@ -22,25 +22,15 @@ namespace Lurkers.Control
         public static Action onEnemyOutOfProximity;
 
         private bool gameStarted = false;
-        //private bool sensorEnabled = false;
 
         private void OnEnable()
         {
-            CameraFollow.onCameraRestoreComplete += EnableSensor;
-            LeverPullAnimationEvents.onLeverPullNoFlicker += EnableSensor;
             ElevatorOpen.onElevatorClose += BeginGame;
         }
 
         private void OnDisable()
         {
-            CameraFollow.onCameraRestoreComplete -= EnableSensor;
-            LeverPullAnimationEvents.onLeverPullNoFlicker -= EnableSensor;
             ElevatorOpen.onElevatorClose -= BeginGame;
-        }
-
-        private void EnableSensor()
-        {
-            //sensorEnabled = true;
         }
 
         private void BeginGame()
@@ -48,10 +38,11 @@ namespace Lurkers.Control
             gameStarted = true;
 
             // TODO this should be abstracted away in the PlayerAudioSources class
-            PlayerAudioSources.breathingAndHeartbeat = AudioManager.instance.CreateEventInstance(FMODEvents.instance.breathingAndHeartbeat, transform);
+            AudioManager.instance.SetPlaySingleton("breathingAndHeartbeat", FMODEvents.instance.breathingAndHeartbeat, transform, "Intensity", 0f);
+            /*PlayerAudioSources.breathingAndHeartbeat = AudioManager.instance.CreateEventInstance(FMODEvents.instance.breathingAndHeartbeat, transform);
             PLAYBACK_STATE playbackState;
             PlayerAudioSources.breathingAndHeartbeat.getPlaybackState(out playbackState);
-            if (playbackState.Equals(PLAYBACK_STATE.STOPPED)) PlayerAudioSources.breathingAndHeartbeat.start();
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED)) PlayerAudioSources.breathingAndHeartbeat.start();*/
         }
 
         private void Update()
