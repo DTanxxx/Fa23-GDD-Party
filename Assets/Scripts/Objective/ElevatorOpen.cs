@@ -2,83 +2,87 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Lurkers.Audio;
+using Lurkers.UI;
 
-public class ElevatorOpen : MonoBehaviour
+namespace Lurkers.Environment.Vision
 {
-    [SerializeField] private Animator animator = null;
-    [SerializeField] private GameObject nextLevelTrigger = null;
-    [SerializeField] private AudioSource audioSource = null;
-    [SerializeField] private AudioClip openCloseSFX = null;
-
-    public bool goalAchieved = false;
-
-    private bool opened = false;
-
-    public static Action onElevatorClose;
-    public static Action onPlayerEntrance;
-
-    private void Start()
+    public class ElevatorOpen : MonoBehaviour
     {
-        nextLevelTrigger.SetActive(false);
-    }
+        [SerializeField] private Animator animator = null;
+        [SerializeField] private GameObject nextLevelTrigger = null;
 
-    private void OnEnable()
-    {
-        PullLever.onLeverPulled += AchieveGoal;
-        FadeInPanel.onBeginElevatorOpen += BeginElevatorOpen;
-    }
+        public bool goalAchieved = false;
 
-    private void OnDisable()
-    {
-        PullLever.onLeverPulled -= AchieveGoal;
-        FadeInPanel.onBeginElevatorOpen -= BeginElevatorOpen;
-    }
+        private bool opened = false;
 
-    public void AchieveGoal()
-    {
-        goalAchieved = true;
-    }
+        public static Action onElevatorClose;
+        public static Action onPlayerEntrance;
 
-    // animation event
-    public void EnableNextLevelTrigger()
-    {
-        nextLevelTrigger.SetActive(true);
-    }
-
-    // animation event
-    public void DisableNextLevelTrigger()
-    {
-        nextLevelTrigger.SetActive(false);
-    }
-
-    // animation event
-    public void ElevatorClose()
-    {
-        onElevatorClose?.Invoke();
-    }
-
-    // animation event
-    public void ShowPlayer()
-    {
-        onPlayerEntrance?.Invoke();
-    }
-
-    private void BeginElevatorOpen()
-    {
-        // play animation
-        animator.SetTrigger("Enter");
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!goalAchieved || !other.gameObject.CompareTag("Player") || opened)
+        private void Start()
         {
-            return;
+            nextLevelTrigger.SetActive(false);
         }
 
-        // play animation
-        audioSource.PlayOneShot(openCloseSFX);
-        animator.SetTrigger("Exit");
-        opened = true;
+        private void OnEnable()
+        {
+            PullLever.onLeverPulled += AchieveGoal;
+            FadeInPanel.onBeginElevatorOpen += BeginElevatorOpen;
+        }
+
+        private void OnDisable()
+        {
+            PullLever.onLeverPulled -= AchieveGoal;
+            FadeInPanel.onBeginElevatorOpen -= BeginElevatorOpen;
+        }
+
+        public void AchieveGoal()
+        {
+            goalAchieved = true;
+        }
+
+        // animation event
+        public void EnableNextLevelTrigger()
+        {
+            nextLevelTrigger.SetActive(true);
+        }
+
+        // animation event
+        public void DisableNextLevelTrigger()
+        {
+            nextLevelTrigger.SetActive(false);
+        }
+
+        // animation event
+        public void ElevatorClose()
+        {
+            onElevatorClose?.Invoke();
+        }
+
+        // animation event
+        public void ShowPlayer()
+        {
+            onPlayerEntrance?.Invoke();
+        }
+
+        private void BeginElevatorOpen()
+        {
+            // play animation
+            animator.SetTrigger("Enter");
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, transform, "Elevator", (float)Elevator.State.OPEN_CLOSE);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!goalAchieved || !other.gameObject.CompareTag("Player") || opened)
+            {
+                return;
+            }
+
+            // play animation
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, transform, "Elevator", (float)Elevator.State.OPEN);
+            animator.SetTrigger("Exit");
+            opened = true;
+        }
     }
 }

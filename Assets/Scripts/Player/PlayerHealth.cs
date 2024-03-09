@@ -2,33 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Lurkers.Control.Vision.Character;
 
-public class PlayerHealth : MonoBehaviour
+namespace Lurkers.Control
 {
-    public static Action<Vector3> onDeath;
-
-    private bool isDead = false;
-
-    private void OnCollisionEnter(Collision collision)
+    public enum DeathCause
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
+        WEEPINGANGEL,
+        FACEHUGGER,
+        REDTILE
+    }
+
+    public class PlayerHealth : MonoBehaviour
+    {
+        public static Action<DeathCause, Vector3, GameObject> onDeath;
+
+        private bool isDead = false;
+
+        private void OnCollisionEnter(Collision collision)
         {
-            bool enemyActive = collision.gameObject.GetComponentInParent<WeepingAngelMovement>().EnemyActivated();
-            if (onDeath != null && enemyActive)
+            if (collision.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
             {
-                isDead = true;
-                onDeath?.Invoke(collision.transform.position);
+                bool enemyActive = collision.gameObject.GetComponentInParent<WeepingAngelController>().IsActive();
+                if (onDeath != null && enemyActive)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.WEEPINGANGEL, collision.transform.position, collision.transform.parent.gameObject);
+                }
+            }
+            else if (collision.gameObject.layer == LayerMask.NameToLayer("FaceHugger"))
+            {
+                if (onDeath != null)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.FACEHUGGER, collision.transform.position, collision.transform.parent.gameObject);
+                }
             }
         }
-    }
 
-    public void SetIsPlayerDead()
-    {
-        isDead = true;
-    }
+        public void SetIsPlayerDead()
+        {
+            isDead = true;
+        }
 
-    public bool GetIsPlayerDead()
-    {
-        return isDead;
+        public bool GetIsPlayerDead()
+        {
+            return isDead;
+        }
     }
 }

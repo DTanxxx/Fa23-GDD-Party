@@ -3,26 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[Serializable]
-public class InventoryItemData
+namespace Lurkers.Inventory
 {
-    public ItemData data { get; private set; }
-    public int stackSize { get; private set; }
-
-    public InventoryItemData(ItemData source)
+    [Serializable]
+    public class InventoryItemData
     {
-        data = source;
-        AddtoStack();
-    }
+        public ItemData data { get; private set; }
+        public int stackSize { get; private set; }
 
-    public void AddtoStack()
-    {
-        stackSize++;
-    }
+        public InventoryItemData(ItemData source)
+        {
+            data = source;
+            AddtoStack();
+        }
 
-    public void RemoveFromStack()
-    {
-        stackSize--;
+        public void AddtoStack()
+        {
+            stackSize++;
+        }
+
+        public void RemoveFromStack()
+        {
+            stackSize--;
+        }
     }
 }

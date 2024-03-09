@@ -4,44 +4,44 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class FadeInPanel : MonoBehaviour
+namespace Lurkers.UI
 {
-    [SerializeField] private Image fadeInPanel = null;
-    [SerializeField] private float fadeDuration = 1f;
-    [SerializeField] private float pauseBeforeElevatorOpen = 1f;
-
-    private WaitForSeconds waitForPauseBeforeElevatorOpen;
-    private AudioSource audioSource;
-
-    public static Action onBeginElevatorOpen;
-
-    private void Start()
+    public class FadeInPanel : MonoBehaviour
     {
-        waitForPauseBeforeElevatorOpen = new WaitForSeconds(pauseBeforeElevatorOpen);
-        audioSource = GetComponent<AudioSource>();
+        [SerializeField] private Image fadeInPanel = null;
+        [SerializeField] private float fadeDuration = 1f;
+        [SerializeField] private float pauseBeforeElevatorOpen = 1f;
 
-        StartCoroutine(OnLevelBegin());
-    }
+        private WaitForSeconds waitForPauseBeforeElevatorOpen;
 
-    private IEnumerator OnLevelBegin()
-    {
-        float totalDur = fadeDuration;
-        while (totalDur > 0f)
+        public static Action onBeginElevatorOpen;
+
+        private void Start()
         {
-            float curAlpha = fadeInPanel.color.a;
-            curAlpha -= Time.deltaTime / totalDur;
-            fadeInPanel.color = new Color(fadeInPanel.color.r,
-                fadeInPanel.color.g, fadeInPanel.color.b, curAlpha);
-            totalDur -= Time.deltaTime;
-            yield return null;
+            waitForPauseBeforeElevatorOpen = new WaitForSeconds(pauseBeforeElevatorOpen);
+
+            StartCoroutine(OnLevelBegin());
         }
-        fadeInPanel.color = new Color(fadeInPanel.color.r,
-                fadeInPanel.color.g, fadeInPanel.color.b, 0f);
 
-        yield return waitForPauseBeforeElevatorOpen;
+        private IEnumerator OnLevelBegin()
+        {
+            float totalDur = fadeDuration;
+            while (totalDur > 0f)
+            {
+                float curAlpha = fadeInPanel.color.a;
+                curAlpha -= Time.deltaTime / totalDur;
+                fadeInPanel.color = new Color(fadeInPanel.color.r,
+                    fadeInPanel.color.g, fadeInPanel.color.b, curAlpha);
+                totalDur -= Time.deltaTime;
+                yield return null;
+            }
+            fadeInPanel.color = new Color(fadeInPanel.color.r,
+                    fadeInPanel.color.g, fadeInPanel.color.b, 0f);
 
-        // play rising sfx and animation
-        onBeginElevatorOpen?.Invoke();
-        audioSource.Play();
+            yield return waitForPauseBeforeElevatorOpen;
+
+            // play rising animation
+            onBeginElevatorOpen?.Invoke();
+        }
     }
 }

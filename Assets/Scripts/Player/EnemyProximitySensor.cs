@@ -2,62 +2,88 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using FMOD.Studio;
+using Lurkers.Camera;
+using Lurkers.Environment.Vision;
+using Lurkers.Audio;  // TODO this namespace should not be here - it is redundant when we are already using Lurkers.Audio.Player
+using Lurkers.Audio.Player;
+using Lurkers.Event;
+using Lurkers.Vision;
 
-public class EnemyProximitySensor : MonoBehaviour
+namespace Lurkers.Control
 {
-    [SerializeField] private float enemySensorRadius = 2f;
-    [SerializeField] private LayerMask weepingAngelLayer;
-
-    public static Action onEnemyInProximity;
-    public static Action onEnemyOutOfProximity;
-
-    private bool gameStarted = false;
-    private bool sensorEnabled = false;
-
-    private void OnEnable()
+    public class EnemyProximitySensor : MonoBehaviour
     {
-        CameraFollow.onCameraRestoreComplete += EnableSensor;
-        ElevatorOpen.onElevatorClose += BeginGame;
-    }
+        [SerializeField] private float enemySensorRadius = 2f;
+        [SerializeField] private LayerMask weepingAngelLayer;
+        [SerializeField] private LayerMask faceHuggerLayer;
 
-    private void OnDisable()
-    {
-        CameraFollow.onCameraRestoreComplete -= EnableSensor;
-        ElevatorOpen.onElevatorClose -= BeginGame;
-    }
+        public static Action onEnemyInProximity;
+        public static Action onEnemyOutOfProximity;
 
-    private void EnableSensor()
-    {
-        sensorEnabled = true;
-    }
+        private bool gameStarted = false;
+        //private bool sensorEnabled = false;
 
-    private void BeginGame()
-    {
-        gameStarted = true;
-    }
-
-    private void Update()
-    {
-        if (!gameStarted)
+        private void OnEnable()
         {
-            return;
+            CameraFollow.onCameraRestoreComplete += EnableSensor;
+            LeverPullAnimationEvents.onLeverPullNoFlicker += EnableSensor;
+            ElevatorOpen.onElevatorClose += BeginGame;
         }
 
-        // create a sphere raycast and check if there are any enemies within the specified radius
-        RaycastHit[] hits = Physics.SphereCastAll(transform.position, enemySensorRadius, transform.forward, 0f,
-            weepingAngelLayer.value, QueryTriggerInteraction.Ignore);
-        
-        if (hits.Length > 0 && sensorEnabled)
+        private void OnDisable()
         {
-            // enemy in proximity!
-            //Debug.Log("DETECTED");
-            onEnemyInProximity?.Invoke();
+            CameraFollow.onCameraRestoreComplete -= EnableSensor;
+            LeverPullAnimationEvents.onLeverPullNoFlicker -= EnableSensor;
+            ElevatorOpen.onElevatorClose -= BeginGame;
         }
-        else
+
+        private void EnableSensor()
         {
-            // no enemy in proximity
-            //Debug.Log("NO DETECTION");
-            onEnemyOutOfProximity?.Invoke();
+            //sensorEnabled = true;
+        }
+
+        private void BeginGame()
+        {
+            gameStarted = true;
+
+            // TODO this should be abstracted away in the PlayerAudioSources class
+            PlayerAudioSources.breathingAndHeartbeat = AudioManager.instance.CreateEventInstance(FMODEvents.instance.breathingAndHeartbeat, transform);
+            PLAYBACK_STATE playbackState;
+            PlayerAudioSources.breathingAndHeartbeat.getPlaybackState(out playbackState);
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED)) PlayerAudioSources.breathingAndHeartbeat.start();
+        }
+
+        private void Update()
+        {
+            if (!gameStarted)
+            {
+                return;
+            }
+
+            // create a sphere raycast and check if there are any enemies within the specified radius
+            RaycastHit[] hits = Physics.SphereCastAll(transform.position, enemySensorRadius, transform.forward, 0f,
+                (weepingAngelLayer | faceHuggerLayer), QueryTriggerInteraction.Ignore);
+
+            // TODO: If enemy in proximity, vary FMOD INTENSITY parameter based on distance between closest enemy and player
+            // process each enemy, only detect them if they are active
+            bool detected = false;
+            foreach (var hit in hits)
+            {
+                if (hit.transform.GetComponentInParent<IFlashable>().IsActive())
+                {
+                    // enemy in proximity!
+                    onEnemyInProximity?.Invoke();
+                    detected = true;
+                    break;
+                }
+            }
+
+            if (!detected)
+            {
+                // no enemy in proximity
+                onEnemyOutOfProximity?.Invoke();
+            }
         }
     }
 }

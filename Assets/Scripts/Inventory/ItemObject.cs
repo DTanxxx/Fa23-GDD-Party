@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemObject : MonoBehaviour
+namespace Lurkers.Inventory
 {
-    [SerializeField] public InventorySystem inventorySystem;
-    [SerializeField] private ItemData referenceItem;
-
-    public void PickUp()
+    public class ItemObject : MonoBehaviour
     {
-        inventorySystem.Add(referenceItem);
-        Destroy(gameObject);
-    }
+        [SerializeField] public InventorySystem inventorySystem;
+        [SerializeField] private ItemData referenceItem;
 
-    public ItemData GetItemData()
-    {
-        return referenceItem;
+        public void PickUp()
+        {
+            inventorySystem.Add(referenceItem);
+            Destroy(gameObject);
+        }
+
+        public ItemData GetItemData()
+        {
+            return referenceItem;
+        }
     }
 }

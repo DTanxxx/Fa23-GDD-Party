@@ -3,39 +3,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExitCheck : MonoBehaviour
+namespace Lurkers.Environment.Vision.ColorTile
 {
-    private Collider _collider;
-    private GameObject _parent;
-    private void Awake()
+    public class ExitCheck : MonoBehaviour
     {
-        _collider = GetComponent<Collider>();
-        _collider.isTrigger = true;
-        _parent = transform.parent.gameObject;
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (_parent != null)
+        private Collider _collider;
+        private GameObject _parent;
+        private void Awake()
         {
-            ColorTile tile = _parent.GetComponent<ColorTile>();
-            tile.EnterTile();
+            _collider = GetComponent<Collider>();
+            _collider.isTrigger = true;
+            _parent = transform.parent.gameObject;
         }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        GameObject player = other.transform.parent.parent.gameObject;
-
-        Debug.Log(other.gameObject.name);
-
-        if (!player.gameObject.CompareTag("Player"))
+        private void OnTriggerEnter(Collider other)
         {
-            return;
+            if (_parent != null)
+            {
+                ColorTile tile = _parent.GetComponent<ColorTile>();
+                tile.EnterTile();
+            }
         }
-
-        if (_parent != null)
+        private void OnTriggerExit(Collider other)
         {
-            ColorTile tile = _parent.GetComponent<ColorTile>();
-            tile.ExitTile();
+            GameObject player = other.transform.parent.parent.gameObject;
+
+            Debug.Log(other.gameObject.name);
+
+            if (!player.gameObject.CompareTag("Player"))
+            {
+                return;
+            }
+
+            if (_parent != null)
+            {
+                ColorTile tile = _parent.GetComponent<ColorTile>();
+                tile.ExitTile();
+            }
         }
     }
 }

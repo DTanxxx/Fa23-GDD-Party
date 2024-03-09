@@ -1,29 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Lurkers.Camera;
 
-public class FocusLight : MonoBehaviour
+namespace Lurkers.Environment.Vision
 {
-    private Animator animator;
-
-    private void Start()
+    public class FocusLight : MonoBehaviour
     {
-        animator = GetComponent<Animator>();
-    }
+        private Animator animator;
 
-    private void OnEnable()
-    {
-        CameraFollow.onCameraShiftComplete += BeginFlickeringSequence;
-    }
+        private void Start()
+        {
+            animator = GetComponent<Animator>();
+        }
 
-    private void OnDisable()
-    {
-        CameraFollow.onCameraShiftComplete -= BeginFlickeringSequence;
-    }
+        private void OnEnable()
+        {
+            CameraFollow.onCameraShiftComplete += BeginFlickeringSequence;
+        }
 
-    private void BeginFlickeringSequence()
-    {
-        // animate the light source and overhead lamp sprite
-        animator.SetTrigger("Flicker");
+        private void OnDisable()
+        {
+            CameraFollow.onCameraShiftComplete -= BeginFlickeringSequence;
+        }
+
+        private void BeginFlickeringSequence()
+        {
+            // animate the light source and overhead lamp sprite
+            animator.SetTrigger("Flicker");
+        }
     }
 }

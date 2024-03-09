@@ -1,63 +1,66 @@
+using Lurkers.Environment.Vision;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class ObjectivePanel : MonoBehaviour
+namespace Lurkers.UI
 {
-    private CanvasGroup invenRender;
-    private bool invenVisible = false;
-
-    private void Start()
+    public class ObjectivePanel : MonoBehaviour
     {
-        invenRender = GetComponent<CanvasGroup>();
-        invenRender.interactable = false;
-        invenRender.blocksRaycasts = false;
-        invenRender.alpha = 0.0f;
-    }
+        private CanvasGroup invenRender;
+        private bool invenVisible = false;
 
-    private void OnEnable()
-    {
-        ElevatorOpen.onElevatorClose += EnablePanel;
-    }
-
-    private void OnDisable()
-    {
-        ElevatorOpen.onElevatorClose -= EnablePanel;
-    }
-
-    private void Update()
-    {
-        ShowPanel();
-    }
-
-    private void EnablePanel()
-    {
-        invenVisible = true;
-        invenRender.alpha = 1.0f;
-        invenRender.blocksRaycasts = true;
-    }
-
-    public void ShowPanel()
-    {
-        if (Input.GetKeyDown("o"))
+        private void Start()
         {
-            if (!invenVisible)
+            invenRender = GetComponent<CanvasGroup>();
+            invenRender.interactable = false;
+            invenRender.blocksRaycasts = false;
+            invenRender.alpha = 0.0f;
+        }
+
+        private void OnEnable()
+        {
+            ElevatorOpen.onElevatorClose += EnablePanel;
+        }
+
+        private void OnDisable()
+        {
+            ElevatorOpen.onElevatorClose -= EnablePanel;
+        }
+
+        private void Update()
+        {
+            ShowPanel();
+        }
+
+        private void EnablePanel()
+        {
+            invenVisible = true;
+            invenRender.alpha = 1.0f;
+            invenRender.blocksRaycasts = true;
+        }
+
+        public void ShowPanel()
+        {
+            if (Input.GetKeyDown("o"))
             {
-                EnablePanel();
+                if (!invenVisible)
+                {
+                    EnablePanel();
+                }
+                else
+                {
+                    invenVisible = false;
+                    invenRender.alpha = 0.0f;
+                    invenRender.blocksRaycasts = false;
+                }
+
             }
-            else
-            {
-                invenVisible = false;
-                invenRender.alpha = 0.0f;
-                invenRender.blocksRaycasts = false;
-            }
+        }
+
+        public void AddObjective(string text)
+        {
 
         }
-    }
-
-    public void AddObjective(string text)
-    {
-
     }
 }
