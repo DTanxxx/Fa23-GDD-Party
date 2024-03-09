@@ -4,81 +4,84 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
-[RequireComponent(typeof(Collider))]
-public class TriggerVolume: MonoBehaviour
+namespace Lurkers.Control
 {
-    [Header("Gizmo Settings")]
-    [SerializeField] private bool _displayGizmos = false;
-    [SerializeField] private bool _showOnlyWhileSelected = true;
-    [SerializeField] private Color _gizmoColor = new Color(0, 1, 0, 0.5f);
-    
-
-    [Header("Settings")]
-    [SerializeField] private bool _oneshot = true;
-
-
-    public UnityEvent OnEnterTrigger;
-    private Collider _collider;
-    private bool _alreadyEntered = false;
-
-
-    private void Awake()
+    [RequireComponent(typeof(Collider))]
+    public class TriggerVolume : MonoBehaviour
     {
-        _collider = GetComponent<Collider>();
-        _collider.isTrigger = true;
-    }
+        [Header("Gizmo Settings")]
+        [SerializeField] private bool _displayGizmos = false;
+        [SerializeField] private bool _showOnlyWhileSelected = true;
+        [SerializeField] private Color _gizmoColor = new Color(0, 1, 0, 0.5f);
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (_alreadyEntered && _oneshot)
-        {
-            return;
-        }
 
-        OnEnterTrigger.Invoke();
-        _alreadyEntered = true;
-    }
+        [Header("Settings")]
+        [SerializeField] private bool _oneshot = true;
 
-    private void OnDrawGizmos()
-    {
-        if (!_displayGizmos)
-        {
-            return;
-        }
 
-        if (_showOnlyWhileSelected)
-        {
-            return;
-        }
+        public UnityEvent OnEnterTrigger;
+        private Collider _collider;
+        private bool _alreadyEntered = false;
 
-        if (_collider == null)
+
+        private void Awake()
         {
             _collider = GetComponent<Collider>();
+            _collider.isTrigger = true;
         }
-        Gizmos.color = _gizmoColor;
-        Gizmos.DrawCube(transform.position, _collider.bounds.size);
 
-
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (!_displayGizmos)
+        private void OnTriggerEnter(Collider other)
         {
-            return;
+            if (_alreadyEntered && _oneshot)
+            {
+                return;
+            }
+
+            OnEnterTrigger.Invoke();
+            _alreadyEntered = true;
         }
 
-        if (!_showOnlyWhileSelected)
+        private void OnDrawGizmos()
         {
-            return;
+            if (!_displayGizmos)
+            {
+                return;
+            }
+
+            if (_showOnlyWhileSelected)
+            {
+                return;
+            }
+
+            if (_collider == null)
+            {
+                _collider = GetComponent<Collider>();
+            }
+            Gizmos.color = _gizmoColor;
+            Gizmos.DrawCube(transform.position, _collider.bounds.size);
+
+
         }
 
-        if (_collider == null)
+        private void OnDrawGizmosSelected()
         {
-            _collider = GetComponent<Collider>();
-        }
-        Gizmos.color = _gizmoColor;
-        Gizmos.DrawCube(transform.position, _collider.bounds.size);
+            if (!_displayGizmos)
+            {
+                return;
+            }
 
+            if (!_showOnlyWhileSelected)
+            {
+                return;
+            }
+
+            if (_collider == null)
+            {
+                _collider = GetComponent<Collider>();
+            }
+            Gizmos.color = _gizmoColor;
+            Gizmos.DrawCube(transform.position, _collider.bounds.size);
+
+        }
     }
 }

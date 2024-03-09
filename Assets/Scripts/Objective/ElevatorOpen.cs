@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Lurkers.Audio;
+using Lurkers.UI;
 
 namespace Lurkers.Environment.Vision
 {

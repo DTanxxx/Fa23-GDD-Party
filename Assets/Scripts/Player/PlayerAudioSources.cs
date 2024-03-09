@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMOD.Studio;
 using Lurkers.Event;
-using Lurkers.Character.Player;
 using Lurkers.Environment.Vision;
 using Lurkers.Environment.Vision.ColorTile;
+using Lurkers.Control;
+using Lurkers.Control.Level;
 
 namespace Lurkers.Audio.Player
 {

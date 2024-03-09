@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Lurkers.Control.Vision.Character;
 
-namespace Lurkers.Character.Player
+namespace Lurkers.Control
 {
     public enum DeathCause
     {

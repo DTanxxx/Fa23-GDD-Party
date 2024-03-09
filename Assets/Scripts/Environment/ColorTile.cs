@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using System;
-using Lurkers.Audio.Vision;
+using Lurkers.Audio.Vision;  // TODO this dependency should be removed to prevent cyclic dependency
+using Lurkers.Control;  // TODO this dependency should be removed to prevent cyclic dependency
 
 namespace Lurkers.Environment.Vision.ColorTile
 {
@@ -120,6 +121,7 @@ namespace Lurkers.Environment.Vision.ColorTile
 
         private void OnTriggerEnter(Collider collision)
         {
+            // TODO remove all instances of Lurkers.Control classes, and use C# event instead
             GameObject player = collision.transform.parent.parent.gameObject;
             PlayerMovement pm = player.GetComponent<PlayerMovement>();
             PlayerHealth health = player.GetComponent<PlayerHealth>();
@@ -174,6 +176,7 @@ namespace Lurkers.Environment.Vision.ColorTile
         {
             if (tileColor == TileColor.Yellow)
             {
+                // TODO remove all instances of Play...SFX() and fire a C# event instead
                 audioSources.PlayRaiseSFX();
                 StartCoroutine(Mover(gameObject, "raise"));
             }

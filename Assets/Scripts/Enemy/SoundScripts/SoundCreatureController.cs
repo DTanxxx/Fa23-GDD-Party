@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Lurkers.Hearing;
 
-namespace Lurkers.Character
+namespace Lurkers.Control.Hearing.Character
 {
 	public class SoundCreatureController : MonoBehaviour, Listen
 	{

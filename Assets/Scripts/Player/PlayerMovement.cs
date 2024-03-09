@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.Rendering.Universal;
-using Lurkers.Character.Player;
 using Lurkers.Event;
 using Lurkers.Environment.Vision;
 using Lurkers.Camera;
 using Lurkers.Environment.Vision.ColorTile;
+using Lurkers.Control.Level;
 
 namespace Lurkers.Control
 {

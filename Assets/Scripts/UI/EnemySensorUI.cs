@@ -1,4 +1,4 @@
-using Lurkers.Character.Player;
+using Lurkers.Control;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

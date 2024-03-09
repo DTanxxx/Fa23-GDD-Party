@@ -5,9 +5,10 @@ using System;
 using FMOD.Studio;
 using Lurkers.Camera;
 using Lurkers.Environment.Vision;
-using Lurkers.Audio;
+using Lurkers.Audio;  // TODO this namespace should not be here - it is redundant when we are already using Lurkers.Audio.Player
+using Lurkers.Audio.Player;
 
-namespace Lurkers.Character.Player
+namespace Lurkers.Control
 {
     public class EnemyProximitySensor : MonoBehaviour
     {
@@ -42,6 +43,7 @@ namespace Lurkers.Character.Player
         {
             gameStarted = true;
 
+            // TODO this should be abstracted away in the PlayerAudioSources class
             PlayerAudioSources.breathingAndHeartbeat = AudioManager.instance.CreateEventInstance(FMODEvents.instance.breathingAndHeartbeat, transform);
             PLAYBACK_STATE playbackState;
             PlayerAudioSources.breathingAndHeartbeat.getPlaybackState(out playbackState);
