@@ -3,27 +3,26 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CameraMode : MonoBehaviour
+namespace Lurkers.Camera
 {
-    [SerializeField] private CameraFollow[] cameraFollows;
-    [SerializeField] private int modeSet;
-
-    private GameObject room;
-
-    private void Start()
+    public class CameraMode : MonoBehaviour
     {
-        room = this.transform.parent.gameObject;
-    }
+        [SerializeField] private CameraFollow[] cameraFollows;
+        [SerializeField] private int modeSet;
 
-    private void Update()
-    {
-        
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        foreach (var cam in cameraFollows)
+        private GameObject room;
+
+        private void Start()
         {
-            cam.SetMode(modeSet, room);
-        }       
+            room = this.transform.parent.gameObject;
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            foreach (var cam in cameraFollows)
+            {
+                cam.SetMode(modeSet, room);
+            }
+        }
     }
 }

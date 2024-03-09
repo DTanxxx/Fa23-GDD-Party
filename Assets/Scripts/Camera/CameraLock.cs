@@ -2,27 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraLock : MonoBehaviour
+namespace Lurkers.Camera
 {
-    [SerializeField] private float degrees;
-
-    private void Start()
+    public class CameraLock : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private float degrees;
 
-    private void Update()
-    {
-        
-    }
+        public Vector3 GetPosition()
+        {
+            return transform.position;
+        }
 
-    public Vector3 GetPosition() 
-    { 
-        return transform.position; 
-    }
-
-    public float GetDegrees() 
-    {
-        return degrees;
+        public float GetDegrees()
+        {
+            return degrees;
+        }
     }
 }
