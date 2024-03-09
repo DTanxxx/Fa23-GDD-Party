@@ -2,38 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PausePanel : MonoBehaviour
+namespace Lurkers.UI
 {
-    private CanvasGroup canvasGroup;
-
-    private void Start()
+    public class PausePanel : MonoBehaviour
     {
-        canvasGroup = GetComponent<CanvasGroup>();
-    }
+        private CanvasGroup canvasGroup;
 
-    private void OnEnable()
-    {
-        LevelManager.onPauseGame += ShowPanel;
-    }
-
-    private void OnDisable()
-    {
-        LevelManager.onPauseGame -= ShowPanel;
-    }
-
-    private void ShowPanel(bool toPause)
-    {
-        if (toPause)
+        private void Start()
         {
-            canvasGroup.alpha = 1f;
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
+            canvasGroup = GetComponent<CanvasGroup>();
         }
-        else
+
+        private void OnEnable()
         {
-            canvasGroup.alpha = 0f;
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
+            LevelManager.onPauseGame += ShowPanel;
+        }
+
+        private void OnDisable()
+        {
+            LevelManager.onPauseGame -= ShowPanel;
+        }
+
+        private void ShowPanel(bool toPause)
+        {
+            if (toPause)
+            {
+                canvasGroup.alpha = 1f;
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
+            }
+            else
+            {
+                canvasGroup.alpha = 0f;
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
+            }
         }
     }
 }

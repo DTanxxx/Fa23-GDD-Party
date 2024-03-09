@@ -3,238 +3,246 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.Rendering.Universal;
+using Lurkers.Character.Player;
+using Lurkers.Event;
+using Lurkers.Environment.Vision;
+using Lurkers.Camera;
+using Lurkers.Environment.Vision.ColorTile;
 
-public class PlayerMovement : MonoBehaviour
+namespace Lurkers.Control
 {
-    [SerializeField] private float maxSpeed = 0.2f;
-    [SerializeField] private int accFrames = 9;
-    [SerializeField] private int lookFrames = 2;
-    [SerializeField] private int frameDelay = 1;
-    [SerializeField] private Animator animator = null;
-    [SerializeField] private SpriteRenderer spriteRenderer = null;
-    [SerializeField] private Collider myCollider = null;
-    [SerializeField] private Rigidbody myRigidbody = null;
-    [SerializeField] private float pauseBeforeAppearance = 1f;
-    [SerializeField] private Transform beginTransform = null;
-    [SerializeField] private float tolerableOffset = 1f;
-    [SerializeField] private float playerTransitionRate = 0.25f;
-    [SerializeField] private Light2D[] lights;
-
-    private int currFrames;
-    private Vector3 dir;
-    private int curFrameDelay;
-    private Vector3 lastDirection;
-    private bool isDead = false;
-    private bool isFrozen = false;
-    private float animSpeed;
-    private WaitForSeconds waitForPauseBeforeAppearance;
-    private float tempSpeed;
-
-    public static Action onPlayerSlide;
-    public static Action onPlayerEndSlide;
-
-    private void Start()
+    public class PlayerMovement : MonoBehaviour
     {
-        dir = new Vector3(1, 0, 0);
-        waitForPauseBeforeAppearance = new WaitForSeconds(pauseBeforeAppearance);
-        FreezePlayer();
-    }
+        [SerializeField] private float maxSpeed = 0.2f;
+        [SerializeField] private int accFrames = 9;
+        [SerializeField] private int lookFrames = 2;
+        [SerializeField] private int frameDelay = 1;
+        [SerializeField] private Animator animator = null;
+        [SerializeField] private SpriteRenderer spriteRenderer = null;
+        [SerializeField] private Collider myCollider = null;
+        [SerializeField] private Rigidbody myRigidbody = null;
+        [SerializeField] private float pauseBeforeAppearance = 1f;
+        [SerializeField] private Transform beginTransform = null;
+        [SerializeField] private float tolerableOffset = 1f;
+        [SerializeField] private float playerTransitionRate = 0.25f;
+        [SerializeField] private Light2D[] lights;
 
-    private void OnEnable()
-    {
-        PlayerHealth.onDeath += TriggerDeathAnimation;
-        LeverPullAnimationEvents.onBeginLeverCinematicSequence += FreezePlayer;
-        ElevatorOpen.onPlayerEntrance += TransitionIntoLevel;
-        CameraFollow.onCameraRestoreComplete += UnfreezePlayer;
-        ElevatorOpen.onElevatorClose += UnfreezePlayer;
-        NextLevelTrigger.onBeginLevelTransition += FreezePlayer;
-        ColorTile.onIncinerate += Incinerate;
-    }
+        private int currFrames;
+        private Vector3 dir;
+        private int curFrameDelay;
+        private Vector3 lastDirection;
+        private bool isDead = false;
+        private bool isFrozen = false;
+        private float animSpeed;
+        private WaitForSeconds waitForPauseBeforeAppearance;
+        private float tempSpeed;
 
-    private void OnDisable()
-    {
-        PlayerHealth.onDeath -= TriggerDeathAnimation;
-        LeverPullAnimationEvents.onBeginLeverCinematicSequence -= FreezePlayer;
-        ElevatorOpen.onPlayerEntrance -= TransitionIntoLevel;
-        CameraFollow.onCameraRestoreComplete -= UnfreezePlayer;
-        ElevatorOpen.onElevatorClose -= UnfreezePlayer;
-        NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
-        ColorTile.onIncinerate -= Incinerate;
-    }
+        public static Action onPlayerSlide;
+        public static Action onPlayerEndSlide;
 
-    private void FixedUpdate()
-    {
-        if (isDead || isFrozen)
+        private void Start()
         {
-            return;
+            dir = new Vector3(1, 0, 0);
+            waitForPauseBeforeAppearance = new WaitForSeconds(pauseBeforeAppearance);
+            FreezePlayer();
         }
 
-        currFrames++;
-        if (currFrames >= accFrames)
+        private void OnEnable()
         {
-            currFrames = accFrames + 1;
-        }
-        if (currFrames - lookFrames < 0)
-        {
-            currFrames = lookFrames;
-        }
-
-        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
-        {
-            currFrames = 0;
+            PlayerHealth.onDeath += TriggerDeathAnimation;
+            LeverPullAnimationEvents.onBeginLeverCinematicSequence += FreezePlayer;
+            ElevatorOpen.onPlayerEntrance += TransitionIntoLevel;
+            CameraFollow.onCameraRestoreComplete += UnfreezePlayer;
+            ElevatorOpen.onElevatorClose += UnfreezePlayer;
+            NextLevelTrigger.onBeginLevelTransition += FreezePlayer;
+            ColorTile.onIncinerate += Incinerate;
         }
 
-        if (curFrameDelay == frameDelay)
+        private void OnDisable()
         {
-            lastDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            curFrameDelay = 0;
-        }
-        else
-        {
-            // skip this frame's input
-            curFrameDelay++;
+            PlayerHealth.onDeath -= TriggerDeathAnimation;
+            LeverPullAnimationEvents.onBeginLeverCinematicSequence -= FreezePlayer;
+            ElevatorOpen.onPlayerEntrance -= TransitionIntoLevel;
+            CameraFollow.onCameraRestoreComplete -= UnfreezePlayer;
+            ElevatorOpen.onElevatorClose -= UnfreezePlayer;
+            NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
+            ColorTile.onIncinerate -= Incinerate;
         }
 
-        if (lastDirection != Vector3.zero)
+        private void FixedUpdate()
         {
-            // walking
-            animator.SetBool("Walking", true);
-
-            dir = lastDirection.normalized;
-            gameObject.transform.Translate(dir * maxSpeed * (currFrames - lookFrames) / accFrames);
-            
-            if (dir.x > 0)
+            if (isDead || isFrozen)
             {
-                // going right
+                return;
+            }
+
+            currFrames++;
+            if (currFrames >= accFrames)
+            {
+                currFrames = accFrames + 1;
+            }
+            if (currFrames - lookFrames < 0)
+            {
+                currFrames = lookFrames;
+            }
+
+            if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
+            {
+                currFrames = 0;
+            }
+
+            if (curFrameDelay == frameDelay)
+            {
+                lastDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                curFrameDelay = 0;
+            }
+            else
+            {
+                // skip this frame's input
+                curFrameDelay++;
+            }
+
+            if (lastDirection != Vector3.zero)
+            {
+                // walking
+                animator.SetBool("Walking", true);
+
+                dir = lastDirection.normalized;
+                gameObject.transform.Translate(dir * maxSpeed * (currFrames - lookFrames) / accFrames);
+
+                if (dir.x > 0)
+                {
+                    // going right
+                    spriteRenderer.flipX = true;
+                }
+                else if (dir.x < 0)
+                {
+                    // going left
+                    spriteRenderer.flipX = false;
+                }
+            }
+            else
+            {
+                // not walking
+                animator.SetBool("Walking", false);
+            }
+        }
+
+        private void TransitionIntoLevel()
+        {
+            //StartCoroutine(BeginTransitioning());
+
+            // for now, simply enable flashlight
+            foreach (var light in lights)
+            {
+                light.enabled = true;
+            }
+
+            transform.position = beginTransform.position;
+        }
+
+        /*private IEnumerator BeginTransitioning()
+        {
+            yield return waitForPauseBeforeAppearance;
+
+            float dist = Vector3.Distance(transform.position, beginTransform.position);
+            while (dist > tolerableOffset)
+            {
+                transform.position = Vector3.Lerp(transform.position, beginTransform.position, playerTransitionRate);
+                dist = Vector3.Distance(transform.position, beginTransform.position);
+                yield return null;
+            }
+        }*/
+
+        private void FreezePlayer()
+        {
+            myCollider.enabled = false;
+            myRigidbody.velocity = Vector3.zero;
+            animSpeed = animator.speed;
+            if (!isDead)
+            {
+                animator.speed = 0f;
+            }
+            isFrozen = true;
+        }
+
+        private void UnfreezePlayer()
+        {
+            Debug.Log("Player unfrozen");
+            myCollider.enabled = true;
+            myRigidbody.velocity = Vector3.zero;
+            animator.speed = animSpeed;
+            isFrozen = false;
+        }
+
+        private void TriggerDeathAnimation(Vector3 enemyPosition, DeathCause cause)
+        {
+            switch (cause)
+            {
+                case DeathCause.WEEPINGANGEL:
+                    animator.SetTrigger("WeepingAngelDeath");
+                    break;
+                case DeathCause.FACEHUGGER:
+                    animator.SetTrigger("FaceHuggerDeath");
+                    break;
+                case DeathCause.REDTILE:
+                    animator.SetTrigger("RedDeath");
+                    break;
+                default:
+                    Debug.LogError("UNKNOWN DEATH CAUSE");
+                    break;
+            }
+
+            isDead = true;
+            FreezePlayer();
+            if (enemyPosition.x < transform.position.x)
+            {
+                // flip sprite
                 spriteRenderer.flipX = true;
             }
-            else if (dir.x < 0)
+            else
             {
-                // going left
+                // don't flip
                 spriteRenderer.flipX = false;
             }
         }
-        else
-        {
-            // not walking
-            animator.SetBool("Walking", false);
-        }
-    }
 
-    private void TransitionIntoLevel()
-    {
-        //StartCoroutine(BeginTransitioning());
-
-        // for now, simply enable flashlight
-        foreach (var light in lights)
+        private void Incinerate()
         {
-            light.enabled = true;
+            TriggerDeathAnimation(transform.position, DeathCause.REDTILE);
         }
 
-        transform.position = beginTransform.position;
-    }
-
-    private IEnumerator BeginTransitioning()
-    {
-        yield return waitForPauseBeforeAppearance;
-
-        float dist = Vector3.Distance(transform.position, beginTransform.position);
-        while (dist > tolerableOffset)
+        private void Slide()
         {
-            transform.position = Vector3.Lerp(transform.position, beginTransform.position, playerTransitionRate);
-            dist = Vector3.Distance(transform.position, beginTransform.position);
-            yield return null;
+            myRigidbody.velocity = Vector3.zero;
+            isFrozen = true;  // disable player input
+                              // transition to sliding animation
+            animator.SetTrigger("Slide");
+            onPlayerSlide?.Invoke();
         }
-    }
 
-    private void FreezePlayer()
-    {
-        myCollider.enabled = false;
-        myRigidbody.velocity = Vector3.zero;
-        animSpeed = animator.speed;
-        if (!isDead)
+        private void RecoverFromSlide()
         {
-            animator.speed = 0f;
+            onPlayerEndSlide?.Invoke();
+            animator.SetTrigger("Recover");
+            isFrozen = false;
         }
-        isFrozen = true;
-    }
 
-    private void UnfreezePlayer()
-    {
-        Debug.Log("Player unfrozen");
-        myCollider.enabled = true;
-        myRigidbody.velocity = Vector3.zero;
-        animator.speed = animSpeed;
-        isFrozen = false;
-    }
-
-    private void TriggerDeathAnimation(Vector3 enemyPosition, DeathCause cause)
-    {
-        switch (cause) 
+        public Vector3 getDir()
         {
-            case DeathCause.WEEPINGANGEL:
-                animator.SetTrigger("WeepingAngelDeath");
-                break;
-            case DeathCause.FACEHUGGER:
-                animator.SetTrigger("FaceHuggerDeath");
-                break;
-            case DeathCause.REDTILE:
-                animator.SetTrigger("RedDeath");
-                break;
-            default:
-                Debug.LogError("UNKNOWN DEATH CAUSE");
-                break;
-        }        
-        
-        isDead = true;
-        FreezePlayer();
-        if (enemyPosition.x < transform.position.x)
-        {
-            // flip sprite
-            spriteRenderer.flipX = true;
+            return dir;
         }
-        else
+
+        public void Immobile(bool onoff)
         {
-            // don't flip
-            spriteRenderer.flipX = false;
-        }
-    }
-
-    private void Incinerate()
-    {
-        TriggerDeathAnimation(transform.position, DeathCause.REDTILE);
-    }
-
-    private void Slide()
-    {
-        myRigidbody.velocity = Vector3.zero;
-        isFrozen = true;  // disable player input
-        // transition to sliding animation
-        animator.SetTrigger("Slide");
-        onPlayerSlide?.Invoke();
-    }
-
-    private void RecoverFromSlide()
-    {
-        onPlayerEndSlide?.Invoke();
-        animator.SetTrigger("Recover");
-        isFrozen = false;
-    }
-
-    public Vector3 getDir()
-    {
-        return dir;
-    }
-
-    public void Immobile(bool onoff)
-    {
-        if (onoff)
-        {
-            Slide();
-        }
-        else
-        {
-            RecoverFromSlide();
+            if (onoff)
+            {
+                Slide();
+            }
+            else
+            {
+                RecoverFromSlide();
+            }
         }
     }
 }

@@ -3,47 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum DeathCause
+namespace Lurkers.Character.Player
 {
-    WEEPINGANGEL,
-    FACEHUGGER,
-    REDTILE
-}
-
-public class PlayerHealth : MonoBehaviour
-{
-    public static Action<Vector3, DeathCause> onDeath;
-
-    private bool isDead = false;
-
-    private void OnCollisionEnter(Collision collision)
+    public enum DeathCause
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
-        {
-            bool enemyActive = collision.gameObject.GetComponentInParent<WeepingAngelMovement>().EnemyActivated();
-            if (onDeath != null && enemyActive)
-            {
-                isDead = true;
-                onDeath?.Invoke(collision.transform.position, DeathCause.WEEPINGANGEL);
-            }
-        }
-        else if (collision.gameObject.layer == LayerMask.NameToLayer("FaceHugger"))
-        {
-            if (onDeath != null)
-            {
-                isDead = true;
-                onDeath?.Invoke(collision.transform.position, DeathCause.FACEHUGGER);
-            }
-        }
+        WEEPINGANGEL,
+        FACEHUGGER,
+        REDTILE
     }
 
-    public void SetIsPlayerDead()
+    public class PlayerHealth : MonoBehaviour
     {
-        isDead = true;
-    }
+        public static Action<Vector3, DeathCause> onDeath;
 
-    public bool GetIsPlayerDead()
-    {
-        return isDead;
+        private bool isDead = false;
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
+            {
+                bool enemyActive = collision.gameObject.GetComponentInParent<WeepingAngelMovement>().EnemyActivated();
+                if (onDeath != null && enemyActive)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(collision.transform.position, DeathCause.WEEPINGANGEL);
+                }
+            }
+            else if (collision.gameObject.layer == LayerMask.NameToLayer("FaceHugger"))
+            {
+                if (onDeath != null)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(collision.transform.position, DeathCause.FACEHUGGER);
+                }
+            }
+        }
+
+        public void SetIsPlayerDead()
+        {
+            isDead = true;
+        }
+
+        public bool GetIsPlayerDead()
+        {
+            return isDead;
+        }
     }
 }

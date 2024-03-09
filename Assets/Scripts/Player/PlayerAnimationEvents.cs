@@ -2,29 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.SceneManagement;
 
-public class PlayerAnimationEvents : MonoBehaviour
+namespace Lurkers.Event
 {
-    public static Action onFootstep;
-    public static Action onEndPlayerDeathAnim;
-    public static Action onSkullCrush;
-
-    // animation event
-    public void OnEndDeathAnimation()
+    public class PlayerAnimationEvents : MonoBehaviour
     {
-        onEndPlayerDeathAnim?.Invoke();
-    }
+        public static Action onFootstep;
+        public static Action onEndPlayerDeathAnim;
+        public static Action onSkullCrush;
 
-    // animation event
-    public void OnSkullCrush()
-    {
-        onSkullCrush?.Invoke();
-    }
+        // animation event
+        public void OnEndDeathAnimation()
+        {
+            onEndPlayerDeathAnim?.Invoke();
+        }
 
-    // animation event
-    public void OnFootstep()
-    {
-        onFootstep?.Invoke();
+        // animation event
+        public void OnSkullCrush()
+        {
+            onSkullCrush?.Invoke();
+        }
+
+        // animation event
+        public void OnFootstep()
+        {
+            onFootstep?.Invoke();
+        }
     }
 }

@@ -1,36 +1,40 @@
+using Lurkers.Character.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EnemySensorUI : MonoBehaviour
+namespace Lurkers.UI
 {
-    private Image sensorUI;
-
-    private void Start()
+    public class EnemySensorUI : MonoBehaviour
     {
-        sensorUI = GetComponent<Image>();
-    }
+        private Image sensorUI;
 
-    private void OnEnable()
-    {
-        EnemyProximitySensor.onEnemyInProximity += ShowUI;
-        EnemyProximitySensor.onEnemyOutOfProximity += HideUI;
-    }
+        private void Start()
+        {
+            sensorUI = GetComponent<Image>();
+        }
 
-    private void OnDisable()
-    {
-        EnemyProximitySensor.onEnemyInProximity -= ShowUI;
-        EnemyProximitySensor.onEnemyOutOfProximity -= HideUI;
-    }
+        private void OnEnable()
+        {
+            EnemyProximitySensor.onEnemyInProximity += ShowUI;
+            EnemyProximitySensor.onEnemyOutOfProximity += HideUI;
+        }
 
-    private void ShowUI()
-    {
-        sensorUI.enabled = true;
-    }
+        private void OnDisable()
+        {
+            EnemyProximitySensor.onEnemyInProximity -= ShowUI;
+            EnemyProximitySensor.onEnemyOutOfProximity -= HideUI;
+        }
 
-    private void HideUI()
-    {
-        sensorUI.enabled = false;
+        private void ShowUI()
+        {
+            sensorUI.enabled = true;
+        }
+
+        private void HideUI()
+        {
+            sensorUI.enabled = false;
+        }
     }
 }

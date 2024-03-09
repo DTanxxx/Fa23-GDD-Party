@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Elevator : MonoBehaviour
+namespace Lurkers.Environment.Vision
 {
-    public enum State
+    public class Elevator : MonoBehaviour
     {
-        OPEN = 0,
-        OPEN_CLOSE = 1,
-        MOVING = 2,
+        public enum State
+        {
+            OPEN = 0,
+            OPEN_CLOSE = 1,
+            MOVING = 2,
+        }
     }
 }

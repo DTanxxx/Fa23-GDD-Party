@@ -2,103 +2,110 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FMOD.Studio;
+using Lurkers.Event;
+using Lurkers.Character.Player;
+using Lurkers.Environment.Vision;
+using Lurkers.Environment.Vision.ColorTile;
 
-public class PlayerAudioSources : MonoBehaviour
+namespace Lurkers.Audio.Player
 {
-    public static EventInstance breathingAndHeartbeat;
-    public static EventInstance death;
-    private enum DeathType
+    public class PlayerAudioSources : MonoBehaviour
     {
-        SIGHT_MONSTER = 0,
-        RED_TILE = 1,
-    }
-
-    private void OnEnable()
-    {
-        PlayerAnimationEvents.onFootstep += PlayFootstepSFX;
-        PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
-        /*PlayerMovement.onPlayerSlide += PlaySlideSFX;
-        PlayerMovement.onPlayerEndSlide += StopSlideSFX;*/
-        PlayerAnimationEvents.onEndPlayerDeathAnim += PlayGameOverSFX;
-        EnemyProximitySensor.onEnemyInProximity += EnterPanicPhase;
-        EnemyProximitySensor.onEnemyOutOfProximity += EnterCalmPhase;
-        NextLevelTrigger.onBeginLevelTransition += StopAllSFX;
-        ElevatorOpen.onElevatorClose += EnterCalmPhase;
-        LevelManager.onPauseGame += PauseAllSFX;
-        ColorTile.onIncinerate += PlayIncinerateSFX;
-    }
-
-    private void OnDisable()
-    {
-        PlayerAnimationEvents.onFootstep -= PlayFootstepSFX;
-        PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
-        /*PlayerMovement.onPlayerSlide -= PlaySlideSFX;
-        PlayerMovement.onPlayerEndSlide -= StopSlideSFX;*/
-        PlayerAnimationEvents.onEndPlayerDeathAnim -= PlayGameOverSFX;
-        EnemyProximitySensor.onEnemyInProximity -= EnterPanicPhase;
-        EnemyProximitySensor.onEnemyOutOfProximity -= EnterCalmPhase;
-        NextLevelTrigger.onBeginLevelTransition -= StopAllSFX;
-        ElevatorOpen.onElevatorClose -= EnterCalmPhase;
-        LevelManager.onPauseGame -= PauseAllSFX;
-        ColorTile.onIncinerate -= PlayIncinerateSFX;
-    }
-
-    private void PauseAllSFX(bool toPause)
-    {
-        if (toPause)
+        public static EventInstance breathingAndHeartbeat;
+        public static EventInstance death;
+        private enum DeathType
         {
-            AudioManager.instance.PauseAll();
+            SIGHT_MONSTER = 0,
+            RED_TILE = 1,
         }
-        else
+
+        private void OnEnable()
         {
-            AudioManager.instance.UnpauseAll();
+            PlayerAnimationEvents.onFootstep += PlayFootstepSFX;
+            PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
+            /*PlayerMovement.onPlayerSlide += PlaySlideSFX;
+            PlayerMovement.onPlayerEndSlide += StopSlideSFX;*/
+            PlayerAnimationEvents.onEndPlayerDeathAnim += PlayGameOverSFX;
+            EnemyProximitySensor.onEnemyInProximity += EnterPanicPhase;
+            EnemyProximitySensor.onEnemyOutOfProximity += EnterCalmPhase;
+            NextLevelTrigger.onBeginLevelTransition += StopAllSFX;
+            ElevatorOpen.onElevatorClose += EnterCalmPhase;
+            LevelManager.onPauseGame += PauseAllSFX;
+            ColorTile.onIncinerate += PlayIncinerateSFX;
         }
-    }
 
-/*  private void PlaySlideSFX()
-    {
-        slideSource.Play();
-    }
+        private void OnDisable()
+        {
+            PlayerAnimationEvents.onFootstep -= PlayFootstepSFX;
+            PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
+            /*PlayerMovement.onPlayerSlide -= PlaySlideSFX;
+            PlayerMovement.onPlayerEndSlide -= StopSlideSFX;*/
+            PlayerAnimationEvents.onEndPlayerDeathAnim -= PlayGameOverSFX;
+            EnemyProximitySensor.onEnemyInProximity -= EnterPanicPhase;
+            EnemyProximitySensor.onEnemyOutOfProximity -= EnterCalmPhase;
+            NextLevelTrigger.onBeginLevelTransition -= StopAllSFX;
+            ElevatorOpen.onElevatorClose -= EnterCalmPhase;
+            LevelManager.onPauseGame -= PauseAllSFX;
+            ColorTile.onIncinerate -= PlayIncinerateSFX;
+        }
 
-    private void StopSlideSFX()
-    {
-        slideSource.Stop();
-    }*/
+        private void PauseAllSFX(bool toPause)
+        {
+            if (toPause)
+            {
+                AudioManager.instance.PauseAll();
+            }
+            else
+            {
+                AudioManager.instance.UnpauseAll();
+            }
+        }
 
-    private void StopAllSFX()
-    {
-        AudioManager.instance.StopAll();
-    }
+        /*  private void PlaySlideSFX()
+            {
+                slideSource.Play();
+            }
 
-    private void EnterPanicPhase()
-    {
-        AudioManager.instance.SetParameter(breathingAndHeartbeat, "Intensity", 1f);
-    }
+            private void StopSlideSFX()
+            {
+                slideSource.Stop();
+            }*/
 
-    private void EnterCalmPhase()
-    {
-        AudioManager.instance.SetParameter(breathingAndHeartbeat, "Intensity", 0f);
-    }
+        private void StopAllSFX()
+        {
+            AudioManager.instance.StopAll();
+        }
 
-    private void PlayFootstepSFX()
-    {
-        AudioManager.instance.PlayOneShot(FMODEvents.instance.footsteps, transform);
-    }
+        private void EnterPanicPhase()
+        {
+            AudioManager.instance.SetParameter(breathingAndHeartbeat, "Intensity", 1f);
+        }
 
-    private void PlaySkullCrushSFX()
-    {
-        StopAllSFX();
-        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.death, transform, "DeathType", (float)DeathType.SIGHT_MONSTER);
-    }
+        private void EnterCalmPhase()
+        {
+            AudioManager.instance.SetParameter(breathingAndHeartbeat, "Intensity", 0f);
+        }
 
-    private void PlayIncinerateSFX()
-    {
-        StopAllSFX();
-        AudioManager.instance.SetPlayOneShot(FMODEvents.instance.death, transform, "DeathType", (float)DeathType.RED_TILE);
-    }
+        private void PlayFootstepSFX()
+        {
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.footsteps, transform);
+        }
 
-    private void PlayGameOverSFX()
-    {
-        AudioManager.instance.PlayOneShot(FMODEvents.instance.gameOver, transform);
+        private void PlaySkullCrushSFX()
+        {
+            StopAllSFX();
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.death, transform, "DeathType", (float)DeathType.SIGHT_MONSTER);
+        }
+
+        private void PlayIncinerateSFX()
+        {
+            StopAllSFX();
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.death, transform, "DeathType", (float)DeathType.RED_TILE);
+        }
+
+        private void PlayGameOverSFX()
+        {
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.gameOver, transform);
+        }
     }
 }

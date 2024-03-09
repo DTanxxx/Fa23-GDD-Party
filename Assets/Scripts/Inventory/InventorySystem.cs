@@ -60,6 +60,7 @@ namespace Lurkers.Inventory
             }
         }
 
+        // TODO GUI functionalities should be in a standalone script rather than being associated with inventory
         public void OpenGUI(string input = "Press E to pick up item")
         {
             pickupGUI.GetComponentInChildren<TextMeshProUGUI>().text = input;
@@ -70,5 +71,6 @@ namespace Lurkers.Inventory
         {
             pickupGUI.SetActive(false);
         }
+        //======================================================================================
     }
 }

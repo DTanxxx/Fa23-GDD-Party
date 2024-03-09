@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Lurkers.Vision;
+using Lurkers.Character.Player;
 
 namespace Lurkers.Character
 {

@@ -27,7 +27,7 @@ namespace Lurkers.Environment.Vision
             activeCoroutines = new Dictionary<Transform, Coroutine>();
         }
 
-        public void ClueSpot(Vector3 currPos, float sphereCastRadius, Vector3 currDir, Light2D light, int excludePlayerLayerMask, PlayerMovement playerMovement)
+        public void ClueSpot(Vector3 currPos, float sphereCastRadius, Vector3 currDir, Light2D light, int excludePlayerLayerMask, GameObject player)
         {
             uniqueClue = new HashSet<Transform>();
             sphereHitsClue = Physics.SphereCastAll(currPos, sphereCastRadius,
@@ -36,7 +36,7 @@ namespace Lurkers.Environment.Vision
             foreach (var hit in sphereHitsClue)
             {
                 RaycastHit hitInfo;
-                if (Physics.Raycast(playerMovement.transform.position, (hit.transform.position - playerMovement.transform.position).normalized,
+                if (Physics.Raycast(player.transform.position, (hit.transform.position - player.transform.position).normalized,
                     out hitInfo, light.pointLightOuterRadius, excludePlayerLayerMask))
                 {
                     if (hitInfo.transform.CompareTag(clueTile))
@@ -47,8 +47,8 @@ namespace Lurkers.Environment.Vision
                         if (Mathf.Abs(deg) <= light.pointLightOuterAngle / 2.0f)
                         {
                             // check if both hitDir and actual direction from player to clue match
-                            Vector3 dirFromPlayerToEnemy = new Vector3(hit.transform.position.x - playerMovement.transform.position.x,
-                                0, hit.transform.position.z - playerMovement.transform.position.z);
+                            Vector3 dirFromPlayerToEnemy = new Vector3(hit.transform.position.x - player.transform.position.x,
+                                0, hit.transform.position.z - player.transform.position.z);
                             if (dirFromPlayerToEnemy.x * hitDir.x >= 0 && dirFromPlayerToEnemy.z * hitDir.z >= 0)
                             {
                                 if (!uniqueClue.Contains(hitInfo.transform))

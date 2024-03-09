@@ -2,42 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameOverPanel : MonoBehaviour
+namespace Lurkers.UI
 {
-    [SerializeField] private float fadeInRate = 0.25f;
-
-    private CanvasGroup canvasGroup;
-
-    private void Start()
+    public class GameOverPanel : MonoBehaviour
     {
-        canvasGroup = GetComponent<CanvasGroup>();
-    }
+        [SerializeField] private float fadeInRate = 0.25f;
 
-    private void OnEnable()
-    {
-        PlayerAnimationEvents.onEndPlayerDeathAnim += ShowPanel;
-    }
+        private CanvasGroup canvasGroup;
 
-    private void OnDisable()
-    {
-        PlayerAnimationEvents.onEndPlayerDeathAnim -= ShowPanel;
-    }
-
-    private void ShowPanel()
-    {
-        StartCoroutine(FadeInGameOverPanel());
-    }
-
-    private IEnumerator FadeInGameOverPanel()
-    {
-        canvasGroup.blocksRaycasts = true;
-        canvasGroup.interactable = true;
-
-        while ((1f - canvasGroup.alpha) > Mathf.Epsilon)
+        private void Start()
         {
-            canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, 1f, fadeInRate);
-            yield return null;
+            canvasGroup = GetComponent<CanvasGroup>();
         }
-        canvasGroup.alpha = 1f;
+
+        private void OnEnable()
+        {
+            PlayerAnimationEvents.onEndPlayerDeathAnim += ShowPanel;
+        }
+
+        private void OnDisable()
+        {
+            PlayerAnimationEvents.onEndPlayerDeathAnim -= ShowPanel;
+        }
+
+        private void ShowPanel()
+        {
+            StartCoroutine(FadeInGameOverPanel());
+        }
+
+        private IEnumerator FadeInGameOverPanel()
+        {
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
+
+            while ((1f - canvasGroup.alpha) > Mathf.Epsilon)
+            {
+                canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, 1f, fadeInRate);
+                yield return null;
+            }
+            canvasGroup.alpha = 1f;
+        }
     }
 }

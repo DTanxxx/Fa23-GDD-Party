@@ -2,23 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectiveManager : MonoBehaviour
+namespace Lurkers.Objective
 {
-    [SerializeField] private Goal[] goals;
-
-    private void Awake()
+    public class ObjectiveManager : MonoBehaviour
     {
-        goals = GetComponents<Goal>();
-    }
+        [SerializeField] private Goal[] goals;
 
-    private void Update()
-    {
-        foreach (Goal goal in goals)
+        private void Awake()
         {
-            if (goal.IsAchieved())
+            goals = GetComponents<Goal>();
+        }
+
+        private void Update()
+        {
+            foreach (Goal goal in goals)
             {
-                goal.Complete();
-                Destroy(goal);
+                if (goal.IsAchieved())
+                {
+                    goal.Complete();
+                    Destroy(goal);
+                }
             }
         }
     }
