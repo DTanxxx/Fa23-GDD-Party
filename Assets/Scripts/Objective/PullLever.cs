@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.SceneManagement;
 
 public class PullLever : MonoBehaviour
 {
+    [SerializeField] bool triggerLightFlicker = false;
     [SerializeField] InventorySystem inventorySystem;
     [SerializeField] private Animator animator;
 
@@ -59,21 +59,19 @@ public class PullLever : MonoBehaviour
     {
         onLeverPulled?.Invoke();
 
-        // start cinematic sequence
         if (animator != null)
         {
             pulled = true;
             inventorySystem.CloseGUI();
             item = null;
 
-            if (SceneManager.GetActiveScene().buildIndex == 2)
+            if (triggerLightFlicker)
             {
-                animator.SetTrigger("Pulled2");
-                FindObjectOfType<EnemyActivate>().SetActive();
+                animator.SetTrigger("Pulled");
             }
             else
             {
-                animator.SetTrigger("Pulled");
+                animator.SetTrigger("PulledNoFlicker");
             }
 
             AudioManager.instance.PlayOneShot(FMODEvents.instance.lever, transform);

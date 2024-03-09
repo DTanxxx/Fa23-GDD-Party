@@ -120,7 +120,7 @@ public class CameraFollow : MonoBehaviour
 
             //cameraLock = room.transform.Find("RoomCameraPosHolder").GetComponent<CameraLock>();
 
-            // shift camera to go back to room pos
+            // shift camera to go back to player pos
             transform.position = Vector3.Lerp(transform.position,
                 targetPos, cameraShiftRate);
 

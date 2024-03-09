@@ -16,5 +16,9 @@ public class LeverPullAnimationEvents : MonoBehaviour
         {
             onBeginLeverCinematicSequence?.Invoke();
         }
+        else
+        {
+
+        }
     }
 }

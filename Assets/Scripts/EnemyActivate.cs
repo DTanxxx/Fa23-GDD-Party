@@ -23,9 +23,6 @@ public class EnemyActivate : MonoBehaviour
     private void OnEnable()
     {
         CameraFollow.onCameraRestoreComplete += SetActive;
-        //weepingAngels = FindObjectsOfType<WeepingAngelMovement>(true);
-        //Debug.Log(weepingAngels.Length);
-        //itemData = activationItem.GetItemData();
     }
 
     private void OnDisable()
@@ -35,7 +32,7 @@ public class EnemyActivate : MonoBehaviour
 
     private void Update()
     {
-        if (active || activationItem == null)
+        /*if (active || activationItem == null)
         {
             return;
         }
@@ -44,10 +41,9 @@ public class EnemyActivate : MonoBehaviour
         {
             if (inventorySystem.Get(itemData).stackSize == 1)
             {
-                //Debug.Log("awake the beasts");
                 SetActive();
             }
-        }
+        }*/
     }
 
     public void SetActive()

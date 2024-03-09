@@ -66,6 +66,23 @@ public class ColorTile : MonoBehaviour
         tileManager = manager;
         isRaised = raised;
 
+        if (isRaised)
+        {
+            // set top surface and sides of tile's layer to tileRaised
+            foreach (SpriteRenderer rend in spriteRenderers)
+            {
+                rend.sortingLayerName = tileRaisedLayer;
+            }
+        }
+        else
+        {
+            // set top surface and sides of tile's layer to tileFlat
+            foreach (SpriteRenderer rend in spriteRenderers)
+            {
+                rend.sortingLayerName = tileFlatLayer;
+            }
+        }
+
         switch (tileColor)
         {
             case TileColor.White:
