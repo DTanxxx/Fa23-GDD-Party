@@ -3,69 +3,72 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class InventorySystem : MonoBehaviour
+namespace Lurkers.Inventory
 {
-    [SerializeField] private GameObject pickupGUI;
-
-    private Dictionary<ItemData, InventoryItemData> m_itemDictionary;
-
-    public List<InventoryItemData> inventory { get; private set; }
-
-    public static InventorySystem instance;
-
-    private void Awake()
+    public class InventorySystem : MonoBehaviour
     {
-        instance = this;
-        inventory = new List<InventoryItemData>();
-        m_itemDictionary = new Dictionary<ItemData, InventoryItemData>();
-        pickupGUI.SetActive(false);
-    }
+        [SerializeField] private GameObject pickupGUI;
 
-    public InventoryItemData Get(ItemData referenceData)
-    {
-        if (m_itemDictionary.TryGetValue(referenceData, out InventoryItemData value))
+        private Dictionary<ItemData, InventoryItemData> m_itemDictionary;
+
+        public List<InventoryItemData> inventory { get; private set; }
+
+        public static InventorySystem instance;
+
+        private void Awake()
         {
-            return value;
+            instance = this;
+            inventory = new List<InventoryItemData>();
+            m_itemDictionary = new Dictionary<ItemData, InventoryItemData>();
+            pickupGUI.SetActive(false);
         }
-        return null;
-    }
 
-    public void Add(ItemData referenceData)
-    {
-        if(m_itemDictionary.TryGetValue(referenceData, out InventoryItemData value))
+        public InventoryItemData Get(ItemData referenceData)
         {
-            value.AddtoStack();
-        }
-        else
-        {
-            InventoryItemData newItem = new InventoryItemData(referenceData);
-            inventory.Add(newItem);
-            m_itemDictionary.Add(referenceData, newItem);
-        }
-    }
-
-    public void Remove(ItemData referenceData)
-    {
-        if (m_itemDictionary.TryGetValue(referenceData, out InventoryItemData value))
-        {
-            value.RemoveFromStack();
-
-            if(value.stackSize == 0)
+            if (m_itemDictionary.TryGetValue(referenceData, out InventoryItemData value))
             {
-                inventory.Remove(value);
-                m_itemDictionary.Remove(referenceData);
+                return value;
+            }
+            return null;
+        }
+
+        public void Add(ItemData referenceData)
+        {
+            if (m_itemDictionary.TryGetValue(referenceData, out InventoryItemData value))
+            {
+                value.AddtoStack();
+            }
+            else
+            {
+                InventoryItemData newItem = new InventoryItemData(referenceData);
+                inventory.Add(newItem);
+                m_itemDictionary.Add(referenceData, newItem);
             }
         }
-    }
 
-    public void OpenGUI(string input = "Press E to pick up item")
-    {
-        pickupGUI.GetComponentInChildren<TextMeshProUGUI>().text = input;
-        pickupGUI.SetActive(true);
-    }
+        public void Remove(ItemData referenceData)
+        {
+            if (m_itemDictionary.TryGetValue(referenceData, out InventoryItemData value))
+            {
+                value.RemoveFromStack();
 
-    public void CloseGUI()
-    {
-        pickupGUI.SetActive(false);
+                if (value.stackSize == 0)
+                {
+                    inventory.Remove(value);
+                    m_itemDictionary.Remove(referenceData);
+                }
+            }
+        }
+
+        public void OpenGUI(string input = "Press E to pick up item")
+        {
+            pickupGUI.GetComponentInChildren<TextMeshProUGUI>().text = input;
+            pickupGUI.SetActive(true);
+        }
+
+        public void CloseGUI()
+        {
+            pickupGUI.SetActive(false);
+        }
     }
 }
