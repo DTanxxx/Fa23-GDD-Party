@@ -2,18 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Implements things sounds can do (like Unity Physics)
-public static class Sounds
+namespace Lurkers.Hearing
 {
-	public static void MakeSound(Sound sound)
+	// Implements things sounds can do (like Unity Physics)
+	public static class Sounds
 	{
-		Collider[] col = Physics.OverlapSphere(sound.pos, sound.range);
-
-		for (int i = 0; i < col.Length; i++)
+		public static void MakeSound(Sound sound)
 		{
-			if (col[i].TryGetComponent(out Listen listener))
+			Collider[] col = Physics.OverlapSphere(sound.pos, sound.range);
+
+			for (int i = 0; i < col.Length; i++)
 			{
-				listener.RespondToSound(sound);
+				if (col[i].TryGetComponent(out Listen listener))
+				{
+					listener.RespondToSound(sound);
+				}
 			}
 		}
 	}

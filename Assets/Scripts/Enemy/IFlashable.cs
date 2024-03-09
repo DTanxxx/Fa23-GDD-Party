@@ -1,4 +1,7 @@
-public interface IFlashable
+namespace Lurkers.Vision
 {
-    public void OnFlash();
+    public interface IFlashable
+    {
+        public void OnFlash();
+    }
 }

@@ -2,90 +2,93 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
+using Lurkers.Vision;
 
-public class FaceHuggerController : MonoBehaviour, IFlashable
+namespace Lurkers.Character
 {
-    [SerializeField] private float playerDetectionRadius = 5f;
-    [SerializeField] private float chaseSpeed = 5f;
-    [SerializeField] private LayerMask faceHuggerLayer;
-    [SerializeField] private Animator animator = null;
-
-    [SerializeField] private SpriteRenderer spriteRenderer = null;
-    [SerializeField] private Collider myCollider = null;
-
-    private GameObject player;
-    private bool isPlayerDead = false;
-    private NavMeshAgent agent;
-
-    private void Start()
+    public class FaceHuggerController : MonoBehaviour, IFlashable
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        agent = GetComponent<NavMeshAgent>();
-    }
+        [SerializeField] private float playerDetectionRadius = 5f;
+        [SerializeField] private float chaseSpeed = 5f;
+        [SerializeField] private LayerMask faceHuggerLayer;
+        [SerializeField] private Animator animator = null;
 
-    private void OnEnable()
-    {
-        PlayerHealth.onDeath += OnPlayerDeath;
-    }
+        [SerializeField] private SpriteRenderer spriteRenderer = null;
+        [SerializeField] private Collider myCollider = null;
 
-    private void OnDisable()
-    {
-        PlayerHealth.onDeath -= OnPlayerDeath;
-    }
+        private GameObject player;
+        private bool isPlayerDead = false;
+        private NavMeshAgent agent;
 
-    private void Update()
-    {
-        if (isPlayerDead)
+        private void Start()
         {
-            return;
+            player = GameObject.FindGameObjectWithTag("Player");
+            agent = GetComponent<NavMeshAgent>();
         }
 
-        if (Vector3.Distance(player.transform.position, transform.position) <= playerDetectionRadius)
+        private void OnEnable()
         {
-            // check for line of sight to player
-            RaycastHit hitInfo;
-            if (Physics.Raycast(transform.position, (player.transform.position - transform.position).normalized,
-                out hitInfo, playerDetectionRadius, ~faceHuggerLayer, QueryTriggerInteraction.Ignore))
-            {
-                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
-                {
-                    // detect player
-                    animator.SetTrigger("Chase");
+            PlayerHealth.onDeath += OnPlayerDeath;
+        }
 
-                    agent.isStopped = false;
-                    agent.destination = player.transform.position;
-                    agent.speed = chaseSpeed;
-                    if ((agent.destination.x - transform.position.x) > 0)
+        private void OnDisable()
+        {
+            PlayerHealth.onDeath -= OnPlayerDeath;
+        }
+
+        private void Update()
+        {
+            if (isPlayerDead)
+            {
+                return;
+            }
+
+            if (Vector3.Distance(player.transform.position, transform.position) <= playerDetectionRadius)
+            {
+                // check for line of sight to player
+                RaycastHit hitInfo;
+                if (Physics.Raycast(transform.position, (player.transform.position - transform.position).normalized,
+                    out hitInfo, playerDetectionRadius, ~faceHuggerLayer, QueryTriggerInteraction.Ignore))
+                {
+                    if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
                     {
-                        spriteRenderer.flipX = true;
-                    }
-                    else
-                    {
-                        spriteRenderer.flipX = false;
+                        // detect player
+                        animator.SetTrigger("Chase");
+
+                        agent.isStopped = false;
+                        agent.destination = player.transform.position;
+                        agent.speed = chaseSpeed;
+                        if ((agent.destination.x - transform.position.x) > 0)
+                        {
+                            spriteRenderer.flipX = true;
+                        }
+                        else
+                        {
+                            spriteRenderer.flipX = false;
+                        }
                     }
                 }
             }
+            else
+            {
+                agent.velocity = Vector3.zero;
+                agent.isStopped = true;
+            }
         }
-        else
+
+        private void OnPlayerDeath(Vector3 enemyPosition, DeathCause cause)
         {
+            spriteRenderer.enabled = false;
+            myCollider.enabled = false;
             agent.velocity = Vector3.zero;
             agent.isStopped = true;
+            isPlayerDead = true;
         }
-    }
 
-    private void OnPlayerDeath(Vector3 enemyPosition, DeathCause cause)
-    {
-        spriteRenderer.enabled = false;
-        myCollider.enabled = false;
-        agent.velocity = Vector3.zero;
-        agent.isStopped = true;
-        isPlayerDead = true;
-    }
-
-    public void OnFlash()
-    {
-        // kill this enemy (TODO need animation + SFX)
-        Destroy(gameObject);
+        public void OnFlash()
+        {
+            // kill this enemy (TODO need animation + SFX)
+            Destroy(gameObject);
+        }
     }
 }
