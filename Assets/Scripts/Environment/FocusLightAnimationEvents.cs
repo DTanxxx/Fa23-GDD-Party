@@ -3,23 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class FocusLightAnimationEvents : MonoBehaviour
+namespace Lurkers.Event
 {
-    [SerializeField] private Transform enemyUnderFocus = null;
-    [SerializeField] private Transform teleportDestination = null;
-
-    public static Action onFocusLightFinishAnim;
-
-    // animation event
-    public void TeleportEnemy()
+    public class FocusLightAnimationEvents : MonoBehaviour
     {
-        enemyUnderFocus.gameObject.SetActive(false);
-        enemyUnderFocus.position = teleportDestination.position;
-    }
+        [SerializeField] private Transform enemyUnderFocus = null;
+        [SerializeField] private Transform teleportDestination = null;
 
-    // animation event
-    public void FinishFlicker()
-    {
-        onFocusLightFinishAnim?.Invoke();
+        public static Action onFocusLightFinishAnim;
+
+        // animation event
+        public void TeleportEnemy()
+        {
+            enemyUnderFocus.gameObject.SetActive(false);
+            enemyUnderFocus.position = teleportDestination.position;
+        }
+
+        // animation event
+        public void FinishFlicker()
+        {
+            onFocusLightFinishAnim?.Invoke();
+        }
     }
 }

@@ -2,34 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileAudioSources : MonoBehaviour
+namespace Lurkers.Audio.Vision
 {
-    [SerializeField] private AudioSource raiseSource = null;
-
-    private void OnEnable()
+    public class TileAudioSources : MonoBehaviour
     {
-        LevelManager.onPauseGame += PauseAllSFX;
-    }
+        [SerializeField] private AudioSource raiseSource = null;
 
-    private void OnDisable()
-    {
-        LevelManager.onPauseGame -= PauseAllSFX;
-    }
-
-    private void PauseAllSFX(bool toPause)
-    {
-        if (toPause)
+        private void OnEnable()
         {
-            raiseSource.Pause();
+            LevelManager.onPauseGame += PauseAllSFX;
         }
-        else
-        {
-            raiseSource.UnPause();
-        }
-    }
 
-    public void PlayRaiseSFX()
-    {
-        raiseSource.PlayOneShot(raiseSource.clip);
+        private void OnDisable()
+        {
+            LevelManager.onPauseGame -= PauseAllSFX;
+        }
+
+        private void PauseAllSFX(bool toPause)
+        {
+            if (toPause)
+            {
+                raiseSource.Pause();
+            }
+            else
+            {
+                raiseSource.UnPause();
+            }
+        }
+
+        public void PlayRaiseSFX()
+        {
+            raiseSource.PlayOneShot(raiseSource.clip);
+        }
     }
 }
