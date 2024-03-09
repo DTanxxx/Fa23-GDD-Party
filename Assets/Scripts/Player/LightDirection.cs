@@ -10,9 +10,10 @@ namespace Lurkers.Control.Vision
     public class LightDirection : MonoBehaviour
     {
         [SerializeField] private LayerMask weepingAngelLayer;
+        [SerializeField] private LayerMask faceHuggerLayer;
         [SerializeField] private LayerMask playerLayer;
         [SerializeField] private GameObject lightContainer;
-        [SerializeField] private PlayerMovement playerMovement;
+        [SerializeField] private PlayerController playerController;
         [SerializeField] private Transform lightTransform;
         [SerializeField] private float damping = 20.0f;
 
@@ -39,7 +40,7 @@ namespace Lurkers.Control.Vision
 
         private void FixedUpdate()
         {
-            currDirection = playerMovement.getDir();
+            currDirection = playerController.getDir();
             Quaternion smoothing = Quaternion.LookRotation(currDirection);
             lightContainer.transform.rotation = Quaternion.Lerp(lightContainer.transform.rotation, smoothing,
                 Time.fixedDeltaTime * damping);
@@ -47,7 +48,7 @@ namespace Lurkers.Control.Vision
             tempDirection = lightContainer.transform.rotation * Vector3.forward;
 
             sphereCastHits = Physics.SphereCastAll(transform.position, sphereCastRadius,
-                tempDirection, lightComponent.pointLightOuterRadius, weepingAngelLayer.value, QueryTriggerInteraction.Ignore);
+                tempDirection, lightComponent.pointLightOuterRadius, (weepingAngelLayer | faceHuggerLayer), QueryTriggerInteraction.Ignore);
 
             // for Gizmos ========================================
             if (sphereCastHits.Length > 0)
@@ -67,7 +68,7 @@ namespace Lurkers.Control.Vision
                 if (Physics.Raycast(lightTransform.position, (hit.transform.position - lightTransform.position).normalized,
                     out hitInfo, lightComponent.pointLightOuterRadius, ~playerLayer, QueryTriggerInteraction.Ignore))
                 {
-                    //Debug.Log(hitInfo.transform.gameObject.layer);
+                    Debug.LogWarning(LayerMask.LayerToName(hitInfo.transform.gameObject.layer));
                     if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel") ||
                         hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("FaceHugger"))
                     {

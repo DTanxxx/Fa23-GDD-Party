@@ -15,7 +15,7 @@ namespace Lurkers.Control
 
     public class PlayerHealth : MonoBehaviour
     {
-        public static Action<Vector3, DeathCause> onDeath;
+        public static Action<DeathCause, Vector3, GameObject> onDeath;
 
         private bool isDead = false;
 
@@ -23,11 +23,11 @@ namespace Lurkers.Control
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
             {
-                bool enemyActive = collision.gameObject.GetComponentInParent<WeepingAngelMovement>().EnemyActivated();
+                bool enemyActive = collision.gameObject.GetComponentInParent<WeepingAngelController>().IsActive();
                 if (onDeath != null && enemyActive)
                 {
                     isDead = true;
-                    onDeath?.Invoke(collision.transform.position, DeathCause.WEEPINGANGEL);
+                    onDeath?.Invoke(DeathCause.WEEPINGANGEL, collision.transform.position, collision.transform.parent.gameObject);
                 }
             }
             else if (collision.gameObject.layer == LayerMask.NameToLayer("FaceHugger"))
@@ -35,7 +35,7 @@ namespace Lurkers.Control
                 if (onDeath != null)
                 {
                     isDead = true;
-                    onDeath?.Invoke(collision.transform.position, DeathCause.FACEHUGGER);
+                    onDeath?.Invoke(DeathCause.FACEHUGGER, collision.transform.position, collision.transform.parent.gameObject);
                 }
             }
         }

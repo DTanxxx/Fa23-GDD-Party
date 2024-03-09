@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using Lurkers.Inventory;
 using Lurkers.Camera;
+using Lurkers.Event;
 using Lurkers.Control.Vision.Character;
 
 namespace Lurkers.Control
@@ -12,7 +13,7 @@ namespace Lurkers.Control
     {
         [SerializeField] private InventorySystem inventorySystem;
         [SerializeField] private ItemObject activationItem;
-        [SerializeField] private WeepingAngelMovement[] weepingAngels;
+        [SerializeField] private WeepingAngelController[] weepingAngels;
 
         //private ItemData itemData;
         private bool active = false;
@@ -28,11 +29,13 @@ namespace Lurkers.Control
         private void OnEnable()
         {
             CameraFollow.onCameraRestoreComplete += SetActive;
+            LeverPullAnimationEvents.onLeverPullNoFlicker += SetActive;
         }
 
         private void OnDisable()
         {
             CameraFollow.onCameraRestoreComplete -= SetActive;
+            LeverPullAnimationEvents.onLeverPullNoFlicker -= SetActive;
         }
 
         private void Update()

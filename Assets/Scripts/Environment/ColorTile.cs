@@ -123,7 +123,7 @@ namespace Lurkers.Environment.Vision.ColorTile
         {
             // TODO remove all instances of Lurkers.Control classes, and use C# event instead
             GameObject player = collision.transform.parent.parent.gameObject;
-            PlayerMovement pm = player.GetComponent<PlayerMovement>();
+            PlayerController pm = player.GetComponent<PlayerController>();
             PlayerHealth health = player.GetComponent<PlayerHealth>();
 
             if (!player.gameObject.CompareTag("Player") || health.GetIsPlayerDead())
@@ -254,7 +254,7 @@ namespace Lurkers.Environment.Vision.ColorTile
         {
             offTile = false;
             onTile = false;
-            //player.GetComponent<PlayerMovement>().Immobile(false);
+            //player.GetComponent<PlayerController>().Immobile(false);
         }
 
         public bool GetIsRaised()
@@ -266,11 +266,11 @@ namespace Lurkers.Environment.Vision.ColorTile
         public IEnumerator Mover(GameObject go, string state)
         {
             // the only case where go is the player game object is when we step on blue tile
-            PlayerMovement pm;
-            if (go.TryGetComponent<PlayerMovement>(out pm))
+            PlayerController controller;
+            if (go.TryGetComponent<PlayerController>(out controller))
             {
                 // make player immobile
-                pm.Immobile(true);
+                controller.Immobile(true);
             }
 
             var endPos = go.transform.position;
@@ -339,7 +339,7 @@ namespace Lurkers.Environment.Vision.ColorTile
                 }
             }
 
-            if (pm != null)
+            if (controller != null)
             {
                 // blue tile slide
                 while (elapsedTime < blueTileSlideDuration)
@@ -368,10 +368,10 @@ namespace Lurkers.Environment.Vision.ColorTile
 
             yield return null;
 
-            if (pm != null)
+            if (controller != null)
             {
                 // mobilise player
-                pm.Immobile(false);
+                controller.Immobile(false);
             }
         }
 

@@ -76,9 +76,13 @@ namespace Lurkers.Control.Vision.Character
             }
         }
 
-        private void OnPlayerDeath(Vector3 enemyPosition, DeathCause cause)
+        private void OnPlayerDeath(DeathCause cause, Vector3 enemyPosition, GameObject enemy = null)
         {
-            spriteRenderer.enabled = false;
+            if (cause == DeathCause.FACEHUGGER && enemy == gameObject)
+            {
+                spriteRenderer.enabled = false;    
+            }
+
             myCollider.enabled = false;
             agent.velocity = Vector3.zero;
             agent.isStopped = true;
@@ -89,6 +93,11 @@ namespace Lurkers.Control.Vision.Character
         {
             // kill this enemy (TODO need animation + SFX)
             Destroy(gameObject);
+        }
+
+        public bool IsActive()
+        {
+            return true;
         }
     }
 }

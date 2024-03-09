@@ -25,16 +25,7 @@ namespace Lurkers.Control.Level
         public void LoadNextScene()
         {
             AudioManager.instance.StopAll();
-            if (SceneManager.GetActiveScene().buildIndex == 0)
-            {
-                // first scene
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            }
-            else
-            {
-                // reload scene
-                ReloadScene();
-            }
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
         // button event

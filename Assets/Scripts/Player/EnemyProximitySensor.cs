@@ -7,6 +7,8 @@ using Lurkers.Camera;
 using Lurkers.Environment.Vision;
 using Lurkers.Audio;  // TODO this namespace should not be here - it is redundant when we are already using Lurkers.Audio.Player
 using Lurkers.Audio.Player;
+using Lurkers.Event;
+using Lurkers.Vision;
 
 namespace Lurkers.Control
 {
@@ -20,23 +22,25 @@ namespace Lurkers.Control
         public static Action onEnemyOutOfProximity;
 
         private bool gameStarted = false;
-        private bool sensorEnabled = false;
+        //private bool sensorEnabled = false;
 
         private void OnEnable()
         {
             CameraFollow.onCameraRestoreComplete += EnableSensor;
+            LeverPullAnimationEvents.onLeverPullNoFlicker += EnableSensor;
             ElevatorOpen.onElevatorClose += BeginGame;
         }
 
         private void OnDisable()
         {
             CameraFollow.onCameraRestoreComplete -= EnableSensor;
+            LeverPullAnimationEvents.onLeverPullNoFlicker -= EnableSensor;
             ElevatorOpen.onElevatorClose -= BeginGame;
         }
 
         private void EnableSensor()
         {
-            sensorEnabled = true;
+            //sensorEnabled = true;
         }
 
         private void BeginGame()
@@ -62,16 +66,22 @@ namespace Lurkers.Control
                 (weepingAngelLayer | faceHuggerLayer), QueryTriggerInteraction.Ignore);
 
             // TODO: If enemy in proximity, vary FMOD INTENSITY parameter based on distance between closest enemy and player
-            if (hits.Length > 0 && sensorEnabled)
+            // process each enemy, only detect them if they are active
+            bool detected = false;
+            foreach (var hit in hits)
             {
-                // enemy in proximity!
-                //Debug.Log("DETECTED");
-                onEnemyInProximity?.Invoke();
+                if (hit.transform.GetComponentInParent<IFlashable>().IsActive())
+                {
+                    // enemy in proximity!
+                    onEnemyInProximity?.Invoke();
+                    detected = true;
+                    break;
+                }
             }
-            else
+
+            if (!detected)
             {
                 // no enemy in proximity
-                //Debug.Log("NO DETECTION");
                 onEnemyOutOfProximity?.Invoke();
             }
         }

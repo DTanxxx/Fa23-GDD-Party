@@ -69,15 +69,7 @@ namespace Lurkers.Environment.Vision
                 inventorySystem.CloseGUI();
                 item = null;
 
-                if (triggerLightFlicker)
-                {
-                    animator.SetTrigger("Pulled");
-                }
-                else
-                {
-                    animator.SetTrigger("PulledNoFlicker");
-                }
-
+                animator.SetTrigger("Pulled");
                 AudioManager.instance.PlayOneShot(FMODEvents.instance.lever, transform);
             }
             else
