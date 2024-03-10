@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using System;
-using Lurkers.Audio.Vision;  // TODO this dependency should be removed to prevent cyclic dependency
 using Lurkers.Control;  // TODO this dependency should be removed to prevent cyclic dependency
+using Lurkers.Audio;  // TODO this dependency should be removed to prevent cyclic dependency, use C# event listened by TileAudioSources
 
 namespace Lurkers.Environment.Vision.ColorTile
 {
@@ -50,7 +50,6 @@ namespace Lurkers.Environment.Vision.ColorTile
         private SpriteRenderer[] spriteRenderers;
         private bool offTile = false;
         private bool onTile = false;
-        private TileAudioSources audioSources;
         private Coroutine slideCoroutine;
         private bool isRaised = false;
         
@@ -67,7 +66,6 @@ namespace Lurkers.Environment.Vision.ColorTile
             _collider.isTrigger = true;
             offTile = false;
             spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
-            audioSources = GetComponent<TileAudioSources>();
         }
 
         public void SetData(TileColor c, ColorTileManager manager, bool raised)
