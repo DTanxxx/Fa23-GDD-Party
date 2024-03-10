@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class throwing_script : MonoBehaviour
 {
-    float throwForce = 500f; 
+    float throwForce = 1000f; 
     Vector3 objectPos;
     float distance;
 
@@ -22,15 +22,17 @@ public class throwing_script : MonoBehaviour
     // Update is called once per frame
     void Update() {
         distance = Vector3.Distance (item.transform.position, tempParent.transform.position); 
-        if (distance <= 5f) 
+        if (distance <= 3f) 
         {
             canHold = true; 
             if (Input.GetKeyDown(KeyCode.F)) {
             isInHand = !isInHand;
+            if (isInHand)
+            {
+                item.transform.position += Vector3.up;
+            }
         }
         }
-        
-        
 
         if (isInHand)
         {
@@ -42,7 +44,7 @@ public class throwing_script : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space)) 
             {
-                item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up * throwForce);
+                item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up.normalized * throwForce);
                 item.GetComponent<Rigidbody>().drag = 1;
                 isInHand = false; 
             }
@@ -62,6 +64,7 @@ public class throwing_script : MonoBehaviour
     void pickUpObject() 
     {
         isInHand = true;
+        item.transform.position += Vector3.up;
         item.GetComponent<Rigidbody>().useGravity = false;
         item.GetComponent<Rigidbody>().detectCollisions = true;
         
