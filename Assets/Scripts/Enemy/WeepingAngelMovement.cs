@@ -20,6 +20,7 @@ public class WeepingAngelMovement : MonoBehaviour
     private float freezeTimer;
     private bool idle = true;
     private bool enemyActive = false;
+    private bool Monologue;
 
     private void Start()
     {
@@ -30,16 +31,20 @@ public class WeepingAngelMovement : MonoBehaviour
     private void OnEnable()
     {
         PlayerHealth.onDeath += OnPlayerDeath;
+        Dialogue.Active += DialogueActive;
+        Dialogue.Unactive += DialogueInactive;
     }
 
     private void OnDisable()
     {
         PlayerHealth.onDeath -= OnPlayerDeath;
+        Dialogue.Active -= DialogueActive;
+        Dialogue.Unactive -= DialogueInactive;
     }
 
     private void Update()
     {
-        if (isPlayerDead || !enemyActive)
+        if (isPlayerDead || !enemyActive || Monologue)
         {
             return;
         }
@@ -121,5 +126,17 @@ public class WeepingAngelMovement : MonoBehaviour
     public bool EnemyActivated()
     {
         return enemyActive;
+    }
+    public void DialogueActive() 
+    {
+        Debug.Log("WeepingAngelDialogue");
+        agent.velocity = Vector3.zero;
+        agent.isStopped = true;
+        Monologue = true;
+    }
+    public void DialogueInactive() 
+    {
+        agent.isStopped = false;
+        Monologue = false;
     }
 }

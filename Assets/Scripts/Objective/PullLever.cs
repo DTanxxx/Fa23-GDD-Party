@@ -80,6 +80,7 @@ public class PullLever : MonoBehaviour
             
             leverSource.Play();
             electricitySource.Play();
+            FindObjectOfType<EnemyActivate>().SetActive();
         }
         else
         {

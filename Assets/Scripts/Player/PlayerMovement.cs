@@ -29,6 +29,8 @@ public class PlayerMovement : MonoBehaviour
     private float animSpeed;
     private WaitForSeconds waitForPauseBeforeAppearance;
     private float tempSpeed;
+    public bool inDialogue;
+    public GameObject Monologue; 
 
     public static Action onPlayerSlide;
     public static Action onPlayerEndSlide;
@@ -61,14 +63,28 @@ public class PlayerMovement : MonoBehaviour
         NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
         ColorTile.onIncinerate -= Incinerate;
     }
-
+    private void Update() 
+    {
+        if (Input.GetKeyDown("p")) 
+        {
+            Debug.Log(inDialogue);
+            if (!inDialogue) 
+            {
+                Monologue.SetActive(true);
+            } 
+        }
+    }
     private void FixedUpdate()
     {
+        
         if (isDead || isFrozen)
         {
             return;
         }
-
+        if ( inDialogue) { 
+            animator.SetBool("Walking", false);
+            return;
+        }
         currFrames++;
         if (currFrames >= accFrames)
         {
@@ -78,7 +94,6 @@ public class PlayerMovement : MonoBehaviour
         {
             currFrames = lookFrames;
         }
-
         if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
         {
             currFrames = 0;
