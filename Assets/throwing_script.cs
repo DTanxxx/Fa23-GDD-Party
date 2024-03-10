@@ -61,19 +61,19 @@ public class throwing_script : MonoBehaviour
 
     }
 
-    void pickUpObject() 
-    {
-        isInHand = true;
-        item.transform.position += Vector3.up;
-        item.GetComponent<Rigidbody>().useGravity = false;
-        item.GetComponent<Rigidbody>().detectCollisions = true;
+    // void pickUpObject() 
+    // {
+    //     isInHand = true;
+    //     item.transform.position += Vector3.up;
+    //     item.GetComponent<Rigidbody>().useGravity = false;
+    //     item.GetComponent<Rigidbody>().detectCollisions = true;
         
        
-    }
+    // }
 
-    void OnMouseUp() 
-    {
-        isInHand = false; 
-    }
+    // void OnMouseUp() 
+    // {
+    //     isInHand = false; 
+    // }
 
 }
