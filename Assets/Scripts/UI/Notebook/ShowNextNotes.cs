@@ -2,22 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShowNextNotes : MonoBehaviour
+namespace Lurkers.UI.Hearing
 {
-    private NotebookPanel parent;
-
-    private void Start()
+    public class ShowNextNotes : MonoBehaviour
     {
-        parent = GetComponentInParent<NotebookPanel>();
-    }
+        private NotebookPanel parent;
 
-    public void LoadPage()
-    {
-        parent.LoadNotes();
-    }
+        private void Start()
+        {
+            parent = GetComponentInParent<NotebookPanel>();
+        }
 
-    public void PreventSpam()
-    {
-        parent.ChangeButtonState();
+        public void LoadPage()
+        {
+            parent.LoadNotes();
+        }
+
+        public void PreventSpam()
+        {
+            parent.ChangeButtonState();
+        }
     }
 }

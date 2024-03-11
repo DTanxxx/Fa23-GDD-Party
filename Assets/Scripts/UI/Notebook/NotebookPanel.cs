@@ -3,108 +3,112 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Lurkers.Control.Level;
 
-public class NotebookPanel : MonoBehaviour
+namespace Lurkers.UI.Hearing
 {
-    [SerializeField] private Animator animator;
-    [SerializeField] private int maxPages = 5;
-    [SerializeField] private TextMeshProUGUI pageNumber;
-    [SerializeField] private AudioSource flipAudio;
-
-    private CanvasGroup canvasGroup;
-    public TMP_InputField inputFieldChat;
-    private int currPage = 0;
-    private Dictionary<int, string> notes = new Dictionary<int, string>();
-    private Button[] buttons;
-    
-
-    private void Start()
+    public class NotebookPanel : MonoBehaviour
     {
-        canvasGroup = GetComponent<CanvasGroup>();
-        inputFieldChat = GetComponentInChildren<TMP_InputField>();
-        buttons = GetComponentsInChildren<Button>();
-        for (int i = 0; i < maxPages; i++)
+        [SerializeField] private Animator animator;
+        [SerializeField] private int maxPages = 5;
+        [SerializeField] private TextMeshProUGUI pageNumber;
+        [SerializeField] private AudioSource flipAudio;
+
+        private CanvasGroup canvasGroup;
+        public TMP_InputField inputFieldChat;
+        private int currPage = 0;
+        private Dictionary<int, string> notes = new Dictionary<int, string>();
+        private Button[] buttons;
+
+
+        private void Start()
         {
-            notes.Add(i, "");
+            canvasGroup = GetComponent<CanvasGroup>();
+            inputFieldChat = GetComponentInChildren<TMP_InputField>();
+            buttons = GetComponentsInChildren<Button>();
+            for (int i = 0; i < maxPages; i++)
+            {
+                notes.Add(i, "");
+            }
+            pageNumber.text = CurrentPage();
         }
-        pageNumber.text = CurrentPage();
-    }
-    private void OnEnable()
-    {
-        LevelManager.onNotes += ShowPanel;
-    }
-
-    private void OnDisable()
-    {
-        LevelManager.onNotes -= ShowPanel;
-    }
-
-    private void ShowPanel(bool toPause)
-    {
-        if (toPause)
-        {   
-            canvasGroup.alpha = 1f;
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
-            animator.SetTrigger("OpenNotes");
-            LoadNotes();
-            flipAudio.Play();
-            animator.SetTrigger("CloseNotes");
-        }   
-        else
+        private void OnEnable()
         {
-            canvasGroup.alpha = 0f;
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
+            LevelManager.onNotes += ShowPanel;
+        }
+
+        private void OnDisable()
+        {
+            LevelManager.onNotes -= ShowPanel;
+        }
+
+        private void ShowPanel(bool toPause)
+        {
+            if (toPause)
+            {
+                canvasGroup.alpha = 1f;
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
+                animator.SetTrigger("OpenNotes");
+                LoadNotes();
+                flipAudio.Play();
+                animator.SetTrigger("CloseNotes");
+            }
+            else
+            {
+                canvasGroup.alpha = 0f;
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
+                SaveNotes();
+            }
+        }
+
+        public void Flip()
+        {
+            animator.SetTrigger("FlipNotes");
             SaveNotes();
-        }
-    }
+            if (currPage == maxPages - 1)
+            {
+                currPage = 0;
+            }
+            else
+            {
+                currPage++;
+            }
+            animator.SetTrigger("CloseNotes");
 
-    public void Flip()
-    {
-        animator.SetTrigger("FlipNotes");
-        SaveNotes();
-        if (currPage == maxPages - 1)
-        {
-            currPage = 0;
+            flipAudio.Play();
         }
-        else
-        {
-            currPage++;
-        }
-        animator.SetTrigger("CloseNotes");
 
-        flipAudio.Play();
-    }
-    
-    public void SaveNotes()
-    {
-        if (notes.TryGetValue(currPage, out string currnotes))
+        public void SaveNotes()
         {
-            notes[currPage] = inputFieldChat.text;
+            if (notes.TryGetValue(currPage, out string currnotes))
+            {
+                notes[currPage] = inputFieldChat.text;
+            }
         }
-    }
 
-    public void LoadNotes()
-    {
-        pageNumber.text = CurrentPage();
-        if (notes.TryGetValue(currPage, out string currnotes))
+        public void LoadNotes()
         {
-            inputFieldChat.text = currnotes;
+            pageNumber.text = CurrentPage();
+            if (notes.TryGetValue(currPage, out string currnotes))
+            {
+                inputFieldChat.text = currnotes;
+            }
         }
-    }
 
-    public void ChangeButtonState()
-    {
-        foreach (var button in buttons)
+        public void ChangeButtonState()
         {
-            button.interactable = !button.interactable;
+            foreach (var button in buttons)
+            {
+                button.interactable = !button.interactable;
+            }
         }
-    }
 
-    private string CurrentPage()
-    {
-        int displayNumber = currPage + 1;
-        return displayNumber.ToString();
+        private string CurrentPage()
+        {
+            int displayNumber = currPage + 1;
+            return displayNumber.ToString();
+        }
     }
 }
