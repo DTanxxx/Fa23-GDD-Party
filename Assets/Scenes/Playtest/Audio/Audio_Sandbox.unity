@@ -143275,6 +143275,7 @@ MonoBehaviour:
   fadeInPanel: {fileID: 1865464021}
   fadeDuration: 1
   pauseBeforeElevatorOpen: 1
+  buttons: []
 --- !u!82 &1865464024
 AudioSource:
   m_ObjectHideFlags: 0
