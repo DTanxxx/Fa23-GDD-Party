@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="ParameterPreset" id="{f1c0e1ca-a9ec-4be7-bc31-aa5349a540c8}">
 		<property name="name">
-			<value>DeathType</value>
+			<value>Enemy</value>
 		</property>
 		<relationship name="folder">
 			<destination>{1bc22a4b-57b9-47d1-a443-7d2313f1454f}</destination>
@@ -15,12 +15,8 @@
 		<property name="parameterType">
 			<value>2</value>
 		</property>
-		<property name="maximum">
-			<value>2</value>
-		</property>
 		<property name="enumerationLabels">
-			<value>Sight Monster</value>
-			<value>Red Tile</value>
+			<value>Weeping Angel</value>
 		</property>
 		<property name="initialValue">
 			<value>0</value>

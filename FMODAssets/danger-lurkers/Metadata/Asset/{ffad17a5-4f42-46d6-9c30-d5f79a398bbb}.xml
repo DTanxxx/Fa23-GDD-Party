@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EncodableAsset" id="{ffad17a5-4f42-46d6-9c30-d5f79a398bbb}">
+		<property name="assetPath">
+			<value>Josiah/OST/Main Theme/v1.1/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b4b352ce-c43c-4ecf-b57a-abc7995858e1}</destination>
+		</relationship>
+	</object>
+</objects>

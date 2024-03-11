@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using System;
-using Lurkers.Audio.Vision;  // TODO this dependency should be removed to prevent cyclic dependency
 using Lurkers.Control;  // TODO this dependency should be removed to prevent cyclic dependency
+using Lurkers.Audio;  // TODO this dependency should be removed to prevent cyclic dependency, use C# event listened by TileAudioSources
 
 namespace Lurkers.Environment.Vision.ColorTile
 {
@@ -22,6 +22,7 @@ namespace Lurkers.Environment.Vision.ColorTile
         LightGray, //Normal Ground
         Purple //Something else that isn't part of color puzzle
     }
+
     [RequireComponent(typeof(Collider))]
     public class ColorTile : MonoBehaviour
     {
@@ -49,9 +50,13 @@ namespace Lurkers.Environment.Vision.ColorTile
         private SpriteRenderer[] spriteRenderers;
         private bool offTile = false;
         private bool onTile = false;
-        private TileAudioSources audioSources;
         private Coroutine slideCoroutine;
         private bool isRaised = false;
+        
+        private enum TileActivation
+        {
+            MOVE = 0,
+        }
 
         public static Action onIncinerate;
 
@@ -61,7 +66,6 @@ namespace Lurkers.Environment.Vision.ColorTile
             _collider.isTrigger = true;
             offTile = false;
             spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
-            audioSources = GetComponent<TileAudioSources>();
         }
 
         public void SetData(TileColor c, ColorTileManager manager, bool raised)
@@ -157,7 +161,7 @@ namespace Lurkers.Environment.Vision.ColorTile
                     {
                         return;
                     }
-                    audioSources.PlayRaiseSFX();
+                    AudioManager.instance.SetPlayOneShot(FMODEvents.instance.tileActivation, transform, "TileActivation", (float)TileActivation.MOVE);
                     tileManager.ActivateGreen();
                     break;
 
@@ -176,13 +180,13 @@ namespace Lurkers.Environment.Vision.ColorTile
         {
             if (tileColor == TileColor.Yellow)
             {
-                // TODO remove all instances of Play...SFX() and fire a C# event instead
-                audioSources.PlayRaiseSFX();
+                // TODO remove all instances of AudioManager... and fire a C# event instead
+                AudioManager.instance.SetPlayOneShot(FMODEvents.instance.tileActivation, transform, "TileActivation", (float)TileActivation.MOVE);
                 StartCoroutine(Mover(gameObject, "raise"));
             }
             else if (tileColor == TileColor.Black)
             {
-                audioSources.PlayRaiseSFX();
+                AudioManager.instance.SetPlayOneShot(FMODEvents.instance.tileActivation, transform, "TileActivation", (float)TileActivation.MOVE);
                 tileManager.ActivateBlack();
             }
         }

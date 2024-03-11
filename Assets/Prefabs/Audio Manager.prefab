@@ -117,13 +117,27 @@ MonoBehaviour:
       Data3: -535558243
       Data4: -1411033213
     Path: event:/Lever
-  <death>k__BackingField:
+  <tileActivation>k__BackingField:
+    Guid:
+      Data1: -1125442802
+      Data2: 1079189910
+      Data3: -2070751572
+      Data4: -792437258
+    Path: event:/TileActivation
+  <tileEffect>k__BackingField:
+    Guid:
+      Data1: 44356580
+      Data2: 1231467539
+      Data3: -239346512
+      Data4: 1113801882
+    Path: event:/TileEffect
+  <enemy>k__BackingField:
     Guid:
       Data1: -606037044
       Data2: 1300628115
       Data3: 1102686601
       Data4: 1319604264
-    Path: event:/Death
+    Path: event:/Enemy
   <gameOver>k__BackingField:
     Guid:
       Data1: 963464784
