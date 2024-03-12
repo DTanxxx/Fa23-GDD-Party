@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="ParameterPreset" id="{13549f31-f48e-480b-8051-03d74f397bc1}">
+		<property name="name">
+			<value>TileActivation</value>
+		</property>
+		<relationship name="folder">
+			<destination>{1bc22a4b-57b9-47d1-a443-7d2313f1454f}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{213f3724-2358-4697-88b4-4bba566c2114}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{213f3724-2358-4697-88b4-4bba566c2114}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>Move</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>

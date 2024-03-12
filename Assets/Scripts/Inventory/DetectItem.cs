@@ -1,45 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
-public class DetectItem : MonoBehaviour
+namespace Lurkers.Inventory
 {
-    [SerializeField] InventorySystem inventorySystem;
-    private ItemObject item;
-
-    // Update is called once per frame
-    void Update()
+    public class DetectItem : MonoBehaviour
     {
-        if (item != null)
+        [SerializeField] InventorySystem inventorySystem;
+        private ItemObject item;
+
+        // Update is called once per frame
+        void Update()
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (item != null)
             {
-                item.PickUp();
-                inventorySystem.CloseGUI();
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    item.PickUp();
+                    inventorySystem.CloseGUI();
+                }
             }
         }
-    }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        item = collision.gameObject.GetComponent<ItemObject>();
-        if (item != null)
+        private void OnCollisionEnter(Collision collision)
         {
-            Debug.Log("touch");
-            inventorySystem.OpenGUI();
+            item = collision.gameObject.GetComponent<ItemObject>();
+            if (item != null)
+            {
+                Debug.Log("touch");
+                inventorySystem.OpenGUI();
+            }
         }
-    }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        item = collision.gameObject.GetComponent<ItemObject>();
-        if (item != null)
+        private void OnCollisionExit(Collision collision)
         {
-            Debug.Log("not");
-            inventorySystem.CloseGUI();
-            item = null;
+            item = collision.gameObject.GetComponent<ItemObject>();
+            if (item != null)
+            {
+                Debug.Log("not");
+                inventorySystem.CloseGUI();
+                item = null;
+            }
+
         }
-        
     }
 }

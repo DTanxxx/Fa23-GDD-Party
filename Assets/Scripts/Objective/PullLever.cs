@@ -2,88 +2,80 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.SceneManagement;
+using Lurkers.Audio;
+using Lurkers.Inventory;  // TODO pulling lever should not depend on inventory
 
-public class PullLever : MonoBehaviour
+namespace Lurkers.Environment.Vision
 {
-    [SerializeField] InventorySystem inventorySystem;
-    [SerializeField] private AudioSource leverSource = null;
-    [SerializeField] private AudioSource electricitySource = null;
-    [SerializeField] private Animator animator;
-
-    public static Action onLeverPulled;
-
-    private GameObject item;
-    private bool pulled = false;
-
-    private void Awake()
+    public class PullLever : MonoBehaviour
     {
-        inventorySystem = FindObjectOfType<InventorySystem>();
-        animator = GetComponentInChildren<Animator>();
-    }
+        [SerializeField] bool triggerLightFlicker = false;
+        [SerializeField] InventorySystem inventorySystem;
+        [SerializeField] private Animator animator;
 
-    private void Update()
-    {
-        if (item != null && !pulled)
+        public static Action onLeverPulled;
+
+        private GameObject item;
+        private bool pulled = false;
+
+        private void Awake()
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            inventorySystem = FindObjectOfType<InventorySystem>();
+            animator = GetComponentInChildren<Animator>();
+        }
+
+        private void Update()
+        {
+            if (item != null && !pulled)
             {
-                LeverPulled();
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    LeverPulled();
+                }
             }
         }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (pulled)
+        private void OnTriggerEnter(Collider other)
         {
-            return;
-        }
-
-        item = other.gameObject;
-
-        if (other != null)
-        {
-            inventorySystem.OpenGUI("Press E to pull lever");
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other != null)
-        {
-            inventorySystem.CloseGUI();
-            item = null;
-        }
-    }
-
-    private void LeverPulled()
-    {
-        onLeverPulled?.Invoke();
-
-        // start cinematic sequence
-        if (animator != null && leverSource != null && electricitySource != null)
-        {
-            pulled = true;
-            inventorySystem.CloseGUI();
-            item = null;
-
-            if (SceneManager.GetActiveScene().buildIndex == 2)
+            if (pulled)
             {
-                animator.SetTrigger("Pulled2");
-                FindObjectOfType<EnemyActivate>().SetActive();
+                return;
+            }
+
+            item = other.gameObject;
+
+            if (other != null)
+            {
+                inventorySystem.OpenGUI("Press E to pull lever");
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other != null)
+            {
+                inventorySystem.CloseGUI();
+                item = null;
+            }
+        }
+
+        private void LeverPulled()
+        {
+            onLeverPulled?.Invoke();
+
+            if (animator != null)
+            {
+                pulled = true;
+                inventorySystem.CloseGUI();
+                item = null;
+
+                animator.SetTrigger("Pulled");
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.lever, transform);
             }
             else
             {
-                animator.SetTrigger("Pulled");
+                Debug.LogError("One of the fields is null!");
             }
-            
-            leverSource.Play();
-            electricitySource.Play();
-        }
-        else
-        {
-            Debug.LogError("One of the fields is null!");
         }
     }
 }

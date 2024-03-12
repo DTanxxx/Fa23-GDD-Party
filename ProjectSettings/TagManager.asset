@@ -7,6 +7,7 @@ TagManager:
   - FlashLight
   - ClueTrail
   - clueTile
+  - detectable
   layers:
   - Default
   - TransparentFX
@@ -25,8 +26,9 @@ TagManager:
   - Foreground
   - ColorTile
   - PlayerColliderWithTile
-  - 
-  - 
+  - TileSide
+  - FaceHugger
+  - DetectableObject
   - 
   - 
   - 
@@ -47,18 +49,21 @@ TagManager:
   - name: Floor
     uniqueID: 1388736813
     locked: 0
-  - name: Wall
-    uniqueID: 525619777
+  - name: Tile
+    uniqueID: 1322744307
     locked: 0
   - name: Props
     uniqueID: 1280697863
     locked: 0
-  - name: Characters
-    uniqueID: 963813051
+  - name: Wall
+    uniqueID: 525619777
     locked: 0
-  - name: Player
-    uniqueID: 105903575
+  - name: Character
+    uniqueID: 1489772483
     locked: 0
   - name: Overhang
     uniqueID: 923572005
+    locked: 0
+  - name: Elevator
+    uniqueID: 4272272303
     locked: 0

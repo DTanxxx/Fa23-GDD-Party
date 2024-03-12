@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="DataFile" id="{82c9e0dd-2783-4327-a8d1-1ef2a563b81c}">
+		<property name="assetPath">
+			<value>Rahm/SFX/Item Pickup 1 v2.mp3.meta</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b4b352ce-c43c-4ecf-b57a-abc7995858e1}</destination>
+		</relationship>
+	</object>
+</objects>

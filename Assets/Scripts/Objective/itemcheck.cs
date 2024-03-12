@@ -1,24 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Lurkers.Inventory;
 
-public class ItemCheck : MonoBehaviour
+namespace Lurkers.Objective
 {
-    [SerializeField] private InventorySystem inventorySystem;
-    [SerializeField] private ItemData requiredItem;
-
-    private void OnCollisionEnter(Collision collision)
+    public class ItemCheck : MonoBehaviour
     {
-        if (inventorySystem.Get(requiredItem) != null)
+        [SerializeField] private InventorySystem inventorySystem;
+        [SerializeField] private ItemData requiredItem;
+
+        private void OnCollisionEnter(Collision collision)
         {
-            if (inventorySystem.Get(requiredItem).stackSize == 1)
+            if (inventorySystem.Get(requiredItem) != null)
             {
-                Debug.Log("you have the item");
+                if (inventorySystem.Get(requiredItem).stackSize == 1)
+                {
+                    Debug.Log("you have the item");
+                }
             }
-        }
-        else
-        {
-            Debug.Log("come back with item");
+            else
+            {
+                Debug.Log("come back with item");
+            }
         }
     }
 }

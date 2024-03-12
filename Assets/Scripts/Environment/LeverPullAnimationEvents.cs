@@ -3,13 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class LeverPullAnimationEvents : MonoBehaviour
+namespace Lurkers.Event
 {
-    public static Action onBeginLeverCinematicSequence;
-
-    // animation event
-    public void BeginCinematicSequence()
+    public class LeverPullAnimationEvents : MonoBehaviour
     {
-        onBeginLeverCinematicSequence?.Invoke();
+        [SerializeField] private bool animateLightFlicker = false;
+
+        public static Action onBeginLeverCinematicSequence;
+        public static Action onLeverPullNoFlicker;
+
+        // animation event
+        public void BeginCinematicSequence()
+        {
+            if (animateLightFlicker)
+            {
+                onBeginLeverCinematicSequence?.Invoke();
+            }
+            else
+            {
+                onLeverPullNoFlicker?.Invoke();
+            }
+        }
     }
 }

@@ -1,102 +1,109 @@
+using Lurkers.Environment.Vision;
+using Lurkers.Vision;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class LightDirection : MonoBehaviour
+namespace Lurkers.Control.Vision
 {
-    [SerializeField] private LayerMask weepingAngelLayer;
-    [SerializeField] private LayerMask playerLayer;
-    [SerializeField] private GameObject lightContainer;
-    [SerializeField] private PlayerMovement playerMovement;
-    [SerializeField] private float damping = 20.0f;
-
-    private Light2D lightComponent;
-    private Vector3 currDirection;
-    private Vector3 tempDirection;
-    private float sphereCastRadius;
-    private ClueGlow clueGlow;
-
-    // for Gizmos
-    private RaycastHit[] sphereCastHits;
-    private float sphereCastHitDistance;
-
-    private void Start()
+    public class LightDirection : MonoBehaviour
     {
-        lightContainer.transform.rotation = Quaternion.Euler(0, 90, 0);
-        lightComponent = GetComponent<Light2D>();
+        [SerializeField] private LayerMask weepingAngelLayer;
+        [SerializeField] private LayerMask faceHuggerLayer;
+        [SerializeField] private LayerMask playerLayer;
+        [SerializeField] private GameObject lightContainer;
+        [SerializeField] private PlayerController playerController;
+        [SerializeField] private Transform lightTransform;
+        [SerializeField] private float damping = 20.0f;
 
-        sphereCastRadius = Mathf.Atan(lightComponent.pointLightOuterAngle / 2.0f * Mathf.Deg2Rad) * lightComponent.pointLightOuterRadius;
+        private Light2D lightComponent;
+        private Vector3 currDirection;
+        private Vector3 tempDirection;
+        private float sphereCastRadius;
+        //private ClueGlow clueGlow;
 
-        clueGlow = GameObject.Find("EventSystem").GetComponent<ClueGlow>();
+        // for Gizmos
+        private RaycastHit[] sphereCastHits;
+        private float sphereCastHitDistance;
 
-    }
-
-    private void FixedUpdate()
-    {
-        currDirection = playerMovement.getDir();
-        Quaternion smoothing = Quaternion.LookRotation(currDirection);
-        lightContainer.transform.rotation = Quaternion.Lerp(lightContainer.transform.rotation, smoothing,
-            Time.fixedDeltaTime * damping);
-
-        tempDirection = lightContainer.transform.rotation * Vector3.forward;
-
-        sphereCastHits = Physics.SphereCastAll(transform.position, sphereCastRadius,
-            tempDirection, lightComponent.pointLightOuterRadius, weepingAngelLayer.value, QueryTriggerInteraction.Ignore);
-        
-        // for Gizmos ========================================
-        if (sphereCastHits.Length > 0)
+        private void Start()
         {
-            sphereCastHitDistance = sphereCastHits[0].distance;
+            lightContainer.transform.rotation = Quaternion.Euler(0, 90, 0);
+            lightComponent = GetComponent<Light2D>();
+
+            sphereCastRadius = Mathf.Atan(lightComponent.pointLightOuterAngle / 2.0f * Mathf.Deg2Rad) * lightComponent.pointLightOuterRadius;
+
+            //clueGlow = GameObject.Find("EventSystem").GetComponent<ClueGlow>();
+
         }
-        else
-        {
-            sphereCastHitDistance = lightComponent.pointLightOuterRadius;
-        }
-        // ===================================================
 
-        foreach (var hit in sphereCastHits)
+        private void FixedUpdate()
         {
-            RaycastHit hitInfo;
-            // check for light of sight
-            if (Physics.Raycast(playerMovement.transform.position, (hit.transform.position - playerMovement.transform.position).normalized,
-                out hitInfo, lightComponent.pointLightOuterRadius, ~playerLayer, QueryTriggerInteraction.Ignore))
+            currDirection = playerController.getDir();
+            Quaternion smoothing = Quaternion.LookRotation(currDirection);
+            lightContainer.transform.rotation = Quaternion.Lerp(lightContainer.transform.rotation, smoothing,
+                Time.fixedDeltaTime * damping);
+
+            tempDirection = lightContainer.transform.rotation * Vector3.forward;
+
+            sphereCastHits = Physics.SphereCastAll(transform.position, sphereCastRadius,
+                tempDirection, lightComponent.pointLightOuterRadius, (weepingAngelLayer | faceHuggerLayer), QueryTriggerInteraction.Ignore);
+
+            // for Gizmos ========================================
+            if (sphereCastHits.Length > 0)
             {
-                //Debug.Log(hitInfo.transform.gameObject.layer);
-                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
+                sphereCastHitDistance = sphereCastHits[0].distance;
+            }
+            else
+            {
+                sphereCastHitDistance = lightComponent.pointLightOuterRadius;
+            }
+            // ===================================================
+
+            foreach (var hit in sphereCastHits)
+            {
+                RaycastHit hitInfo;
+                // check for line of sight
+                if (Physics.Raycast(lightTransform.position, (hit.transform.position - lightTransform.position).normalized,
+                    out hitInfo, lightComponent.pointLightOuterRadius, ~playerLayer, QueryTriggerInteraction.Ignore))
                 {
-                    // flashlight hits enemy
-                    Vector3 hitDir = new Vector3(hit.transform.position.x - transform.position.x,
-                        0, hit.transform.position.z - transform.position.z);
-                    float cosTheta = Vector3.Dot(tempDirection.normalized, hitDir.normalized);
-                    float deg = Mathf.Acos(cosTheta) * Mathf.Rad2Deg;
-                    if (Mathf.Abs(deg) <= lightComponent.pointLightOuterAngle / 2.0f)
+                    Debug.LogWarning(LayerMask.LayerToName(hitInfo.transform.gameObject.layer));
+                    if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel") ||
+                        hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("FaceHugger"))
                     {
-                        // check if both hitDir and actual direction from player to enemy match
-                        Vector3 dirFromPlayerToEnemy = new Vector3(hit.transform.position.x - playerMovement.transform.position.x,
-                            0, hit.transform.position.z - playerMovement.transform.position.z);
-                        if (dirFromPlayerToEnemy.x * hitDir.x >= 0 && dirFromPlayerToEnemy.z * hitDir.z >= 0)
+                        // flashlight hits enemy
+                        Vector3 hitDir = new Vector3(hit.transform.position.x - lightTransform.position.x,
+                            0, hit.transform.position.z - lightTransform.position.z);
+                        float cosTheta = Vector3.Dot(tempDirection.normalized, hitDir.normalized);
+                        float deg = Mathf.Acos(cosTheta) * Mathf.Rad2Deg;
+                        if (Mathf.Abs(deg) <= lightComponent.pointLightOuterAngle / 2.0f)
                         {
-                            hit.transform.GetComponentInParent<WeepingAngelMovement>().Freeze();
+                            // check if both hitDir and actual direction from player to enemy match
+                            Vector3 dirFromPlayerToEnemy = new Vector3(hit.transform.position.x - lightTransform.position.x,
+                                0, hit.transform.position.z - lightTransform.position.z);
+                            if (dirFromPlayerToEnemy.x * hitDir.x >= 0 && dirFromPlayerToEnemy.z * hitDir.z >= 0)
+                            {
+                                hit.transform.GetComponentInParent<IFlashable>().OnFlash();
+                            }
                         }
                     }
                 }
             }
+            ClueSpot();
         }
-        ClueSpot();
-    }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Debug.DrawLine(lightContainer.transform.position, lightContainer.transform.position + tempDirection * sphereCastHitDistance);
-        Gizmos.DrawWireSphere(lightContainer.transform.position + tempDirection * sphereCastHitDistance, sphereCastRadius);
-    }
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Debug.DrawLine(lightContainer.transform.position, lightContainer.transform.position + tempDirection * sphereCastHitDistance);
+            Gizmos.DrawWireSphere(lightContainer.transform.position + tempDirection * sphereCastHitDistance, sphereCastRadius);
+        }
 
-    public void ClueSpot()
-    {
-        clueGlow.ClueSpot(transform.position, sphereCastRadius, tempDirection, lightComponent, 
-            ~playerLayer, playerMovement);
-    }
+        public void ClueSpot()
+        {
+            //clueGlow.ClueSpot(transform.position, sphereCastRadius, tempDirection, lightComponent, ~playerLayer, playerMovement.gameObject);
+        }
 
+    }
 }
