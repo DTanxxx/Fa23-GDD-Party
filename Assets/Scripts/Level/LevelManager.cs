@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System;
 using UnityEngine.UI;
 using Lurkers.Audio;
+using Unity.VisualScripting;
 
 namespace Lurkers.Control.Level
 {
@@ -59,6 +60,10 @@ namespace Lurkers.Control.Level
         public void OpenNote()
         {
             Time.timeScale = 0f;
+            Button button = GetComponent<Button>();
+            Color bColor = button.colors.disabledColor;
+            bColor.a = 0f;
+            button.interactable = false;
             onNotes?.Invoke(true);
         }
 
@@ -66,6 +71,8 @@ namespace Lurkers.Control.Level
         public void CloseNote()
         {
             Time.timeScale = 1f;
+            Button button = GetComponent<Button>();
+            button.interactable = true;
             onNotes?.Invoke(false);
         }
     }

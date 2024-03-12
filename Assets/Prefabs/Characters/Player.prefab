@@ -896,7 +896,7 @@ MonoBehaviour:
   spotlight: {fileID: 8694835557312243491}
   flashlight: {fileID: 10591371867480534}
   desiredColor: {r: 1, g: 0, b: 0, a: 1}
-  flickerPerMin: 1
+  flickerPerMin: 12
 --- !u!1 &4278100591057319431
 GameObject:
   m_ObjectHideFlags: 0
