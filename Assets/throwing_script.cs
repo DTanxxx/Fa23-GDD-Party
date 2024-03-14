@@ -12,6 +12,7 @@ public class throwing_script : MonoBehaviour
     public GameObject item; 
     public GameObject tempParent; 
     public bool isInHand = false; 
+    private float holdDownStartTime; 
 
     // Start is called before the first frame update
     void Start()
@@ -44,7 +45,12 @@ public class throwing_script : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space)) 
             {
-                item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up.normalized * throwForce);
+                holdDownStartTime = Time.time;
+            }
+            if (Input.GetKeyUp(KeyCode.Space)) {
+                float holdDownTime = Time.time - holdDownStartTime;
+                // item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up.normalized * throwForce);
+                item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up.normalized * CalculateHoldDownForce(holdDownTime));
                 item.GetComponent<Rigidbody>().drag = 1;
                 isInHand = false; 
             }
@@ -59,6 +65,13 @@ public class throwing_script : MonoBehaviour
 
         }
 
+    }
+
+    private float CalculateHoldDownForce(float HoldTime) {
+        float maxForceDownTime = 2f;
+        float holdTimeNormalized = Mathf.Clamp01(HoldTime / maxForceDownTime);
+        float force = holdTimeNormalized * throwForce; 
+        return force; 
     }
 
     // void pickUpObject() 
