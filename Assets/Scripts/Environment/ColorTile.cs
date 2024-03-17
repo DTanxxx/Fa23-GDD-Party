@@ -166,7 +166,7 @@ public class ColorTile : MonoBehaviour
 
     public TileColor GetTileColor() { return tileColor; }
 
-    private void SetSprite(Sprite sp)
+    void SetSprite(Sprite sp)
     {
         foreach (SpriteRenderer spriteRenderer in spriteRenderers)
         {
@@ -178,15 +178,17 @@ public class ColorTile : MonoBehaviour
     //Cyan Tile
     public void TurnRed()
     {
-        tileColor = TileColor.Red;
-        SetSprite(redSprite);
-        Debug.Log(tileColor);
+        // tileColor = TileColor.Red;
+        // SetSprite(redSprite);
+        // Debug.Log(tileColor);
+        TurnColor(TileColor.Red);
     }
     public void TurnWhite()
     {
-        tileColor = TileColor.White;
-        SetSprite(whiteSprite);
-        Debug.Log(tileColor);
+        // tileColor = TileColor.White;
+        // SetSprite(whiteSprite);
+        // Debug.Log(tileColor);
+        TurnColor(TileColor.White);
     }
 
     //Blue Tile
@@ -369,6 +371,42 @@ public class ColorTile : MonoBehaviour
         {
             StopCoroutine(slideCoroutine);
             slideCoroutine = null;
+        }
+    }
+
+    // Color changes
+    public void TurnColor(TileColor newColor)
+    {
+        tileColor = newColor;
+        switch (newColor)
+        {
+            case TileColor.White:
+                SetSprite(whiteSprite);
+                break;
+            case TileColor.Red:
+                SetSprite(redSprite);
+                break;
+            case TileColor.Cyan:
+                SetSprite(cyanSprite);
+                break;
+            case TileColor.Black:
+                SetSprite(blackSprite);
+                break;
+            case TileColor.Green:
+                SetSprite(greenSprite);
+                break;
+            case TileColor.Blue:
+                SetSprite(blueSprite);
+                break;
+            case TileColor.Yellow:
+                SetSprite(yellowSprite);
+                break;
+            case TileColor.Magenta:
+                SetSprite(magentaSprite);
+                break;
+            case TileColor.Purple:
+                SetSprite(purpleSprite);
+                break;
         }
     }
 }
