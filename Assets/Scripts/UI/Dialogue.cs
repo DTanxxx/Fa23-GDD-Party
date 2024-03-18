@@ -15,7 +15,6 @@ public class Dialogue : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         //player = (PlayerMovement) GameObject.FindWithTag("player");
     }
     void Update()
@@ -36,6 +35,7 @@ public class Dialogue : MonoBehaviour
         
     }
     void OnEnable() {
+        index = 0;
         if (player) {
             player.inDialogue = true;
         }

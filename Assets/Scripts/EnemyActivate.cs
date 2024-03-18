@@ -49,7 +49,9 @@ public class EnemyActivate : MonoBehaviour
             }
         }
     }
-
+    public bool Active(){
+        return active;
+    }
     public void SetActive()
     {
         foreach (var enemy in weepingAngels)

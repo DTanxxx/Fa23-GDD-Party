@@ -17,13 +17,17 @@ public class LightDirection : MonoBehaviour
     private Vector3 tempDirection;
     private float sphereCastRadius;
     private ClueGlow clueGlow;
+    private bool firstTime;
+    private bool firstTimeAfter;
+    public Dialogue Monologue;
 
     // for Gizmos
     private RaycastHit[] sphereCastHits;
     private float sphereCastHitDistance;
-
     private void Start()
     {
+        firstTime = true;
+        firstTimeAfter = true;
         lightContainer.transform.rotation = Quaternion.Euler(0, 90, 0);
         lightComponent = GetComponent<Light2D>();
 
@@ -67,6 +71,14 @@ public class LightDirection : MonoBehaviour
                 if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
                 {
                     // flashlight hits enemy
+                    if (firstTime && !FindObjectOfType<EnemyActivate>().Active()) {
+                        string[] lines = new string[2];
+                        lines[0] = "Hmm, all these statues look eerily similar.";
+                        lines[1] = "Not my choice of decor.";
+                        Monologue.lines = lines;
+                        Monologue.gameObject.SetActive(true);
+                        firstTime = false;
+                    }
                     Vector3 hitDir = new Vector3(hit.transform.position.x - lightTransform.position.x,
                         0, hit.transform.position.z - lightTransform.position.z);
                     float cosTheta = Vector3.Dot(tempDirection.normalized, hitDir.normalized);
@@ -79,6 +91,14 @@ public class LightDirection : MonoBehaviour
                         if (dirFromPlayerToEnemy.x * hitDir.x >= 0 && dirFromPlayerToEnemy.z * hitDir.z >= 0)
                         {
                             hit.transform.GetComponentInParent<WeepingAngelMovement>().Freeze();
+                            if (FindObjectOfType<EnemyActivate>().Active() && firstTimeAfter) {
+                                string[] lines = new string[2];
+                                lines[0] = "Light seems to stop their movement.";
+                                lines[1] = "I better hope this flashlight doesn't die anytime soon.";
+                                Monologue.lines = lines;
+                                Monologue.gameObject.SetActive(true);
+                                firstTimeAfter = false;
+                            }
                         }
                     }
                 }

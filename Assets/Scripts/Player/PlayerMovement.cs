@@ -65,14 +65,15 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update() 
     {
-        if (Input.GetKeyDown("p")) 
-        {
-            Debug.Log(inDialogue);
-            if (!inDialogue) 
-            {
-                Monologue.SetActive(true);
-            } 
-        }
+        // Dialogue Debugging purposes
+        // if (Input.GetKeyDown("p")) 
+        // {
+        //     Debug.Log(inDialogue);
+        //     if (!inDialogue) 
+        //     {
+        //         Monologue.SetActive(true);
+        //     } 
+        // }
     }
     private void FixedUpdate()
     {

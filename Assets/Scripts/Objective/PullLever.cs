@@ -15,6 +15,7 @@ public class PullLever : MonoBehaviour
 
     private GameObject item;
     private bool pulled = false;
+    public Dialogue Monologue;
 
     private void Awake()
     {
@@ -81,6 +82,12 @@ public class PullLever : MonoBehaviour
             leverSource.Play();
             electricitySource.Play();
             FindObjectOfType<EnemyActivate>().SetActive();
+            string[] lines = new string[3];
+            lines[0] = "Phew. Now that’s done.";
+            lines[1] = "Did that statue.. Just move?";
+            lines[2] = "Ahh, they’re alive!";
+            Monologue.lines = lines;
+            Monologue.gameObject.SetActive(true);
         }
         else
         {
