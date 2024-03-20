@@ -7,6 +7,8 @@ using UnityEngine.Rendering.Universal;
 
 namespace Lurkers.Control.Vision
 {
+    // TO BE REFACTORED (also need to add in intro dialogue)
+
     public class LightDirection : MonoBehaviour
     {
         [SerializeField] private LayerMask weepingAngelLayer;
@@ -21,6 +23,11 @@ namespace Lurkers.Control.Vision
         private Vector3 currDirection;
         private Vector3 tempDirection;
         private float sphereCastRadius;
+
+        private bool firstTime;
+        private bool firstTimeAfter;
+        public Dialogue monologue;
+
         //private ClueGlow clueGlow;
 
         // for Gizmos
@@ -33,9 +40,10 @@ namespace Lurkers.Control.Vision
             lightComponent = GetComponent<Light2D>();
 
             sphereCastRadius = Mathf.Atan(lightComponent.pointLightOuterAngle / 2.0f * Mathf.Deg2Rad) * lightComponent.pointLightOuterRadius;
+            firstTime = true;
+            firstTimeAfter = true;
 
             //clueGlow = GameObject.Find("EventSystem").GetComponent<ClueGlow>();
-
         }
 
         private void FixedUpdate()
@@ -85,6 +93,26 @@ namespace Lurkers.Control.Vision
                             if (dirFromPlayerToEnemy.x * hitDir.x >= 0 && dirFromPlayerToEnemy.z * hitDir.z >= 0)
                             {
                                 hit.transform.GetComponentInParent<IFlashable>().OnFlash();
+
+                                if (firstTime && !FindObjectOfType<EnemyActivate>().Active())
+                                {
+                                    string[] lines = new string[2];
+                                    lines[0] = "Hmm, all these statues look eerily similar.";
+                                    lines[1] = "Not my choice of decor.";
+                                    Monologue.lines = lines;
+                                    Monologue.gameObject.SetActive(true);
+                                    firstTime = false;
+                                }
+
+                                if (FindObjectOfType<EnemyActivate>().Active() && firstTimeAfter)
+                                {
+                                    string[] lines = new string[2];
+                                    lines[0] = "Light seems to stop their movement.";
+                                    lines[1] = "I better hope this flashlight doesn't die anytime soon.";
+                                    Monologue.lines = lines;
+                                    Monologue.gameObject.SetActive(true);
+                                    firstTimeAfter = false;
+                                }
                             }
                         }
                     }
