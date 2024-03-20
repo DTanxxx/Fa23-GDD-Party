@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum AudioClips    //can be expanded later on to play the designated audio clip with regards to the audio clip name
-{
-    Beginning,          //could be the audio clip for the beginning of the level
-    First,              //could be the audio clip for the first set of instructions
-    Second,             //could be the audio clip for second set of instructions
-}
 
 
 public class Cassette : MonoBehaviour
@@ -16,7 +10,7 @@ public class Cassette : MonoBehaviour
     
     [SerializeField] GameObject button;
     [SerializeField] GameObject play_Button;
-    [SerializeField] AudioClips audioclip;
+    [SerializeField] AudioClip audio;
     
     
     // used to show the area of the trigger(also changes with color of sensor)
@@ -85,6 +79,9 @@ public class Cassette : MonoBehaviour
         {
             Button real_button = button.GetComponent<Button>();
             real_button.interactable = true;
+            AudioSource source = play_Button.GetComponent<AudioSource>();
+            source.clip = audio;
+
         }
         
     }
