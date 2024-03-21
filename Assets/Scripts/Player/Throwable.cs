@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class throwing_script : MonoBehaviour
+public class Throwable : MonoBehaviour
 {
     float throwForce = 1000f; 
     Vector3 objectPos;
