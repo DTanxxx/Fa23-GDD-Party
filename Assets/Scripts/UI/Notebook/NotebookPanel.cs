@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Lurkers.Control.Level;
 using Lurkers.Audio;
 
 namespace Lurkers.UI.Hearing
 {
     public class NotebookPanel : MonoBehaviour
     {
+        [SerializeField] private Button openButton = null;
+        [SerializeField] private Button closeButton = null;
         [SerializeField] private Animator animator;
         [SerializeField] private int maxPages = 5;
         [SerializeField] private TextMeshProUGUI pageNumber;
@@ -19,7 +20,6 @@ namespace Lurkers.UI.Hearing
         private int currPage = 0;
         private Dictionary<int, string> notes = new Dictionary<int, string>();
         private Button[] buttons;
-
 
         private void Start()
         {
@@ -32,14 +32,24 @@ namespace Lurkers.UI.Hearing
             }
             pageNumber.text = CurrentPage();
         }
-        private void OnEnable()
+
+        // notebook button event
+        public void OpenNote()
         {
-            LevelManager.onNotes += ShowPanel;
+            Time.timeScale = 0f;
+            Color bColor = openButton.colors.disabledColor;
+            bColor.a = 0f;
+            openButton.interactable = false;
+            ShowPanel(true);
         }
 
-        private void OnDisable()
+        // notebook button event
+        public void CloseNote()
         {
-            LevelManager.onNotes -= ShowPanel;
+            Time.timeScale = 1f;
+            closeButton.interactable = true;
+            openButton.interactable = true;
+            ShowPanel(false);
         }
 
         private void ShowPanel(bool toPause)
@@ -51,7 +61,8 @@ namespace Lurkers.UI.Hearing
                 canvasGroup.blocksRaycasts = true;
                 animator.SetTrigger("OpenNotes");
                 LoadNotes();
-                AudioManager.instance.PlayOneShot(FMODEvents.instance.pageFlip, transform);
+                // TO BE FIXED
+                //AudioManager.instance.PlayOneShot(FMODEvents.instance.pageFlip, transform);
                 animator.SetTrigger("CloseNotes");
             }
             else
@@ -76,8 +87,8 @@ namespace Lurkers.UI.Hearing
                 currPage++;
             }
             animator.SetTrigger("CloseNotes");
-
-            AudioManager.instance.PlayOneShot(FMODEvents.instance.pageFlip, transform);
+            // TO BE FIXED
+            //AudioManager.instance.PlayOneShot(FMODEvents.instance.pageFlip, transform);
         }
 
         public void SaveNotes()
