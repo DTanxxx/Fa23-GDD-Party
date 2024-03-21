@@ -326,14 +326,6 @@ namespace Lurkers.Environment.Vision.ColorTile
                     rend.sortingLayerName = tileRaisedLayer;
                 }
             }
-            else if (state == "lower")
-            {
-                // set top surface and sides of tile's layer to tileFlat
-                foreach (SpriteRenderer rend in spriteRenderers)
-                {
-                    rend.sortingLayerName = tileFlatLayer;
-                }
-            }
 
             if (onTile)
             {
@@ -363,6 +355,15 @@ namespace Lurkers.Environment.Vision.ColorTile
                     go.transform.position = Vector3.Lerp(currentPos, endPos, (elapsedTime / tileRaiseDuration));
                     elapsedTime += Time.deltaTime;
                     yield return null;
+                }
+            }
+
+            if (state == "lower")
+            {
+                // set top surface and sides of tile's layer to tileFlat
+                foreach (SpriteRenderer rend in spriteRenderers)
+                {
+                    rend.sortingLayerName = tileFlatLayer;
                 }
             }
 

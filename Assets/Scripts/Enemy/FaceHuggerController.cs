@@ -16,6 +16,7 @@ namespace Lurkers.Control.Vision.Character
         [SerializeField] private LayerMask faceHuggerLayer;
         [SerializeField] private Animator animator = null;
         [SerializeField] private float deathProximity = 8f;
+        [SerializeField] private float audibleProximity = 15f;
 
         [SerializeField] private SpriteRenderer spriteRenderer = null;
         [SerializeField] private Collider myCollider = null;
@@ -24,6 +25,9 @@ namespace Lurkers.Control.Vision.Character
         private bool isPlayerDead = false;
         private NavMeshAgent agent;
         private bool isDead = false;
+        private bool chaseSFXPlayed = false;
+
+        public static Action onFacehuggerAudible;
 
         private EventInstance facehuggerEventInstance;
 
@@ -75,7 +79,16 @@ namespace Lurkers.Control.Vision.Character
                             spriteRenderer.flipX = false;
                         }
 
-                        AudioManager.instance.SetParameter(facehuggerEventInstance, "Facehugger Chase", 1f);
+                        if (Vector3.Distance(player.transform.position, transform.position) < audibleProximity)
+                        {
+                            // play facehugger sfx
+                            AudioManager.instance.SetParameter(facehuggerEventInstance, "Facehugger Chase", 1f);
+                            if (!chaseSFXPlayed)
+                            {
+                                chaseSFXPlayed = true;
+                                onFacehuggerAudible?.Invoke();
+                            }
+                        }
                     }
                 }
             }
