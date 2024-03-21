@@ -30,14 +30,14 @@ namespace Lurkers.UI
 
         private void Update()
         {
-            ShowPanel();
+            //ShowPanel();
         }
 
         private void EnablePanel()
         {
-            invenVisible = true;
+            /*invenVisible = true;
             invenRender.alpha = 1.0f;
-            invenRender.blocksRaycasts = true;
+            invenRender.blocksRaycasts = true;*/
         }
 
         public void ShowPanel()

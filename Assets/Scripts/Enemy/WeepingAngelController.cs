@@ -34,15 +34,15 @@ namespace Lurkers.Control.Vision.Character
         private void OnEnable()
         {
             PlayerHealth.onDeath += OnPlayerDeath;
-            Dialogue.Active += DialogueActive;
-            Dialogue.Unactive += DialogueInactive;
+            Dialogue.active += DialogueActive;
+            Dialogue.unactive += DialogueInactive;
         }
 
         private void OnDisable()
         {
             PlayerHealth.onDeath -= OnPlayerDeath;
-            Dialogue.Active -= DialogueActive;
-            Dialogue.Unactive -= DialogueInactive;
+            Dialogue.active -= DialogueActive;
+            Dialogue.unactive -= DialogueInactive;
         }
 
         private void Update()

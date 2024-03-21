@@ -4,12 +4,9 @@ using UnityEngine;
 using System;
 using Lurkers.Audio;
 using Lurkers.Inventory;  // TODO pulling lever should not depend on inventory
-using Lurkers.UI;
-using Lurkers.Control;
 
 namespace Lurkers.Environment.Vision
 {
-    // TODO refactor needed
     public class PullLever : MonoBehaviour
     {
         [SerializeField] bool triggerLightFlicker = false;
@@ -20,7 +17,6 @@ namespace Lurkers.Environment.Vision
 
         private GameObject item;
         private bool pulled = false;
-        public Dialogue Monologue;
 
         private void Awake()
         {
@@ -80,15 +76,6 @@ namespace Lurkers.Environment.Vision
             {
                 Debug.LogError("One of the fields is null!");
             }
-            
-            FindObjectOfType<EnemyActivate>().SetActive();
-
-            string[] lines = new string[3];
-            lines[0] = "Phew. Now that’s done.";
-            lines[1] = "Did that statue.. Just move?";
-            lines[2] = "Ahh, they’re alive!";
-            Monologue.lines = lines;
-            Monologue.gameObject.SetActive(true);
         }
     }
 }

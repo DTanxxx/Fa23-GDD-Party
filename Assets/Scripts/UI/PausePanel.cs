@@ -17,27 +17,27 @@ namespace Lurkers.UI
         private void OnEnable()
         {
             LevelManager.onPauseGame += ShowPanel;
+            LevelManager.onUnpausegame += HidePanel;
         }
 
         private void OnDisable()
         {
             LevelManager.onPauseGame -= ShowPanel;
+            LevelManager.onUnpausegame -= HidePanel;
         }
 
-        private void ShowPanel(bool toPause)
+        private void ShowPanel()
         {
-            if (toPause)
-            {
-                canvasGroup.alpha = 1f;
-                canvasGroup.interactable = true;
-                canvasGroup.blocksRaycasts = true;
-            }
-            else
-            {
-                canvasGroup.alpha = 0f;
-                canvasGroup.interactable = false;
-                canvasGroup.blocksRaycasts = false;
-            }
+            canvasGroup.alpha = 1f;
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+        }
+
+        private void HidePanel()
+        {
+            canvasGroup.alpha = 0f;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
         }
     }
 }

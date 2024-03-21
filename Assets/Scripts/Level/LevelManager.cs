@@ -9,7 +9,8 @@ namespace Lurkers.Control.Level
 {
     public class LevelManager : MonoBehaviour
     {
-        public static Action<bool> onPauseGame;
+        public static Action onPauseGame;
+        public static Action onUnpausegame;
 
         // play main menu theme
         private void Awake()
@@ -43,14 +44,14 @@ namespace Lurkers.Control.Level
         public void PauseGame()
         {
             Time.timeScale = 0f;
-            onPauseGame?.Invoke(true);
+            onPauseGame?.Invoke();
         }
 
         // pause button event
         public void UnpauseGame()
         {
             Time.timeScale = 1f;
-            onPauseGame?.Invoke(false);
+            onUnpausegame?.Invoke();
         }
     }
 }

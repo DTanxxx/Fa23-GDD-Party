@@ -12,23 +12,23 @@ namespace Lurkers.Audio.Vision
         private void OnEnable()
         {
             LevelManager.onPauseGame += PauseAllSFX;
+            LevelManager.onUnpausegame += UnpauseAllSFX;
         }
 
         private void OnDisable()
         {
             LevelManager.onPauseGame -= PauseAllSFX;
+            LevelManager.onUnpausegame -= UnpauseAllSFX;
         }
 
-        private void PauseAllSFX(bool toPause)
+        private void PauseAllSFX()
         {
-            if (toPause)
-            {
-                raiseSource.Pause();
-            }
-            else
-            {
-                raiseSource.UnPause();
-            }
+            raiseSource.Pause();
+        }
+
+        private void UnpauseAllSFX()
+        {
+            raiseSource.UnPause();
         }
 
         public void PlayRaiseSFX()
