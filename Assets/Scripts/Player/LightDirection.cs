@@ -1,4 +1,5 @@
 using Lurkers.Environment.Vision;
+using Lurkers.UI;
 using Lurkers.Vision;
 using System.Collections;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace Lurkers.Control.Vision
 
         private void FixedUpdate()
         {
-            currDirection = playerController.getDir();
+            currDirection = playerController.GetDir();
             Quaternion smoothing = Quaternion.LookRotation(currDirection);
             lightContainer.transform.rotation = Quaternion.Lerp(lightContainer.transform.rotation, smoothing,
                 Time.fixedDeltaTime * damping);
@@ -94,23 +95,23 @@ namespace Lurkers.Control.Vision
                             {
                                 hit.transform.GetComponentInParent<IFlashable>().OnFlash();
 
-                                if (firstTime && !FindObjectOfType<EnemyActivate>().Active())
+                                if (firstTime && !FindObjectOfType<EnemyActivate>().IsActive())
                                 {
                                     string[] lines = new string[2];
                                     lines[0] = "Hmm, all these statues look eerily similar.";
                                     lines[1] = "Not my choice of decor.";
-                                    Monologue.lines = lines;
-                                    Monologue.gameObject.SetActive(true);
+                                    monologue.lines = lines;
+                                    monologue.gameObject.SetActive(true);
                                     firstTime = false;
                                 }
 
-                                if (FindObjectOfType<EnemyActivate>().Active() && firstTimeAfter)
+                                if (FindObjectOfType<EnemyActivate>().IsActive() && firstTimeAfter)
                                 {
                                     string[] lines = new string[2];
                                     lines[0] = "Light seems to stop their movement.";
                                     lines[1] = "I better hope this flashlight doesn't die anytime soon.";
-                                    Monologue.lines = lines;
-                                    Monologue.gameObject.SetActive(true);
+                                    monologue.lines = lines;
+                                    monologue.gameObject.SetActive(true);
                                     firstTimeAfter = false;
                                 }
                             }

@@ -29,7 +29,7 @@ namespace Lurkers.Control.Hearing
 
         void FixedUpdate()
         {
-            currDirection = playerController.getDir();
+            currDirection = playerController.GetDir();
             Quaternion smoothing = Quaternion.LookRotation(currDirection);
             echoContainer.transform.rotation = Quaternion.Lerp(echoContainer.transform.rotation,
                 smoothing, Time.fixedDeltaTime * damping);

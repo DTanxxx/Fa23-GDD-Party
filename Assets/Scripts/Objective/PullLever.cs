@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using Lurkers.Audio;
 using Lurkers.Inventory;  // TODO pulling lever should not depend on inventory
+using Lurkers.UI;
+using Lurkers.Control;
 
 namespace Lurkers.Environment.Vision
 {
