@@ -60,7 +60,7 @@ namespace Lurkers.Control.Level
         public void OpenNote()
         {
             Time.timeScale = 0f;
-            Button button = GetComponent<Button>();
+            Button button = /*GetComponent<Button>();*/ GameObject.Find("Notebook Button").GetComponent<Button>(); // This is pretty inefficient. Might want to change this in the future
             Color bColor = button.colors.disabledColor;
             bColor.a = 0f;
             button.interactable = false;
@@ -71,7 +71,7 @@ namespace Lurkers.Control.Level
         public void CloseNote()
         {
             Time.timeScale = 1f;
-            Button button = GetComponent<Button>();
+            Button button = /*GetComponent<Button>();*/ GameObject.Find("Notebook Button").GetComponent<Button>(); // This is pretty inefficient. Might want to change this in the future
             button.interactable = true;
             onNotes?.Invoke(false);
         }

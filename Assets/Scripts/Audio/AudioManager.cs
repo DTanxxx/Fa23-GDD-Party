@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
+using Lurkers.Control;
 
 namespace Lurkers.Audio
 {
@@ -25,6 +26,12 @@ namespace Lurkers.Audio
                 eventSingletons = new Dictionary<string, EventInstance>();
                 DontDestroyOnLoad(gameObject);
             }
+        }
+
+        // For scripts outside of the ones attached to Player to access the Player transform
+        public Transform playerTransform()
+        {
+            return PlayerController.playerTransform;
         }
 
         // For sounds that play instantly

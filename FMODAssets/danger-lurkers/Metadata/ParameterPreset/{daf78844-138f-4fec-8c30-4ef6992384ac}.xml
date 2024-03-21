@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="ParameterPreset" id="{daf78844-138f-4fec-8c30-4ef6992384ac}">
+		<property name="name">
+			<value>Notebook</value>
+		</property>
+		<relationship name="folder">
+			<destination>{1bc22a4b-57b9-47d1-a443-7d2313f1454f}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{fb082538-f2ae-4fdc-9f47-7365a3c6c681}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{fb082538-f2ae-4fdc-9f47-7365a3c6c681}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>3</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>Open</value>
+			<value>Close</value>
+			<value>Page Flip</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>

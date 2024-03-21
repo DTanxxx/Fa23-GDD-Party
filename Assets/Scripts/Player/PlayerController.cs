@@ -40,11 +40,16 @@ namespace Lurkers.Control
         public static Action onPlayerSlide;
         public static Action onPlayerEndSlide;
 
+        // For all other scripts to reference the Player transform in order to play SFX
+        public static Transform playerTransform;
+
         private void Start()
         {
             dir = new Vector3(1, 0, 0);
             waitForPauseBeforeAppearance = new WaitForSeconds(pauseBeforeAppearance);
             FreezePlayer();
+
+            playerTransform = transform;
         }
 
         private void OnEnable()
