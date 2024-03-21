@@ -7,33 +7,40 @@ namespace Lurkers.Audio
 {
     public class FMODEvents : MonoBehaviour
     {
-        // SFX
-        [field: Header("Footsteps SFX")]
-        [field: SerializeField] public EventReference footsteps { get; private set; }
+        // Test
+        [field: Header("Test SFX")]
+        [field: SerializeField] public EventReference testSfx { get; private set; }
 
+        [field: Header("Test OST")]
+        [field: SerializeField] public EventReference testOst { get; private set; }
+
+        // SFX
         [field: Header("Breathing and Heartbeat SFX")]
         [field: SerializeField] public EventReference breathingAndHeartbeat { get; private set; }
 
         [field: Header("Elevator SFX")]
         [field: SerializeField] public EventReference elevator { get; private set; }
 
+        [field: Header("Enemy SFX")]
+        [field: SerializeField] public EventReference enemy { get; private set; }
+
+        [field: Header("Footsteps SFX")]
+        [field: SerializeField] public EventReference footsteps { get; private set; }
+
+        [field: Header("Game Over SFX")]
+        [field: SerializeField] public EventReference gameOver { get; private set; }
+
         [field: Header("Lever SFX")]
         [field: SerializeField] public EventReference lever { get; private set; }
+
+        [field: Header("Notebook SFX")]
+        [field: SerializeField] public EventReference notebook { get; private set; }
 
         [field: Header("Tile Activation SFX")]
         [field: SerializeField] public EventReference tileActivation { get; private set; }
 
         [field: Header("Tile Effect SFX")]
         [field: SerializeField] public EventReference tileEffect { get; private set; }
-
-        [field: Header("Enemy SFX")]
-        [field: SerializeField] public EventReference enemy { get; private set; }
-
-        [field: Header("Game Over SFX")]
-        [field: SerializeField] public EventReference gameOver { get; private set; }
-
-        [field: Header("Page Flip SFX")]
-        [field: SerializeField] public EventReference pageFlip { get; private set; }
 
 
         // OST
