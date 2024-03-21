@@ -36,6 +36,7 @@ namespace Lurkers.Control
         private float animSpeed;
         private WaitForSeconds waitForPauseBeforeAppearance;
         private float tempSpeed;
+        public bool inDialogue;
 
         public static Action onPlayerSlide;
         public static Action onPlayerEndSlide;
@@ -73,6 +74,12 @@ namespace Lurkers.Control
         {
             if (isDead || isFrozen)
             {
+                return;
+            }
+
+            if (inDialogue)
+            {
+                animator.SetBool("Walking", false);
                 return;
             }
 
@@ -245,7 +252,7 @@ namespace Lurkers.Control
             isFrozen = false;
         }
 
-        public Vector3 getDir()
+        public Vector3 GetDir()
         {
             return dir;
         }

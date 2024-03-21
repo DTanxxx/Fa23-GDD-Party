@@ -67,5 +67,10 @@ namespace Lurkers.Control
                 }
             }
         }
+
+        public bool IsActive()
+        {
+            return active;
+        }
     }
 }

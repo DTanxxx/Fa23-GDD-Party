@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Lurkers.Vision;
+using Lurkers.UI;
 
 namespace Lurkers.Control.Vision.Character
 {
@@ -22,6 +23,7 @@ namespace Lurkers.Control.Vision.Character
         private float freezeTimer;
         private bool idle = true;
         private bool enemyActive = false;
+        private bool inMonologue;
 
         private void Start()
         {
@@ -32,16 +34,20 @@ namespace Lurkers.Control.Vision.Character
         private void OnEnable()
         {
             PlayerHealth.onDeath += OnPlayerDeath;
+            Dialogue.Active += DialogueActive;
+            Dialogue.Unactive += DialogueInactive;
         }
 
         private void OnDisable()
         {
             PlayerHealth.onDeath -= OnPlayerDeath;
+            Dialogue.Active -= DialogueActive;
+            Dialogue.Unactive -= DialogueInactive;
         }
 
         private void Update()
         {
-            if (isPlayerDead || !enemyActive)
+            if (isPlayerDead || !enemyActive || inMonologue)
             {
                 return;
             }
@@ -127,6 +133,20 @@ namespace Lurkers.Control.Vision.Character
         public bool IsActive()
         {
             return enemyActive;
+        }
+
+        public void DialogueActive()
+        {
+            Debug.Log("WeepingAngelDialogue");
+            agent.velocity = Vector3.zero;
+            agent.isStopped = true;
+            inMonologue = true;
+        }
+
+        public void DialogueInactive()
+        {
+            agent.isStopped = false;
+            inMonologue = false;
         }
     }
 }
