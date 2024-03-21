@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{efcc60a1-ccf5-44d5-8f5f-70ba961c652f}">
 		<property name="assetPath">
-			<value>Josiah/OST/Main Theme/v1.1/Senseless-v1.1_no-penderecki.flac</value>
+			<value>Josiah/OST/Main Theme/v1.1/Adrineda_Senseless-v1.1_no-penderecki.flac</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

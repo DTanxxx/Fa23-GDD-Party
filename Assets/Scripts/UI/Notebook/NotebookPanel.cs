@@ -20,6 +20,12 @@ namespace Lurkers.UI.Hearing
         private int currPage = 0;
         private Dictionary<int, string> notes = new Dictionary<int, string>();
         private Button[] buttons;
+        private enum Notebook
+        {
+            OPEN = 0,       // Not implemented, not integrated
+            CLOSE = 1,      // Implemented, integrated, needs work
+            PAGE_FLIP = 2,  // Implemented, integrated, needs work
+        }
 
         private void Start()
         {
@@ -61,8 +67,7 @@ namespace Lurkers.UI.Hearing
                 canvasGroup.blocksRaycasts = true;
                 animator.SetTrigger("OpenNotes");
                 LoadNotes();
-                // TO BE FIXED
-                //AudioManager.instance.PlayOneShot(FMODEvents.instance.pageFlip, transform);
+                AudioManager.instance.SetPlayOneShot(FMODEvents.instance.notebook, AudioManager.instance.playerTransform(), "Notebook", (float)Notebook.PAGE_FLIP);
                 animator.SetTrigger("CloseNotes");
             }
             else
@@ -71,6 +76,7 @@ namespace Lurkers.UI.Hearing
                 canvasGroup.interactable = false;
                 canvasGroup.blocksRaycasts = false;
                 SaveNotes();
+                AudioManager.instance.SetPlayOneShot(FMODEvents.instance.notebook, AudioManager.instance.playerTransform(), "Notebook", (float)Notebook.CLOSE);
             }
         }
 
@@ -87,8 +93,8 @@ namespace Lurkers.UI.Hearing
                 currPage++;
             }
             animator.SetTrigger("CloseNotes");
-            // TO BE FIXED
-            //AudioManager.instance.PlayOneShot(FMODEvents.instance.pageFlip, transform);
+
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.notebook, AudioManager.instance.playerTransform(), "Notebook", (float)Notebook.PAGE_FLIP);
         }
 
         public void SaveNotes()

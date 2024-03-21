@@ -15,8 +15,14 @@
 		<property name="parameterType">
 			<value>2</value>
 		</property>
+		<property name="maximum">
+			<value>4</value>
+		</property>
 		<property name="enumerationLabels">
-			<value>Weeping Angel</value>
+			<value>Death by Weeping Angel</value>
+			<value>Facehugger Run</value>
+			<value>Facehugger Kill</value>
+			<value>Death by Facehugger</value>
 		</property>
 		<property name="initialValue">
 			<value>0</value>

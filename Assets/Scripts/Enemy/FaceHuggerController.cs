@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.AI;
+using FMOD.Studio;  // TODO make a script/event so that we don't have to use this namespace
 using Lurkers.Vision;
+using Lurkers.Audio;
 
 namespace Lurkers.Control.Vision.Character
 {
@@ -20,10 +23,13 @@ namespace Lurkers.Control.Vision.Character
         private bool isPlayerDead = false;
         private NavMeshAgent agent;
 
+        private EventInstance facehuggerEventInstance;
+
         private void Start()
         {
             player = GameObject.FindGameObjectWithTag("Player");
             agent = GetComponent<NavMeshAgent>();
+            facehuggerEventInstance = AudioManager.instance.SetPlay(FMODEvents.instance.enemy, transform, "Enemy", (float)Audio.Enemy.EnemyAudioSources.Enemy.FACEHUGGER_RUN);
         }
 
         private void OnEnable()
@@ -66,6 +72,8 @@ namespace Lurkers.Control.Vision.Character
                         {
                             spriteRenderer.flipX = false;
                         }
+
+                        AudioManager.instance.SetParameter(facehuggerEventInstance, "Facehugger Chase", 1f);
                     }
                 }
             }
@@ -73,6 +81,8 @@ namespace Lurkers.Control.Vision.Character
             {
                 agent.velocity = Vector3.zero;
                 agent.isStopped = true;
+
+                AudioManager.instance.SetParameter(facehuggerEventInstance, "Facehugger Chase", 0f);
             }
         }
 
@@ -87,11 +97,15 @@ namespace Lurkers.Control.Vision.Character
             agent.velocity = Vector3.zero;
             agent.isStopped = true;
             isPlayerDead = true;
+
+            gameObject.SetActive(false);
         }
 
         public void OnFlash()
         {
-            // kill this enemy (TODO need animation + SFX)
+            // kill this enemy (TODO need animation)
+            AudioManager.instance.Stop(facehuggerEventInstance);
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Audio.Enemy.EnemyAudioSources.Enemy.FACEHUGGER_KILL);
             Destroy(gameObject);
         }
 

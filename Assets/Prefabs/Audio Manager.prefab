@@ -89,13 +89,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7cf4ca710b6e647b2c2a1ad2dc3374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <footsteps>k__BackingField:
+  <testSfx>k__BackingField:
     Guid:
-      Data1: 910112794
-      Data2: 1122779757
-      Data3: -1298225474
-      Data4: 1139465964
-    Path: event:/Footsteps
+      Data1: 693740621
+      Data2: 1186419765
+      Data3: 482082206
+      Data4: 857495375
+    Path: event:/TestSFX
+  <testOst>k__BackingField:
+    Guid:
+      Data1: 1210568318
+      Data2: 1143041050
+      Data3: 1327187371
+      Data4: -926516855
+    Path: event:/TestOST
   <breathingAndHeartbeat>k__BackingField:
     Guid:
       Data1: 714018869
@@ -110,6 +117,27 @@ MonoBehaviour:
       Data3: -59537221
       Data4: 800691623
     Path: event:/Elevator
+  <enemy>k__BackingField:
+    Guid:
+      Data1: -606037044
+      Data2: 1300628115
+      Data3: 1102686601
+      Data4: 1319604264
+    Path: event:/Enemy
+  <footsteps>k__BackingField:
+    Guid:
+      Data1: 910112794
+      Data2: 1122779757
+      Data3: -1298225474
+      Data4: 1139465964
+    Path: event:/Footsteps
+  <gameOver>k__BackingField:
+    Guid:
+      Data1: 963464784
+      Data2: 1201077924
+      Data3: -335544695
+      Data4: 1522735892
+    Path: event:/GameOver
   <lever>k__BackingField:
     Guid:
       Data1: -471670361
@@ -117,6 +145,13 @@ MonoBehaviour:
       Data3: -535558243
       Data4: -1411033213
     Path: event:/Lever
+  <notebook>k__BackingField:
+    Guid:
+      Data1: -1798369137
+      Data2: 1234234148
+      Data3: 467086269
+      Data4: -1713029445
+    Path: event:/Notebook
   <tileActivation>k__BackingField:
     Guid:
       Data1: -1125442802
@@ -131,20 +166,6 @@ MonoBehaviour:
       Data3: -239346512
       Data4: 1113801882
     Path: event:/TileEffect
-  <enemy>k__BackingField:
-    Guid:
-      Data1: -606037044
-      Data2: 1300628115
-      Data3: 1102686601
-      Data4: 1319604264
-    Path: event:/Enemy
-  <gameOver>k__BackingField:
-    Guid:
-      Data1: 963464784
-      Data2: 1201077924
-      Data3: -335544695
-      Data4: 1522735892
-    Path: event:/GameOver
   <mainMenu>k__BackingField:
     Guid:
       Data1: -1320322820
