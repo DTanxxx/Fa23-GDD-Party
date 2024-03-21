@@ -12,15 +12,6 @@ namespace Lurkers.Audio.Player
 {
     public class PlayerAudioSources : MonoBehaviour
     {
-        public static EventInstance breathingAndHeartbeat;
-        public static EventInstance death;
-
-        private enum Enemy
-        {
-            WEEPING_ANGEL = 0,
-            FACEHUGGER = 1,
-        }
-
         private enum TileEffect
         {
             BLUE = 0,
@@ -104,14 +95,13 @@ namespace Lurkers.Audio.Player
         private void PlaySkullCrushSFX()
         {
             StopAllSFX();
-            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Enemy.WEEPING_ANGEL);
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Enemy.EnemyAudioSources.Enemy.DEATH_BY_WEEPING_ANGEL);
         }
 
         private void PlayFacehugSFX()
         {
             StopAllSFX();
-            //AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Enemy.FACEHUGGER);
-            AudioManager.instance.PlayOneShot(FMODEvents.instance.testSfx, transform);
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Enemy.EnemyAudioSources.Enemy.DEATH_BY_FACEHUGGER);
         }
 
         private void PlayIncinerateSFX()

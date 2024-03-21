@@ -40,7 +40,7 @@ namespace Lurkers.Control
         public static Action onPlayerSlide;
         public static Action onPlayerEndSlide;
 
-        // For all other scripts to reference the Player transform in order to play SFX
+        // For all other scripts to reference the Player transform in order to play non-spatial SFX
         public static Transform playerTransform;
 
         private void Start()
