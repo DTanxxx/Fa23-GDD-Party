@@ -7,6 +7,13 @@ namespace Lurkers.Audio
 {
     public class FMODEvents : MonoBehaviour
     {
+        // Test
+        [field: Header("Test SFX")]
+        [field: SerializeField] public EventReference testSfx { get; private set; }
+
+        [field: Header("Test OST")]
+        [field: SerializeField] public EventReference testOst { get; private set; }
+
         // SFX
         [field: Header("Footsteps SFX")]
         [field: SerializeField] public EventReference footsteps { get; private set; }

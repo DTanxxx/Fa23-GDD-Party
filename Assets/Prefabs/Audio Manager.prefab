@@ -89,6 +89,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7cf4ca710b6e647b2c2a1ad2dc3374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <testSfx>k__BackingField:
+    Guid:
+      Data1: 693740621
+      Data2: 1186419765
+      Data3: 482082206
+      Data4: 857495375
+    Path: event:/TestSFX
+  <testOst>k__BackingField:
+    Guid:
+      Data1: 1210568318
+      Data2: 1143041050
+      Data3: 1327187371
+      Data4: -926516855
+    Path: event:/TestOST
   <footsteps>k__BackingField:
     Guid:
       Data1: 910112794

@@ -18,6 +18,7 @@ namespace Lurkers.Audio.Player
         private enum Enemy
         {
             WEEPING_ANGEL = 0,
+            FACEHUGGER = 1,
         }
 
         private enum TileEffect
@@ -30,6 +31,7 @@ namespace Lurkers.Audio.Player
         {
             PlayerAnimationEvents.onFootstep += PlayFootstepSFX;
             PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
+            PlayerAnimationEvents.onFacehug += PlayFacehugSFX;
             PlayerController.onPlayerSlide += PlaySlideSFX;
             PlayerController.onPlayerEndSlide += StopSlideSFX;
             PlayerAnimationEvents.onEndPlayerDeathAnim += PlayGameOverSFX;
@@ -45,6 +47,7 @@ namespace Lurkers.Audio.Player
         {
             PlayerAnimationEvents.onFootstep -= PlayFootstepSFX;
             PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
+            PlayerAnimationEvents.onFacehug -= PlayFacehugSFX;
             PlayerController.onPlayerSlide -= PlaySlideSFX;
             PlayerController.onPlayerEndSlide -= StopSlideSFX;
             PlayerAnimationEvents.onEndPlayerDeathAnim -= PlayGameOverSFX;
@@ -102,6 +105,13 @@ namespace Lurkers.Audio.Player
         {
             StopAllSFX();
             AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Enemy.WEEPING_ANGEL);
+        }
+
+        private void PlayFacehugSFX()
+        {
+            StopAllSFX();
+            //AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Enemy.FACEHUGGER);
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.testSfx, transform);
         }
 
         private void PlayIncinerateSFX()
