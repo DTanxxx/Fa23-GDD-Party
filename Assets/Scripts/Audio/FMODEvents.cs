@@ -39,6 +39,10 @@ namespace Lurkers.Audio
         [field: Header("Game Over SFX")]
         [field: SerializeField] public EventReference gameOver { get; private set; }
 
+        [field: Header("Page Flip SFX")]
+        [field: SerializeField] public EventReference pageFlip { get; private set; }
+
+
         // OST
         [field: Header("Main Menu OST")]
         [field: SerializeField] public EventReference mainMenu { get; private set; }

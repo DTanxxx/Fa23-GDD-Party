@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Lurkers.Control.Level;
+using Lurkers.Audio;
 
 namespace Lurkers.UI.Hearing
 {
@@ -12,7 +13,6 @@ namespace Lurkers.UI.Hearing
         [SerializeField] private Animator animator;
         [SerializeField] private int maxPages = 5;
         [SerializeField] private TextMeshProUGUI pageNumber;
-        [SerializeField] private AudioSource flipAudio;
 
         private CanvasGroup canvasGroup;
         public TMP_InputField inputFieldChat;
@@ -51,7 +51,7 @@ namespace Lurkers.UI.Hearing
                 canvasGroup.blocksRaycasts = true;
                 animator.SetTrigger("OpenNotes");
                 LoadNotes();
-                flipAudio.Play();
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.pageFlip, transform);
                 animator.SetTrigger("CloseNotes");
             }
             else
@@ -77,7 +77,7 @@ namespace Lurkers.UI.Hearing
             }
             animator.SetTrigger("CloseNotes");
 
-            flipAudio.Play();
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.pageFlip, transform);
         }
 
         public void SaveNotes()
