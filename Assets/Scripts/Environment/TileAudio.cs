@@ -18,13 +18,13 @@ namespace Lurkers.Audio.Vision
             trigger = GetComponent<Collider2D>();
             player = GameObject.FindWithTag("Player");
         }
+
         void OnTriggerEnter(Collider other)
         {
-            if (Vector3.Distance(this.transform.position, player.transform.position) < distance)
+            if (other.gameObject.CompareTag("Player"))
             {
                 aud.Play();
             }
-
         }
     }
 }
