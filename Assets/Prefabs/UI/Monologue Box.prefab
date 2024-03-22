@@ -71,10 +71,10 @@ RectTransform:
   - {fileID: 4848067110966454524}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -20}
-  m_SizeDelta: {x: 1000, y: 500}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2468913582314506091
 CanvasRenderer:
@@ -120,6 +120,14 @@ MonoBehaviour:
     - These color tiles serve as defensive mechanisms to keep out intruders.
     - Each color has a different functionality.
     - Doubt there will be any intruders now...
+  - type: 5
+    lines:
+    - Here's the key!
+    - The statues...only become active when I pull the lever, right?
+  - type: 6
+    lines:
+    - What's happening?
+    - Ugh! My flashlight is acting weird.
   uiContainer: {fileID: 1489605429915218888}
   text: {fileID: 6917387366776039385}
   lines: []

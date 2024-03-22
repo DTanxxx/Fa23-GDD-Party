@@ -13,9 +13,12 @@ namespace Lurkers.Environment.Vision
         [SerializeField] private Animator animator;
 
         public static Action onVaultOpened;
+        public static Action onFirstTimeOpen;
 
         private GameObject item;
         private bool opened = false;
+
+        private static bool firstTime = true;
 
         private void Awake()
         {
@@ -36,7 +39,7 @@ namespace Lurkers.Environment.Vision
 
         private void OnTriggerEnter(Collider other)
         {
-            if (opened)
+            if (opened || !other.gameObject.CompareTag("Player"))
             {
                 return;
             }
@@ -61,6 +64,12 @@ namespace Lurkers.Environment.Vision
         private void OpenVault()
         {
             onVaultOpened?.Invoke();
+
+            if (firstTime)
+            {
+                firstTime = false;
+                onFirstTimeOpen?.Invoke();
+            }
 
             if (animator != null)
             {

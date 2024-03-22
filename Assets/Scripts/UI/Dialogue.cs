@@ -18,6 +18,8 @@ namespace Lurkers.UI
         FIRST_LEVER_PULL,
         INTRO,
         COLOR_TILE_INTRO,
+        FIRST_KEY_PICKUP,
+        FIRST_FLICKER,
 
     }
 
@@ -70,6 +72,8 @@ namespace Lurkers.UI
             CameraFollow.onCameraRestoreComplete += OnFirstLeverPull;
             ElevatorOpen.onFirstTimeClose += OnFirstTimeElevatorClose;
             ColorTileDialogueTrigger.onColorTileIntro += OnColorTileIntro;
+            Vault.onFirstTimeOpen += OnFirstTimeKeyPickup;
+            FlickerTrigger.onFlashlightFlicker += OnFirstTimeFlicker;
         }
 
         private void OnDisable()
@@ -79,6 +83,8 @@ namespace Lurkers.UI
             CameraFollow.onCameraRestoreComplete -= OnFirstLeverPull;
             ElevatorOpen.onFirstTimeClose -= OnFirstTimeElevatorClose;
             ColorTileDialogueTrigger.onColorTileIntro -= OnColorTileIntro;
+            Vault.onFirstTimeOpen -= OnFirstTimeKeyPickup;
+            FlickerTrigger.onFlashlightFlicker -= OnFirstTimeFlicker;
         }
 
         private void DisplayDialogue()
@@ -150,6 +156,20 @@ namespace Lurkers.UI
         {
             uiContainer.SetActive(true);
             InitDialogueState(DialogueType.COLOR_TILE_INTRO);
+            DisplayDialogue();
+        }
+
+        private void OnFirstTimeKeyPickup()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.FIRST_KEY_PICKUP);
+            DisplayDialogue();
+        }
+
+        private void OnFirstTimeFlicker()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.FIRST_FLICKER);
             DisplayDialogue();
         }
 

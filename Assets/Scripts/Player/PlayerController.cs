@@ -26,6 +26,7 @@ namespace Lurkers.Control
         [SerializeField] private float tolerableOffset = 1f;
         [SerializeField] private float playerTransitionRate = 0.25f;
         [SerializeField] private Light2D[] lights;
+        [SerializeField] private bool debugMode = false;
 
         private int currFrames;
         private Vector3 dir;
@@ -48,7 +49,11 @@ namespace Lurkers.Control
         {
             dir = new Vector3(1, 0, 0);
             waitForPauseBeforeAppearance = new WaitForSeconds(pauseBeforeAppearance);
-            FreezePlayer();
+            
+            if (!debugMode)
+            {
+                FreezePlayer();
+            }
 
             playerTransform = transform;
         }

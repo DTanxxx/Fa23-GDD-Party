@@ -55,7 +55,7 @@ namespace Lurkers.Environment.Vision
 
         private void OnTriggerEnter(Collider other)
         {
-            if (pulled)
+            if (pulled || !other.gameObject.CompareTag("Player"))
             {
                 return;
             }
