@@ -205,6 +205,10 @@ namespace Lurkers.Control
                 case DeathCause.REDTILE:
                     animator.SetTrigger("RedDeath");
                     break;
+                case DeathCause.CTHULHU:
+                    //animator.SetTrigger("Cthulhu");
+                    PlayerAnimationEvents.onEndPlayerDeathAnim?.Invoke();  // TO BE REMOVED
+                    break;
                 default:
                     Debug.LogError("UNKNOWN DEATH CAUSE");
                     break;

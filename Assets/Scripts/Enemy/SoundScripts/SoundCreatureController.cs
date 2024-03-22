@@ -18,11 +18,11 @@ namespace Lurkers.Control.Hearing.Character
 
 		private void Start()
 		{
-			agent = GetComponent<NavMeshAgent>();
+			agent = GetComponentInParent<NavMeshAgent>();
 
-			InterestingSounds = new List<Sound.SoundType>();
+			/*InterestingSounds = new List<Sound.SoundType>();
 			InterestingSounds.Add(Sound.SoundType.Footstep);
-			InterestingSounds.Add(Sound.SoundType.Rock);
+			InterestingSounds.Add(Sound.SoundType.Rock);*/
 
 			DangerousSounds = new List<Sound.SoundType>();
 			DangerousSounds.Add(Sound.SoundType.Bats);

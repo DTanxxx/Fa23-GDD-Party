@@ -6,7 +6,7 @@ namespace Lurkers.Hearing
 {
 	public class Sound
 	{
-		public enum SoundType { Footstep, Rock, Bats }
+		public enum SoundType { Footstep, Rock, Bats, Gravel, Water }
 
 		public Sound(Vector3 _pos, float _range)
 		{

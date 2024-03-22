@@ -10,7 +10,8 @@ namespace Lurkers.Control
     {
         WEEPINGANGEL,
         FACEHUGGER,
-        REDTILE
+        REDTILE,
+        CTHULHU,
     }
 
     public class PlayerHealth : MonoBehaviour
@@ -36,6 +37,14 @@ namespace Lurkers.Control
                 {
                     isDead = true;
                     onDeath?.Invoke(DeathCause.FACEHUGGER, collision.transform.position, collision.transform.parent.gameObject);
+                }
+            }
+            else if (collision.gameObject.layer == LayerMask.NameToLayer("Cthulhu"))
+            {
+                if (onDeath != null)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.CTHULHU, collision.transform.position, collision.transform.parent.gameObject);
                 }
             }
         }

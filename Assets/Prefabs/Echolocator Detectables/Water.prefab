@@ -218,6 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 30
+  soundRange: 10000
 --- !u!114 &-6172305737021100332
 MonoBehaviour:
   m_ObjectHideFlags: 0
