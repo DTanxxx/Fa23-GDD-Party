@@ -166,6 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a4174155acb6c4bb3b7d9497aab6d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerLightFlicker: 0
+  lockable: 0
   inventorySystem: {fileID: 0}
   animator: {fileID: 2594121693361846875}
 --- !u!65 &4258454446199178155
@@ -187,5 +189,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.816473, y: 1.8599327, z: 1.7423732}
-  m_Center: {x: 0.00011634827, y: 0.42996633, z: 0.57468665}
+  m_Size: {x: 1.816473, y: 5.04, z: 1.7423732}
+  m_Center: {x: 0.00011634827, y: -0.81, z: 0.57468665}

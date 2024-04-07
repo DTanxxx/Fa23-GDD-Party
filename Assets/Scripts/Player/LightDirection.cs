@@ -1,12 +1,14 @@
 using Lurkers.Environment.Vision;
+using Lurkers.UI;
 using Lurkers.Vision;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 namespace Lurkers.Control.Vision
 {
+
     public class LightDirection : MonoBehaviour
     {
         [SerializeField] private LayerMask weepingAngelLayer;
@@ -16,11 +18,19 @@ namespace Lurkers.Control.Vision
         [SerializeField] private PlayerController playerController;
         [SerializeField] private Transform lightTransform;
         [SerializeField] private float damping = 20.0f;
+        [SerializeField] private float dialogueTriggerRange = 5f;
 
         private Light2D lightComponent;
         private Vector3 currDirection;
         private Vector3 tempDirection;
         private float sphereCastRadius;
+
+        private static bool firstTime;
+        private bool firstTimeAfter;
+
+        public static Action onFirstEnemyEncounter;
+        public static Action onFirstFreezeEnemy;
+
         //private ClueGlow clueGlow;
 
         // for Gizmos
@@ -33,14 +43,15 @@ namespace Lurkers.Control.Vision
             lightComponent = GetComponent<Light2D>();
 
             sphereCastRadius = Mathf.Atan(lightComponent.pointLightOuterAngle / 2.0f * Mathf.Deg2Rad) * lightComponent.pointLightOuterRadius;
+            firstTime = true;
+            firstTimeAfter = true;
 
             //clueGlow = GameObject.Find("EventSystem").GetComponent<ClueGlow>();
-
         }
 
         private void FixedUpdate()
         {
-            currDirection = playerController.getDir();
+            currDirection = playerController.GetDir();
             Quaternion smoothing = Quaternion.LookRotation(currDirection);
             lightContainer.transform.rotation = Quaternion.Lerp(lightContainer.transform.rotation, smoothing,
                 Time.fixedDeltaTime * damping);
@@ -68,7 +79,6 @@ namespace Lurkers.Control.Vision
                 if (Physics.Raycast(lightTransform.position, (hit.transform.position - lightTransform.position).normalized,
                     out hitInfo, lightComponent.pointLightOuterRadius, ~playerLayer, QueryTriggerInteraction.Ignore))
                 {
-                    Debug.LogWarning(LayerMask.LayerToName(hitInfo.transform.gameObject.layer));
                     if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel") ||
                         hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("FaceHugger"))
                     {
@@ -85,6 +95,21 @@ namespace Lurkers.Control.Vision
                             if (dirFromPlayerToEnemy.x * hitDir.x >= 0 && dirFromPlayerToEnemy.z * hitDir.z >= 0)
                             {
                                 hit.transform.GetComponentInParent<IFlashable>().OnFlash();
+
+                                // ensure these dialogues only get triggered when enemy is closer
+                                if (firstTime && !FindObjectOfType<EnemyActivate>().IsActive() && 
+                                    Vector3.Distance(hit.transform.position, lightTransform.position) <= dialogueTriggerRange)
+                                {
+                                    onFirstEnemyEncounter?.Invoke();
+                                    firstTime = false;
+                                }
+
+                                if (FindObjectOfType<EnemyActivate>().IsActive() && firstTimeAfter &&
+                                    Vector3.Distance(hit.transform.position, lightTransform.position) <= dialogueTriggerRange)
+                                {
+                                    onFirstFreezeEnemy?.Invoke();
+                                    firstTimeAfter = false;
+                                }
                             }
                         }
                     }

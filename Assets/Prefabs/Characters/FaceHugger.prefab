@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1048732157978071246}
   - component: {fileID: 5859807111629467505}
   - component: {fileID: 2077373122603885869}
+  - component: {fileID: 5453354864103679043}
   m_Layer: 18
   m_Name: Sprite
   m_TagString: Untagged
@@ -106,6 +107,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5453354864103679043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104018396293662360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85288997ad2acb048bab9c39073d9617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1592702079211233004
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,6 +130,7 @@ GameObject:
   - component: {fileID: 3211438509934900024}
   - component: {fileID: 1666905590799449083}
   - component: {fileID: 4292916880871166289}
+  - component: {fileID: 30224963596895779}
   m_Layer: 18
   m_Name: FaceHugger
   m_TagString: Untagged
@@ -181,8 +195,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 262144
   animator: {fileID: 2077373122603885869}
+  deathProximity: 8
+  audibleProximity: 20
   spriteRenderer: {fileID: 5859807111629467505}
   myCollider: {fileID: 5767307877296302427}
+--- !u!114 &30224963596895779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592702079211233004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d73e5fe83e72d740b2cf5729d83a764, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9084133598809176884
 GameObject:
   m_ObjectHideFlags: 0

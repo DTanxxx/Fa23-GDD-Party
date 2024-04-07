@@ -10,6 +10,7 @@ namespace Lurkers.Environment.Vision
     public class PullLever : MonoBehaviour
     {
         [SerializeField] bool triggerLightFlicker = false;
+        [SerializeField] bool lockable = false;
         [SerializeField] InventorySystem inventorySystem;
         [SerializeField] private Animator animator;
 
@@ -17,16 +18,28 @@ namespace Lurkers.Environment.Vision
 
         private GameObject item;
         private bool pulled = false;
+        private bool locked;
 
         private void Awake()
         {
+            locked = lockable;
             inventorySystem = FindObjectOfType<InventorySystem>();
             animator = GetComponentInChildren<Animator>();
         }
 
+        private void OnEnable()
+        {
+            Vault.onVaultOpened += ObtainKey;
+        }
+
+        private void OnDisable()
+        {
+            Vault.onVaultOpened -= ObtainKey;
+        }
+
         private void Update()
         {
-            if (item != null && !pulled)
+            if (item != null && !pulled && !locked)
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
@@ -35,9 +48,14 @@ namespace Lurkers.Environment.Vision
             }
         }
 
+        private void ObtainKey()
+        {
+            locked = false;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (pulled)
+            if (pulled || !other.gameObject.CompareTag("Player"))
             {
                 return;
             }
@@ -46,7 +64,14 @@ namespace Lurkers.Environment.Vision
 
             if (other != null)
             {
-                inventorySystem.OpenGUI("Press E to pull lever");
+                if (locked)
+                {
+                    inventorySystem.OpenGUI("Lever is locked! Search for the key in a vault somewhere...");
+                }
+                else
+                {
+                    inventorySystem.OpenGUI("Press E to pull lever");
+                }
             }
         }
 

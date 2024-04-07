@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="ParameterPreset" id="{8bd3e66d-26f3-4dfc-9c3c-10e1c56b91c4}">
+		<property name="name">
+			<value>Facehugger Chase</value>
+		</property>
+		<relationship name="folder">
+			<destination>{1bc22a4b-57b9-47d1-a443-7d2313f1454f}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{7dd88bd9-9c2c-4448-a111-62444d07fa5f}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{7dd88bd9-9c2c-4448-a111-62444d07fa5f}">
+		<property name="parameterType">
+			<value>1</value>
+		</property>
+		<property name="maximum">
+			<value>2</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>

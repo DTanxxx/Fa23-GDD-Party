@@ -6,6 +6,7 @@ using Lurkers.Inventory;
 using Lurkers.Camera;
 using Lurkers.Event;
 using Lurkers.Control.Vision.Character;
+using Lurkers.Environment.Vision;
 
 namespace Lurkers.Control
 {
@@ -30,12 +31,14 @@ namespace Lurkers.Control
         {
             CameraFollow.onCameraRestoreComplete += SetActive;
             LeverPullAnimationEvents.onLeverPullNoFlicker += SetActive;
+            Vault.onVaultOpened += SetActive;
         }
 
         private void OnDisable()
         {
             CameraFollow.onCameraRestoreComplete -= SetActive;
             LeverPullAnimationEvents.onLeverPullNoFlicker -= SetActive;
+            Vault.onVaultOpened -= SetActive;
         }
 
         private void Update()
@@ -66,6 +69,11 @@ namespace Lurkers.Control
                     active = true;
                 }
             }
+        }
+
+        public bool IsActive()
+        {
+            return active;
         }
     }
 }

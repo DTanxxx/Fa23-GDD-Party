@@ -7,19 +7,12 @@ using Lurkers.Environment.Vision;
 using Lurkers.Environment.Vision.ColorTile;
 using Lurkers.Control;
 using Lurkers.Control.Level;
+using Lurkers.Camera;
 
 namespace Lurkers.Audio.Player
 {
     public class PlayerAudioSources : MonoBehaviour
     {
-        public static EventInstance breathingAndHeartbeat;
-        public static EventInstance death;
-
-        private enum Enemy
-        {
-            WEEPING_ANGEL = 0,
-        }
-
         private enum TileEffect
         {
             BLUE = 0,
@@ -30,6 +23,7 @@ namespace Lurkers.Audio.Player
         {
             PlayerAnimationEvents.onFootstep += PlayFootstepSFX;
             PlayerAnimationEvents.onSkullCrush += PlaySkullCrushSFX;
+            PlayerAnimationEvents.onFacehug += PlayFacehugSFX;
             PlayerController.onPlayerSlide += PlaySlideSFX;
             PlayerController.onPlayerEndSlide += StopSlideSFX;
             PlayerAnimationEvents.onEndPlayerDeathAnim += PlayGameOverSFX;
@@ -38,6 +32,9 @@ namespace Lurkers.Audio.Player
             NextLevelTrigger.onBeginLevelTransition += StopAllSFX;
             ElevatorOpen.onElevatorClose += EnterCalmPhase;
             LevelManager.onPauseGame += PauseAllSFX;
+            LevelManager.onUnpausegame += UnpauseAllSFX;
+            PullLever.onLeverPulled += PauseAllSFX;
+            CameraFollow.onCameraRestoreComplete += UnpauseAllSFX;
             ColorTile.onIncinerate += PlayIncinerateSFX;
         }
 
@@ -45,6 +42,7 @@ namespace Lurkers.Audio.Player
         {
             PlayerAnimationEvents.onFootstep -= PlayFootstepSFX;
             PlayerAnimationEvents.onSkullCrush -= PlaySkullCrushSFX;
+            PlayerAnimationEvents.onFacehug -= PlayFacehugSFX;
             PlayerController.onPlayerSlide -= PlaySlideSFX;
             PlayerController.onPlayerEndSlide -= StopSlideSFX;
             PlayerAnimationEvents.onEndPlayerDeathAnim -= PlayGameOverSFX;
@@ -53,19 +51,20 @@ namespace Lurkers.Audio.Player
             NextLevelTrigger.onBeginLevelTransition -= StopAllSFX;
             ElevatorOpen.onElevatorClose -= EnterCalmPhase;
             LevelManager.onPauseGame -= PauseAllSFX;
+            LevelManager.onUnpausegame -= UnpauseAllSFX;
+            PullLever.onLeverPulled -= PauseAllSFX;
+            CameraFollow.onCameraRestoreComplete -= UnpauseAllSFX;
             ColorTile.onIncinerate -= PlayIncinerateSFX;
         }
 
-        private void PauseAllSFX(bool toPause)
+        private void PauseAllSFX()
         {
-            if (toPause)
-            {
-                AudioManager.instance.PauseAll();
-            }
-            else
-            {
-                AudioManager.instance.UnpauseAll();
-            }
+            AudioManager.instance.PauseAll();
+        }
+
+        private void UnpauseAllSFX()
+        {
+            AudioManager.instance.UnpauseAll();
         }
 
         private void PlaySlideSFX()
@@ -101,7 +100,13 @@ namespace Lurkers.Audio.Player
         private void PlaySkullCrushSFX()
         {
             StopAllSFX();
-            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Enemy.WEEPING_ANGEL);
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Enemy.EnemyAudioSources.Enemy.DEATH_BY_WEEPING_ANGEL);
+        }
+
+        private void PlayFacehugSFX()
+        {
+            StopAllSFX();
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.enemy, transform, "Enemy", (float)Enemy.EnemyAudioSources.Enemy.DEATH_BY_FACEHUGGER);
         }
 
         private void PlayIncinerateSFX()

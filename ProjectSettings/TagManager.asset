@@ -8,6 +8,7 @@ TagManager:
   - ClueTrail
   - clueTile
   - detectable
+  - Monologue
   layers:
   - Default
   - TransparentFX
@@ -29,8 +30,7 @@ TagManager:
   - TileSide
   - FaceHugger
   - DetectableObject
-  - 
-  - 
+  - Cthulhu
   - 
   - 
   - 

@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 1974214345011220075}
   m_Layer: 11
   m_Name: Camera Trigger
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -386,7 +386,7 @@ GameObject:
   - component: {fileID: 7586113817238092730}
   m_Layer: 9
   m_Name: Enemy Collision
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -537,6 +537,7 @@ MonoBehaviour:
   playerController: {fileID: 1925378540153279166}
   lightTransform: {fileID: 4281932373405533685}
   damping: 20
+  dialogueTriggerRange: 7
 --- !u!1 &3201889589371621395
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,6 +610,7 @@ MonoBehaviour:
   lights:
   - {fileID: 8694835557312243491}
   - {fileID: 10591371867480534}
+  inDialogue: 0
 --- !u!114 &5671322162475284958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -826,6 +828,7 @@ MonoBehaviour:
   playerController: {fileID: 0}
   lightTransform: {fileID: 0}
   damping: 20
+  dialogueTriggerRange: 5
 --- !u!114 &2420717643816769330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -865,7 +868,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8953246125438862432
 Transform:
   m_ObjectHideFlags: 0
@@ -896,7 +899,7 @@ MonoBehaviour:
   spotlight: {fileID: 8694835557312243491}
   flashlight: {fileID: 10591371867480534}
   desiredColor: {r: 1, g: 0, b: 0, a: 1}
-  flickerPerMin: 12
+  flickerPerMin: 20
 --- !u!1 &4278100591057319431
 GameObject:
   m_ObjectHideFlags: 0

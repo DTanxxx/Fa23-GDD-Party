@@ -348,6 +348,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8c0b6d016d56f40a1d8bd5dc7b543e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  openButton: {fileID: 0}
+  closeButton: {fileID: 1534140974321374317}
   animator: {fileID: 3070513268450770789}
   maxPages: 5
   pageNumber: {fileID: 6429029752852259246}
@@ -627,9 +629,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 3021797058549991950}
+        m_TargetAssemblyTypeName: Lurkers.UI.Hearing.NotebookPanel, Assembly-CSharp
+        m_MethodName: CloseNote
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

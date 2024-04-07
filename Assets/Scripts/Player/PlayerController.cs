@@ -26,6 +26,7 @@ namespace Lurkers.Control
         [SerializeField] private float tolerableOffset = 1f;
         [SerializeField] private float playerTransitionRate = 0.25f;
         [SerializeField] private Light2D[] lights;
+        [SerializeField] private bool debugMode = false;
 
         private int currFrames;
         private Vector3 dir;
@@ -36,15 +37,25 @@ namespace Lurkers.Control
         private float animSpeed;
         private WaitForSeconds waitForPauseBeforeAppearance;
         private float tempSpeed;
+        public bool inDialogue;
 
         public static Action onPlayerSlide;
         public static Action onPlayerEndSlide;
+
+        // For all other scripts to reference the Player transform in order to play non-spatial SFX
+        public static Transform playerTransform;
 
         private void Start()
         {
             dir = new Vector3(1, 0, 0);
             waitForPauseBeforeAppearance = new WaitForSeconds(pauseBeforeAppearance);
-            FreezePlayer();
+            
+            if (!debugMode)
+            {
+                FreezePlayer();
+            }
+
+            playerTransform = transform;
         }
 
         private void OnEnable()
@@ -73,6 +84,12 @@ namespace Lurkers.Control
         {
             if (isDead || isFrozen)
             {
+                return;
+            }
+
+            if (inDialogue)
+            {
+                animator.SetBool("Walking", false);
                 return;
             }
 
@@ -188,6 +205,10 @@ namespace Lurkers.Control
                 case DeathCause.REDTILE:
                     animator.SetTrigger("RedDeath");
                     break;
+                case DeathCause.CTHULHU:
+                    //animator.SetTrigger("Cthulhu");
+                    PlayerAnimationEvents.onEndPlayerDeathAnim?.Invoke();  // TO BE REMOVED
+                    break;
                 default:
                     Debug.LogError("UNKNOWN DEATH CAUSE");
                     break;
@@ -245,7 +266,7 @@ namespace Lurkers.Control
             isFrozen = false;
         }
 
-        public Vector3 getDir()
+        public Vector3 GetDir()
         {
             return dir;
         }

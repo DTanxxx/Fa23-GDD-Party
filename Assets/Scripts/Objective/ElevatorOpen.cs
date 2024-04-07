@@ -18,6 +18,9 @@ namespace Lurkers.Environment.Vision
 
         public static Action onElevatorClose;
         public static Action onPlayerEntrance;
+        public static Action onFirstTimeClose;
+
+        private static bool firstTimeClose = true;
 
         private void Start()
         {
@@ -57,6 +60,13 @@ namespace Lurkers.Environment.Vision
         public void ElevatorClose()
         {
             onElevatorClose?.Invoke();
+
+            if (firstTimeClose)
+            {
+                firstTimeClose = false;
+                // show intro dialogue
+                onFirstTimeClose?.Invoke();
+            }
         }
 
         // animation event
@@ -69,7 +79,7 @@ namespace Lurkers.Environment.Vision
         {
             // play animation
             animator.SetTrigger("Enter");
-            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, transform, "Elevator", (float)Elevator.State.OPEN_CLOSE);
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, AudioManager.instance.playerTransform(), "Elevator", (float)Elevator.State.OPEN_CLOSE);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -80,7 +90,7 @@ namespace Lurkers.Environment.Vision
             }
 
             // play animation
-            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, transform, "Elevator", (float)Elevator.State.OPEN);
+            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, AudioManager.instance.playerTransform(), "Elevator", (float)Elevator.State.OPEN);
             animator.SetTrigger("Exit");
             opened = true;
         }

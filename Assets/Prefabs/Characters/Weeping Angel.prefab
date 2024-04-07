@@ -258,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3db14fd316e384541b14852ba4b49ce5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDetectionRadius: 30
+  playerDetectionRadius: 25
   chaseSpeed: 8
   freezeDuration: 1.5
   weepingAngelLayer:

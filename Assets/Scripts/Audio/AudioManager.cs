@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
+using Lurkers.Control;
 
 namespace Lurkers.Audio
 {
@@ -27,14 +28,22 @@ namespace Lurkers.Audio
             }
         }
 
+        // For scripts outside of the ones attached to Player to access the Player transform
+        public Transform playerTransform()
+        {
+            return PlayerController.playerTransform;
+        }
+
         // For sounds that play instantly
-        public void Play(EventReference sound, Transform transform)
+        public EventInstance Play(EventReference sound, Transform transform)
         {
             EventInstance eventInstance = CreateEventInstance(sound, transform);
             eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
 
             eventInstances.Add(eventInstance);
             eventInstance.start();
+
+            return eventInstance;
         }
 
         public void PlaySingleton(string key, EventReference sound, Transform transform)
@@ -74,7 +83,7 @@ namespace Lurkers.Audio
             eventInstance.release();
         }
 
-        public void SetPlay(EventReference sound, Transform transform, string paramName, float paramVal)
+        public EventInstance SetPlay(EventReference sound, Transform transform, string paramName, float paramVal)
         {
             EventInstance eventInstance = CreateEventInstance(sound, transform);
             eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
@@ -82,6 +91,8 @@ namespace Lurkers.Audio
 
             eventInstances.Add(eventInstance);
             eventInstance.start();
+
+            return eventInstance;
         }
 
         public void SetPlaySingleton(string key, EventReference sound, Transform transform, string paramName, float paramVal)
@@ -168,12 +179,10 @@ namespace Lurkers.Audio
             }
         }
 
-        public void StopSingleton(string key)
+        public void Stop(EventInstance eventInstance)
         {
-            if (!eventSingletons.ContainsKey(key)) return;
-            eventSingletons[key].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            eventSingletons[key].release();
-            eventSingletons.Remove(key);
+            eventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            eventInstances.Remove(eventInstance);
         }
 
         public void UnpauseAll()
@@ -187,6 +196,14 @@ namespace Lurkers.Audio
             {
                 eventInstance.setPaused(false);
             }
+        }
+
+        public void StopSingleton(string key)
+        {
+            if (!eventSingletons.ContainsKey(key)) return;
+            eventSingletons[key].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            eventSingletons[key].release();
+            eventSingletons.Remove(key);
         }
 
         public void StopAll()

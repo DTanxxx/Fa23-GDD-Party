@@ -20,12 +20,22 @@ namespace Lurkers.Environment.Vision
             flashColor = flashlight.color;
         }
 
-        public void StartFlicker()
+        private void OnEnable()
+        {
+            FlickerTrigger.onFlashlightFlicker += StartFlicker;
+        }
+
+        private void OnDisable()
+        {
+            FlickerTrigger.onFlashlightFlicker -= StartFlicker;
+        }
+
+        private void StartFlicker()
         {
             StartCoroutine(flicker());
         }
 
-        public void StopFlicker()
+        private void StopFlicker()
         {
             StopCoroutine(flicker());
         }
