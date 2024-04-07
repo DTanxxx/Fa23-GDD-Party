@@ -41,6 +41,8 @@ namespace Lurkers.Control
 
         public static Action onPlayerSlide;
         public static Action onPlayerEndSlide;
+        public static Action moving;
+        public static Action notMoving;
 
         // For all other scripts to reference the Player transform in order to play non-spatial SFX
         public static Transform playerTransform;
@@ -78,6 +80,7 @@ namespace Lurkers.Control
             ElevatorOpen.onElevatorClose -= UnfreezePlayer;
             NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
             ColorTile.onIncinerate -= Incinerate;
+
         }
 
         private void FixedUpdate()
@@ -123,7 +126,7 @@ namespace Lurkers.Control
             {
                 // walking
                 animator.SetBool("Walking", true);
-
+                moving?.Invoke();
                 dir = lastDirection.normalized;
                 gameObject.transform.Translate(dir * maxSpeed * (currFrames - lookFrames) / accFrames);
 
@@ -142,6 +145,7 @@ namespace Lurkers.Control
             {
                 // not walking
                 animator.SetBool("Walking", false);
+                notMoving?.Invoke();
             }
         }
 
