@@ -107,7 +107,7 @@ namespace Lurkers.Environment.Vision.ColorTile
 
         //Function to change the colors of tiles when pressed is false(i.e. first time trigger is stepped on)
         //changing of colors is based off what is explained in the design document
-        public void TileChangerAdd(SensorColor s, GameObject t, ColorTileManager ctm)
+        public void TileChangerAdd(SensorColor s, GameObject t, ColorTileManager ctm, int row, int col)
         {
             TileColor color = t.GetComponent<ColorTile>().GetTileColor();
             bool raised = t.GetComponent<ColorTile>().GetIsRaised();
@@ -121,6 +121,7 @@ namespace Lurkers.Environment.Vision.ColorTile
                     else if (color == TileColor.Blue)
                     {
                         t.GetComponent<ColorTile>().SetData(TileColor.Magenta, ctm, raised);
+                        ctm.magentaDictionary.TryAdd(t, (row, col));
                     }
                     else if (color == TileColor.Green)
                     {
@@ -135,6 +136,7 @@ namespace Lurkers.Environment.Vision.ColorTile
                     else if (color == TileColor.Red)
                     {
                         t.GetComponent<ColorTile>().SetData(TileColor.Magenta, ctm, raised);
+                        ctm.magentaDictionary.TryAdd(t, (row, col));
                     }
                     else if (color == TileColor.Green)
                     {
@@ -160,7 +162,7 @@ namespace Lurkers.Environment.Vision.ColorTile
 
         //Function that reverts the changes when the trigger was initially pressed(i.e. when pressed is set to true)
         //Colors go back to what they were originally(before the trigger was first activated)
-        public void TileChangerRemove(SensorColor s, GameObject t, ColorTileManager ctm)
+        public void TileChangerRemove(SensorColor s, GameObject t, ColorTileManager ctm, int row, int col)
         {
             TileColor color = t.GetComponent<ColorTile>().GetTileColor();
             bool raised = t.GetComponent<ColorTile>().GetIsRaised();
@@ -170,6 +172,7 @@ namespace Lurkers.Environment.Vision.ColorTile
                     if (color == TileColor.Magenta)
                     {
                         t.GetComponent<ColorTile>().SetData(TileColor.Blue, ctm, raised);
+                        ctm.magentaDictionary.Remove(t);
                     }
                     else if (color == TileColor.Yellow)
                     {
@@ -181,6 +184,7 @@ namespace Lurkers.Environment.Vision.ColorTile
                     if (color == TileColor.Magenta)
                     {
                         t.GetComponent<ColorTile>().TurnRed();
+                        ctm.magentaDictionary.Remove(t);
                     }
                     else if (color == TileColor.Cyan)
                     {
@@ -219,7 +223,7 @@ namespace Lurkers.Environment.Vision.ColorTile
                     {
                         for (int j = 0; j < col; j++) // double for loop to iterate through each tile in each tileManager
                         {
-                            TileChangerAdd(sensor, tiles.GetComponent<ColorTileManager>().matrix[i, j], tiles.GetComponent<ColorTileManager>());
+                            TileChangerAdd(sensor, tiles.GetComponent<ColorTileManager>().matrix[i, j], tiles.GetComponent<ColorTileManager>(), i, j);
                         }
                     }
 
@@ -238,7 +242,7 @@ namespace Lurkers.Environment.Vision.ColorTile
                     {
                         for (int j = 0; j < col; j++) // double for loop to iterate through each tile in each tileManager
                         {
-                            TileChangerRemove(sensor, tiles.GetComponent<ColorTileManager>().matrix[i, j], tiles.GetComponent<ColorTileManager>());
+                            TileChangerRemove(sensor, tiles.GetComponent<ColorTileManager>().matrix[i, j], tiles.GetComponent<ColorTileManager>(), i, j);
                         }
                     }
 
