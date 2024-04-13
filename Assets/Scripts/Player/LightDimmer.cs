@@ -18,6 +18,9 @@ public class LightDimmer : MonoBehaviour
         flashlight = GetComponent<Light>();
         o_Intensity = flashlight.intensity;
         currTime = maxTime;
+
+        maxTime = maxTime <= 0 ? 180 : maxTime;
+        minIntensity = minIntensity < 0 ? 0 : minIntensity;
     }
 
     // Update is called once per frame
