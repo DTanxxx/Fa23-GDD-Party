@@ -12,6 +12,7 @@ namespace Lurkers.Control
         FACEHUGGER,
         REDTILE,
         CTHULHU,
+        MOTHMAN
     }
 
     public class PlayerHealth : MonoBehaviour
@@ -45,6 +46,14 @@ namespace Lurkers.Control
                 {
                     isDead = true;
                     onDeath?.Invoke(DeathCause.CTHULHU, collision.transform.position, collision.transform.parent.gameObject);
+                }
+            }
+            else if (collision.gameObject.layer == LayerMask.NameToLayer("MothMan"))
+            {
+                if (onDeath != null)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.MOTHMAN, collision.transform.position, collision.transform.parent.gameObject);
                 }
             }
         }
