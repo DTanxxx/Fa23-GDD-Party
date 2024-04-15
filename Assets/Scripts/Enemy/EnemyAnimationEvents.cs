@@ -12,7 +12,7 @@ namespace Lurkers.Event
         // animation event
         public void OnFacehuggerFootstep()
         {
-            onFacehuggerFootstep?.Invoke();
+            //onFacehuggerFootstep?.Invoke();
         }
     }
 }

@@ -4,21 +4,53 @@ using UnityEngine;
 using System;
 using TMPro;
 using Lurkers.Control;
+using Lurkers.Control.Vision;
+using Lurkers.Environment.Vision;
+using Lurkers.Camera;
 
 namespace Lurkers.UI
 {
+    [System.Serializable]
+    public enum DialogueType
+    {
+        FIRST_ENEMY_ENCOUNTER,
+        FIRST_ENEMY_FREEZE,
+        FIRST_LEVER_PULL,
+        INTRO,
+        COLOR_TILE_INTRO,
+        FIRST_KEY_PICKUP,
+        FIRST_FLICKER,
+
+    }
+
+    [System.Serializable]
+    public struct DialogueText
+    {
+        public DialogueType type;
+        public string[] lines;
+    }
+
     public class Dialogue : MonoBehaviour
     {
+        [SerializeField] private DialogueText[] dialogueOptions;
+        [SerializeField] private GameObject uiContainer = null;
+
         public TextMeshProUGUI text;
         public string[] lines;
         public float textSpeed;
         private int index;
         public PlayerController player;
-        public static Action Active;
-        public static Action Unactive;
 
-        void Update()
+        public static Action active;
+        public static Action unactive;
+
+        private void Update()
         {
+            if (!uiContainer.activeInHierarchy)
+            {
+                return;
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
                 if (text.text == lines[index])
@@ -31,33 +63,52 @@ namespace Lurkers.UI
                     text.text = lines[index];
                 }
             }
-
         }
-        void OnEnable()
+
+        private void OnEnable()
+        {
+            LightDirection.onFirstEnemyEncounter += OnFirstEnemyEncounter;
+            LightDirection.onFirstFreezeEnemy += OnFirstFreezeEnemy;
+            CameraFollow.onCameraRestoreComplete += OnFirstLeverPull;
+            ElevatorOpen.onFirstTimeClose += OnFirstTimeElevatorClose;
+            ColorTileDialogueTrigger.onColorTileIntro += OnColorTileIntro;
+            Vault.onFirstTimeOpen += OnFirstTimeKeyPickup;
+            FlickerTrigger.onFlashlightFlicker += OnFirstTimeFlicker;
+        }
+
+        private void OnDisable()
+        {
+            LightDirection.onFirstEnemyEncounter -= OnFirstEnemyEncounter;
+            LightDirection.onFirstFreezeEnemy -= OnFirstFreezeEnemy;
+            CameraFollow.onCameraRestoreComplete -= OnFirstLeverPull;
+            ElevatorOpen.onFirstTimeClose -= OnFirstTimeElevatorClose;
+            ColorTileDialogueTrigger.onColorTileIntro -= OnColorTileIntro;
+            Vault.onFirstTimeOpen -= OnFirstTimeKeyPickup;
+            FlickerTrigger.onFlashlightFlicker -= OnFirstTimeFlicker;
+        }
+
+        private void DisplayDialogue()
         {
             index = 0;
             if (player)
             {
                 player.inDialogue = true;
             }
-            Active?.Invoke();
+            active?.Invoke();
             text.text = "";
             StartCoroutine(TypeLine());
         }
-        void StartDialogue()
-        {
-            index = 0;
-            StartCoroutine(TypeLine());
-        }
-        IEnumerator TypeLine()
+        
+        private IEnumerator TypeLine()
         {
             foreach (char c in lines[index].ToCharArray())
             {
                 text.text += c;
-                yield return new WaitForSeconds(textSpeed);
+                yield return new WaitForSeconds(1f / textSpeed);
             }
         }
-        void NextLine()
+
+        private void NextLine()
         {
             if (index < lines.Length - 1)
             {
@@ -68,8 +119,73 @@ namespace Lurkers.UI
             else
             {
                 player.inDialogue = false;
-                gameObject.SetActive(false);
-                Unactive?.Invoke();
+                uiContainer.SetActive(false);
+                unactive?.Invoke();
+            }
+        }
+
+        private void OnFirstEnemyEncounter()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.FIRST_ENEMY_ENCOUNTER);
+            DisplayDialogue();
+        }
+
+        private void OnFirstFreezeEnemy()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.FIRST_ENEMY_FREEZE);
+            DisplayDialogue();
+        }
+
+        private void OnFirstLeverPull()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.FIRST_LEVER_PULL);
+            DisplayDialogue();
+        }
+
+        private void OnFirstTimeElevatorClose()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.INTRO);
+            DisplayDialogue();
+        }
+
+        private void OnColorTileIntro()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.COLOR_TILE_INTRO);
+            DisplayDialogue();
+        }
+
+        private void OnFirstTimeKeyPickup()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.FIRST_KEY_PICKUP);
+            DisplayDialogue();
+        }
+
+        private void OnFirstTimeFlicker()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.FIRST_FLICKER);
+            DisplayDialogue();
+        }
+
+        private void InitDialogueState(DialogueType type)
+        {
+            foreach (var option in dialogueOptions)
+            {
+                if (option.type == type)
+                {
+                    lines = new string[option.lines.Length];
+                    for (int i = 0; i < lines.Length; ++i)
+                    {
+                        lines[i] = option.lines[i];
+                    }
+                    return;
+                }
             }
         }
     }

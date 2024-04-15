@@ -1,14 +1,13 @@
 using Lurkers.Environment.Vision;
 using Lurkers.UI;
 using Lurkers.Vision;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 namespace Lurkers.Control.Vision
 {
-    // TO BE REFACTORED (also need to add in intro dialogue)
 
     public class LightDirection : MonoBehaviour
     {
@@ -19,15 +18,18 @@ namespace Lurkers.Control.Vision
         [SerializeField] private PlayerController playerController;
         [SerializeField] private Transform lightTransform;
         [SerializeField] private float damping = 20.0f;
+        [SerializeField] private float dialogueTriggerRange = 5f;
 
         private Light2D lightComponent;
         private Vector3 currDirection;
         private Vector3 tempDirection;
         private float sphereCastRadius;
 
-        private bool firstTime;
+        private static bool firstTime;
         private bool firstTimeAfter;
-        public Dialogue monologue;
+
+        public static Action onFirstEnemyEncounter;
+        public static Action onFirstFreezeEnemy;
 
         //private ClueGlow clueGlow;
 
@@ -77,7 +79,6 @@ namespace Lurkers.Control.Vision
                 if (Physics.Raycast(lightTransform.position, (hit.transform.position - lightTransform.position).normalized,
                     out hitInfo, lightComponent.pointLightOuterRadius, ~playerLayer, QueryTriggerInteraction.Ignore))
                 {
-                    Debug.LogWarning(LayerMask.LayerToName(hitInfo.transform.gameObject.layer));
                     if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("WeepingAngel") ||
                         hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("FaceHugger"))
                     {
@@ -95,23 +96,18 @@ namespace Lurkers.Control.Vision
                             {
                                 hit.transform.GetComponentInParent<IFlashable>().OnFlash();
 
-                                if (firstTime && !FindObjectOfType<EnemyActivate>().IsActive())
+                                // ensure these dialogues only get triggered when enemy is closer
+                                if (firstTime && !FindObjectOfType<EnemyActivate>().IsActive() && 
+                                    Vector3.Distance(hit.transform.position, lightTransform.position) <= dialogueTriggerRange)
                                 {
-                                    string[] lines = new string[2];
-                                    lines[0] = "Hmm, all these statues look eerily similar.";
-                                    lines[1] = "Not my choice of decor.";
-                                    monologue.lines = lines;
-                                    monologue.gameObject.SetActive(true);
+                                    onFirstEnemyEncounter?.Invoke();
                                     firstTime = false;
                                 }
 
-                                if (FindObjectOfType<EnemyActivate>().IsActive() && firstTimeAfter)
+                                if (FindObjectOfType<EnemyActivate>().IsActive() && firstTimeAfter &&
+                                    Vector3.Distance(hit.transform.position, lightTransform.position) <= dialogueTriggerRange)
                                 {
-                                    string[] lines = new string[2];
-                                    lines[0] = "Light seems to stop their movement.";
-                                    lines[1] = "I better hope this flashlight doesn't die anytime soon.";
-                                    monologue.lines = lines;
-                                    monologue.gameObject.SetActive(true);
+                                    onFirstFreezeEnemy?.Invoke();
                                     firstTimeAfter = false;
                                 }
                             }

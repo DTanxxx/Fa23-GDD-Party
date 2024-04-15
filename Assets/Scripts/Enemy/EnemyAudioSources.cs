@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Lurkers.Event;
+using Lurkers.Control.Vision.Character;
 
 namespace Lurkers.Audio.Enemy
 {
@@ -17,12 +17,14 @@ namespace Lurkers.Audio.Enemy
 
         private void OnEnable()
         {
-            EnemyAnimationEvents.onFacehuggerFootstep += PlayFacehuggerFootstepSFX;
+            //EnemyAnimationEvents.onFacehuggerFootstep += PlayFacehuggerFootstepSFX;
+            FaceHuggerController.onFacehuggerAudible += PlayFacehuggerFootstepSFX;
         }
 
         private void OnDisable()
         {
-            EnemyAnimationEvents.onFacehuggerFootstep -= PlayFacehuggerFootstepSFX;
+            //EnemyAnimationEvents.onFacehuggerFootstep -= PlayFacehuggerFootstepSFX;
+            FaceHuggerController.onFacehuggerAudible -= PlayFacehuggerFootstepSFX;
         }
 
         private void PlayFacehuggerFootstepSFX()

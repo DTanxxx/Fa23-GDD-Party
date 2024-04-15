@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Lurkers.Audio.Hearing
 {
@@ -8,22 +9,29 @@ namespace Lurkers.Audio.Hearing
     {
         AudioSource aud;
         [SerializeField] private float wait_time;
-        // Start is called before the first frame update
-        void OnEnable()
+        [SerializeField] private Button cassetteButton = null;
+        
+        private void OnEnable()
+        {
+            cassetteButton.onClick.AddListener(PlayCassette);
+        }
+
+        private void OnDisable()
+        {
+            cassetteButton.onClick.RemoveListener(PlayCassette);
+        }
+
+        private void PlayCassette()
         {
             aud = GetComponent<AudioSource>();
-            aud.loop = true;
-            aud.Play();
-            Invoke("StopPlay", wait_time);
+            aud.loop = false;
+            aud.PlayOneShot(aud.clip);
+            //Invoke("StopPlay", wait_time);
         }
+
         void StopPlay()
         {
             aud.Stop();
-        }
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 }

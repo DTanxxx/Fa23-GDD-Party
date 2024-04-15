@@ -8,8 +8,9 @@ using UnityEngine.UI;
 public class Cassette : MonoBehaviour
 {
     
-    [SerializeField] GameObject button;
-    [SerializeField] GameObject play_Button;
+    [SerializeField] Button button;
+    [SerializeField] private AudioSource audioSource = null;
+    //[SerializeField] GameObject play_Button;
     [SerializeField] AudioClip audio;
     
     
@@ -75,24 +76,21 @@ public class Cassette : MonoBehaviour
     
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
-            Button real_button = button.GetComponent<Button>();
-            real_button.interactable = true;
-            AudioSource source = play_Button.GetComponent<AudioSource>();
-            source.clip = audio;
-
+            //Button real_button = button.GetComponent<Button>();
+            button.interactable = true;
+            audioSource.clip = audio;
         }
-        
     }
     
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
-            Button real_button = button.GetComponent<Button>();
-            real_button.interactable = false;
+            /*Button real_button = button.GetComponent<Button>();
+            real_button.interactable = false;*/
+            button.interactable = false;
         }
     }
-    
 }

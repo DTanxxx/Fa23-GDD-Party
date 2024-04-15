@@ -18,6 +18,9 @@ namespace Lurkers.Environment.Vision
 
         public static Action onElevatorClose;
         public static Action onPlayerEntrance;
+        public static Action onFirstTimeClose;
+
+        private static bool firstTimeClose = true;
 
         private void Start()
         {
@@ -57,6 +60,13 @@ namespace Lurkers.Environment.Vision
         public void ElevatorClose()
         {
             onElevatorClose?.Invoke();
+
+            if (firstTimeClose)
+            {
+                firstTimeClose = false;
+                // show intro dialogue
+                onFirstTimeClose?.Invoke();
+            }
         }
 
         // animation event

@@ -7,6 +7,7 @@ using Lurkers.Environment.Vision;
 using Lurkers.Environment.Vision.ColorTile;
 using Lurkers.Control;
 using Lurkers.Control.Level;
+using Lurkers.Camera;
 
 namespace Lurkers.Audio.Player
 {
@@ -31,6 +32,9 @@ namespace Lurkers.Audio.Player
             NextLevelTrigger.onBeginLevelTransition += StopAllSFX;
             ElevatorOpen.onElevatorClose += EnterCalmPhase;
             LevelManager.onPauseGame += PauseAllSFX;
+            LevelManager.onUnpausegame += UnpauseAllSFX;
+            PullLever.onLeverPulled += PauseAllSFX;
+            CameraFollow.onCameraRestoreComplete += UnpauseAllSFX;
             ColorTile.onIncinerate += PlayIncinerateSFX;
         }
 
@@ -47,19 +51,20 @@ namespace Lurkers.Audio.Player
             NextLevelTrigger.onBeginLevelTransition -= StopAllSFX;
             ElevatorOpen.onElevatorClose -= EnterCalmPhase;
             LevelManager.onPauseGame -= PauseAllSFX;
+            LevelManager.onUnpausegame -= UnpauseAllSFX;
+            PullLever.onLeverPulled -= PauseAllSFX;
+            CameraFollow.onCameraRestoreComplete -= UnpauseAllSFX;
             ColorTile.onIncinerate -= PlayIncinerateSFX;
         }
 
-        private void PauseAllSFX(bool toPause)
+        private void PauseAllSFX()
         {
-            if (toPause)
-            {
-                AudioManager.instance.PauseAll();
-            }
-            else
-            {
-                AudioManager.instance.UnpauseAll();
-            }
+            AudioManager.instance.PauseAll();
+        }
+
+        private void UnpauseAllSFX()
+        {
+            AudioManager.instance.UnpauseAll();
         }
 
         private void PlaySlideSFX()

@@ -4,15 +4,13 @@ using UnityEngine;
 using System;
 using Lurkers.Audio;
 using Lurkers.Inventory;  // TODO pulling lever should not depend on inventory
-using Lurkers.UI;
-using Lurkers.Control;
 
 namespace Lurkers.Environment.Vision
 {
-    // TODO refactor needed
     public class PullLever : MonoBehaviour
     {
         [SerializeField] bool triggerLightFlicker = false;
+        [SerializeField] bool lockable = false;
         [SerializeField] InventorySystem inventorySystem;
         [SerializeField] private Animator animator;
 
@@ -20,17 +18,28 @@ namespace Lurkers.Environment.Vision
 
         private GameObject item;
         private bool pulled = false;
-        public Dialogue Monologue;
+        private bool locked;
 
         private void Awake()
         {
+            locked = lockable;
             inventorySystem = FindObjectOfType<InventorySystem>();
             animator = GetComponentInChildren<Animator>();
         }
 
+        private void OnEnable()
+        {
+            Vault.onVaultOpened += ObtainKey;
+        }
+
+        private void OnDisable()
+        {
+            Vault.onVaultOpened -= ObtainKey;
+        }
+
         private void Update()
         {
-            if (item != null && !pulled)
+            if (item != null && !pulled && !locked)
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
@@ -39,9 +48,14 @@ namespace Lurkers.Environment.Vision
             }
         }
 
+        private void ObtainKey()
+        {
+            locked = false;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (pulled)
+            if (pulled || !other.gameObject.CompareTag("Player"))
             {
                 return;
             }
@@ -50,7 +64,14 @@ namespace Lurkers.Environment.Vision
 
             if (other != null)
             {
-                inventorySystem.OpenGUI("Press E to pull lever");
+                if (locked)
+                {
+                    inventorySystem.OpenGUI("Lever is locked! Search for the key in a vault somewhere...");
+                }
+                else
+                {
+                    inventorySystem.OpenGUI("Press E to pull lever");
+                }
             }
         }
 
@@ -80,15 +101,6 @@ namespace Lurkers.Environment.Vision
             {
                 Debug.LogError("One of the fields is null!");
             }
-            
-            FindObjectOfType<EnemyActivate>().SetActive();
-
-            string[] lines = new string[3];
-            lines[0] = "Phew. Now that’s done.";
-            lines[1] = "Did that statue.. Just move?";
-            lines[2] = "Ahh, they’re alive!";
-            Monologue.lines = lines;
-            Monologue.gameObject.SetActive(true);
         }
     }
 }
