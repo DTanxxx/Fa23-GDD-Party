@@ -610,6 +610,7 @@ MonoBehaviour:
   lights:
   - {fileID: 8694835557312243491}
   - {fileID: 10591371867480534}
+  debugMode: 0
   inDialogue: 0
 --- !u!114 &5671322162475284958
 MonoBehaviour:
