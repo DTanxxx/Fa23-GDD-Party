@@ -154,7 +154,7 @@ namespace Lurkers.Control
 
         public void SetRunSpeed(float speed)
         {
-            maxSpeed *= speed;
+            maxSpeed *= speed;            
         }
 
         private void TransitionIntoLevel()

@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class PlayerSprinter : MonoBehaviour
 {
+
+    public float moveSpeed; 
    
     private float maxStamina = 100.0f;
     private float currStamina;
@@ -17,10 +19,12 @@ public class PlayerSprinter : MonoBehaviour
     private float staminaDrain = 0.5f;
     private float slowedRunSpeed = 0.1f;
     private float normalRunSpeed = 0.2f;
-    private float sprintingRunSpeed = 0.3f; 
+    private float sprintingRunSpeed = 0.3f;
 
     // Start is called before the first frame update
+    
 
+  
     private void Awake()
     {
         instance = this;
@@ -42,9 +46,17 @@ public class PlayerSprinter : MonoBehaviour
 
                 if (currStamina >= maxStamina)
                 {
-                    // set to normal speed
+                    moveSpeed = normalRunSpeed;
                     hasRegenerated = true;
                 }
+            }
+        }
+        else
+        {
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                Sprinting();
+                Debug.Log("hi");
             }
         }
     }
@@ -54,12 +66,13 @@ public class PlayerSprinter : MonoBehaviour
         if (hasRegenerated)
         {
             weAreSprinting = true;
-            currStamina -= staminaDrain * Time.deltaTime; 
+            currStamina -= staminaDrain * Time.deltaTime;
+            moveSpeed = sprintingRunSpeed;
 
             if (currStamina <= 0)
             {
                 hasRegenerated = false;
-                // set player speed to slowed 
+                moveSpeed = slowedRunSpeed;
             }
         }
     }
