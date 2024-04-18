@@ -1,3 +1,4 @@
+using Lurkers.Control;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
@@ -7,19 +8,18 @@ using UnityEngine;
 public class PlayerSprinter : MonoBehaviour
 {
 
-    public float moveSpeed; 
-   
-    private float maxStamina = 100.0f;
-    private float currStamina;
-    public bool hasRegenerated = true;
-    public bool weAreSprinting = false; 
+    public float moveSpeed;
+    [SerializeField] private float maxStamina = 5f;
+    [SerializeField] private float currStamina;
+    [SerializeField] public bool hasRegenerated;
+    [SerializeField] public bool weAreSprinting = false; 
 
     public static PlayerSprinter instance;
-    private float staminaRegen = 0.5f;
-    private float staminaDrain = 0.5f;
-    private float slowedRunSpeed = 0.1f;
-    private float normalRunSpeed = 0.2f;
-    private float sprintingRunSpeed = 0.3f;
+    [SerializeField] private float staminaRegen = 1f;
+    [SerializeField] private float staminaDrain = 1f;
+    [SerializeField] private float slowedRunSpeed = 0.1f;
+    [SerializeField] private float normalRunSpeed = 0.2f;
+    [SerializeField] private float sprintingRunSpeed = 0.3f;
 
     // Start is called before the first frame update
     
@@ -31,19 +31,27 @@ public class PlayerSprinter : MonoBehaviour
     }
     void Start()
     {
-        currStamina = maxStamina; 
+        currStamina = maxStamina;
+        hasRegenerated = true; 
+        moveSpeed = normalRunSpeed; 
         
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!Input.GetKey(KeyCode.LeftShift))
+        {
+            weAreSprinting = false;
+        }
+
         if (!weAreSprinting)
         {
-            if (currStamina <= maxStamina - 0.01)
+            if (currStamina <= maxStamina)
             {
                 currStamina += staminaRegen * Time.deltaTime;
-
+                Debug.Log(currStamina);
+              
                 if (currStamina >= maxStamina)
                 {
                     moveSpeed = normalRunSpeed;
@@ -53,12 +61,12 @@ public class PlayerSprinter : MonoBehaviour
         }
         else
         {
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 Sprinting();
-                Debug.Log("hi");
             }
         }
+        GetComponent<PlayerController>().SetRunSpeed(moveSpeed);
     }
 
     public void Sprinting()
