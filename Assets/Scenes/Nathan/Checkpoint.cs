@@ -37,7 +37,7 @@ public class Checkpoint : MonoBehaviour
 
     private void whenDead()
     {
-        bool dead = player.GetComponent<PlayerHealth>().GetIsPlayerDead();
+        bool dead = true;
         if (dead)
         {
             for (int i = 0; i < copies.Length; i++)
