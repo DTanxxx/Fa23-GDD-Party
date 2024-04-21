@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using FMOD.Studio;
-using Lurkers.Camera;
+using Lurkers.Cam;
 using Lurkers.Environment.Vision;
 using Lurkers.Audio;  // TODO this namespace should not be here - it is redundant when we are already using Lurkers.Audio.Player
 using Lurkers.Audio.Player;

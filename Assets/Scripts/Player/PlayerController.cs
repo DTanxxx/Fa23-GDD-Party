@@ -5,7 +5,7 @@ using System;
 using UnityEngine.Rendering.Universal;
 using Lurkers.Event;
 using Lurkers.Environment.Vision;
-using Lurkers.Camera;
+using Lurkers.Cam;
 using Lurkers.Environment.Vision.ColorTile;
 using Lurkers.Control.Level;
 
@@ -41,12 +41,16 @@ namespace Lurkers.Control
 
         public static Action onPlayerSlide;
         public static Action onPlayerEndSlide;
+        public static Action moving;
+        public static Action notMoving;
 
         // For all other scripts to reference the Player transform in order to play non-spatial SFX
         public static Transform playerTransform;
+        public PlayerSprinter _playerSprinter;
 
         private void Start()
         {
+            _playerSprinter = GetComponent<PlayerSprinter>();
             dir = new Vector3(1, 0, 0);
             waitForPauseBeforeAppearance = new WaitForSeconds(pauseBeforeAppearance);
             
@@ -78,6 +82,7 @@ namespace Lurkers.Control
             ElevatorOpen.onElevatorClose -= UnfreezePlayer;
             NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
             ColorTile.onIncinerate -= Incinerate;
+
         }
 
         private void FixedUpdate()
@@ -123,7 +128,7 @@ namespace Lurkers.Control
             {
                 // walking
                 animator.SetBool("Walking", true);
-
+                moving?.Invoke();
                 dir = lastDirection.normalized;
                 gameObject.transform.Translate(dir * maxSpeed * (currFrames - lookFrames) / accFrames);
 
@@ -142,7 +147,18 @@ namespace Lurkers.Control
             {
                 // not walking
                 animator.SetBool("Walking", false);
+                notMoving?.Invoke();
             }
+            // Sprinting Input 
+            if (Input.GetKey(KeyCode.LeftShift)) {
+                _playerSprinter.Sprinting();
+
+            }
+        }
+
+        public void SetRunSpeed(float speed)
+        {
+            maxSpeed = speed;
         }
 
         private void TransitionIntoLevel()

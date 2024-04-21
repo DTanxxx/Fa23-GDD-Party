@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Lurkers.Camera
+namespace Lurkers.Cam
 {
     public class CameraLock : MonoBehaviour
     {

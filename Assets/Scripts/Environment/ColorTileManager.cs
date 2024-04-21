@@ -28,7 +28,7 @@ namespace Lurkers.Environment.Vision.ColorTile
 
         private Dictionary<int, GameObject> rowDictionary = new Dictionary<int, GameObject>();
         private Dictionary<int, GameObject> columnDictionary = new Dictionary<int, GameObject>();
-        private Dictionary<GameObject, (int, int)> magentaDictionary = new Dictionary<GameObject, (int, int)>();
+        public Dictionary<GameObject, (int, int)> magentaDictionary = new Dictionary<GameObject, (int, int)>();
 
         private void Awake()
         {

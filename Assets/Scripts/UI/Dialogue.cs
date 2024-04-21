@@ -6,7 +6,7 @@ using TMPro;
 using Lurkers.Control;
 using Lurkers.Control.Vision;
 using Lurkers.Environment.Vision;
-using Lurkers.Camera;
+using Lurkers.Cam;
 
 namespace Lurkers.UI
 {

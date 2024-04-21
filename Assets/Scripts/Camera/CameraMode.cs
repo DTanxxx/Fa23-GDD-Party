@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Lurkers.Camera
+namespace Lurkers.Cam
 {
     public class CameraMode : MonoBehaviour
     {
