@@ -738,9 +738,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98490e0ce25ad1478a8a8d28baa52f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera:
-  - {fileID: 0}
-  - {fileID: 0}
+  cam: []
 --- !u!114 &4164837917184013061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,8 +751,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a3988e585df2f44aaa5b2c59a1b027b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 0
+  maxStamina: 3
+  currStamina: 0
   hasRegenerated: 1
   weAreSprinting: 0
+  staminaRegen: 1
+  staminaDrain: 1
+  slowedRunSpeed: 0.1
+  normalRunSpeed: 0.2
+  sprintingRunSpeed: 0.3
 --- !u!1 &3440088088827517426
 GameObject:
   m_ObjectHideFlags: 0
