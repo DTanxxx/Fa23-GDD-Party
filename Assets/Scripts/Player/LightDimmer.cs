@@ -1,3 +1,4 @@
+using UnityEngine.Rendering.Universal;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,14 +9,14 @@ public class LightDimmer : MonoBehaviour
     [SerializeField] private float minIntensity;
 
     private float o_Intensity;
-    private Light flashlight;
+    private Light2D flashlight;
 
     private float currTime;
     
     // Start is called before the first frame update
     void Start()
     {
-        flashlight = GetComponent<Light>();
+        flashlight = GetComponent<Light2D>();
         o_Intensity = flashlight.intensity;
         currTime = maxTime;
 
