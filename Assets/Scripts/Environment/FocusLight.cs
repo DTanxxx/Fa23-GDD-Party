@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Lurkers.Camera;
+using Lurkers.Cam;
 
 namespace Lurkers.Environment.Vision
 {

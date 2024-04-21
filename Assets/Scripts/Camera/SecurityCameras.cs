@@ -2,40 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SecurityCameras : MonoBehaviour
+namespace Lurkers.Environment.Vision
 {
-    // Start is called before the first frame update   
-    public List<Camera> camera;
-    private bool onCamera;
-    private int index;
-    void Start() {
-        onCamera = false;
-        index = 0;
-    }
-    void Update() 
+    public class SecurityCameras : MonoBehaviour
     {
-        if (camera.Count > 0 && Input.GetKeyDown("c")) 
+        // Start is called before the first frame update   
+        public List<Camera> cam;
+        private bool onCamera;
+        private int index;
+        void Start()
         {
-            onCamera = !onCamera;
-            camera[index].enabled = !camera[index].enabled;
+            onCamera = false;
+            index = 0;
         }
-        if (onCamera && Input.GetKeyDown("e"))
+        void Update()
         {
-            camera[index].enabled = !camera[index].enabled;
-            index += 1;
-            if(index >= camera.Count) {
-                index = 0;
+            if (cam.Count > 0 && Input.GetKeyDown("c"))
+            {
+                onCamera = !onCamera;
+                cam[index].enabled = !cam[index].enabled;
             }
-            camera[index].enabled = !camera[index].enabled;
-        }
-        if (onCamera && Input.GetKeyDown("q"))
-        {
-            camera[index].enabled = !camera[index].enabled;
-            index -= 1;
-            if(index < 0) {
-                index = camera.Count - 1;
+            if (onCamera && Input.GetKeyDown("e"))
+            {
+                cam[index].enabled = !cam[index].enabled;
+                index += 1;
+                if (index >= cam.Count)
+                {
+                    index = 0;
+                }
+                cam[index].enabled = !cam[index].enabled;
             }
-            camera[index].enabled = !camera[index].enabled;
+            if (onCamera && Input.GetKeyDown("q"))
+            {
+                cam[index].enabled = !cam[index].enabled;
+                index -= 1;
+                if (index < 0)
+                {
+                    index = cam.Count - 1;
+                }
+                cam[index].enabled = !cam[index].enabled;
+            }
         }
     }
 }

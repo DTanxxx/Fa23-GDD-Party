@@ -5,7 +5,7 @@ using UnityEngine;
 using System;
 using Lurkers.Event;
 
-namespace Lurkers.Camera
+namespace Lurkers.Cam
 {
     public class CameraFollow : MonoBehaviour
     {

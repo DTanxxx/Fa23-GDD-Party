@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using Lurkers.Inventory;
-using Lurkers.Camera;
+using Lurkers.Cam;
 using Lurkers.Event;
 using Lurkers.Control.Vision.Character;
 using Lurkers.Environment.Vision;

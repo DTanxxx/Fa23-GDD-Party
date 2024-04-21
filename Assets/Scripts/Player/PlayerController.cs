@@ -5,7 +5,7 @@ using System;
 using UnityEngine.Rendering.Universal;
 using Lurkers.Event;
 using Lurkers.Environment.Vision;
-using Lurkers.Camera;
+using Lurkers.Cam;
 using Lurkers.Environment.Vision.ColorTile;
 using Lurkers.Control.Level;
 
@@ -44,9 +44,11 @@ namespace Lurkers.Control
 
         // For all other scripts to reference the Player transform in order to play non-spatial SFX
         public static Transform playerTransform;
+        public PlayerSprinter _playerSprinter;
 
         private void Start()
         {
+            _playerSprinter = GetComponent<PlayerSprinter>();
             dir = new Vector3(1, 0, 0);
             waitForPauseBeforeAppearance = new WaitForSeconds(pauseBeforeAppearance);
             
@@ -143,6 +145,16 @@ namespace Lurkers.Control
                 // not walking
                 animator.SetBool("Walking", false);
             }
+            // Sprinting Input 
+            if (Input.GetKey(KeyCode.LeftShift)) {
+                _playerSprinter.Sprinting();
+
+            }
+        }
+
+        public void SetRunSpeed(float speed)
+        {
+            maxSpeed = speed;
         }
 
         private void TransitionIntoLevel()

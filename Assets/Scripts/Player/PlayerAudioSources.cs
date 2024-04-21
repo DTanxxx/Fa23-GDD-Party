@@ -7,7 +7,7 @@ using Lurkers.Environment.Vision;
 using Lurkers.Environment.Vision.ColorTile;
 using Lurkers.Control;
 using Lurkers.Control.Level;
-using Lurkers.Camera;
+using Lurkers.Cam;
 
 namespace Lurkers.Audio.Player
 {
