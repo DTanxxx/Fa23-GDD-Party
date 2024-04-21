@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Hotbar : MonoBehaviour
 {
-    [SerializeField] Image[] hotbarSlot = new Image[5];
+    [SerializeField] Image[] hotbarSlot = new Image[4];
     [SerializeField] Sprite emptySprite;
     [SerializeField] Sprite Plank; //will be set to placeholder sprite for now
     [SerializeField] Sprite Rope;  //will be set to placeholder sprite for now
@@ -19,9 +19,12 @@ public class Hotbar : MonoBehaviour
         {
             foreach(Image image in hotbarSlot)
             {
+                Color c = image.color;
                 if (image.sprite == emptySprite)
                 {
                     image.sprite = Plank;
+                    c.a = 100;
+                    image.color = c;
                     break;
                 }
             }
@@ -30,9 +33,12 @@ public class Hotbar : MonoBehaviour
         {
             foreach(Image image in hotbarSlot)
             {
+                Color c = image.color;
                 if (image.sprite == emptySprite)
                 {
                     image.sprite = Rope;
+                    c.a = 100;
+                    image.color = c;
                     break;
                 }
             }
@@ -41,9 +47,12 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 0; i < hotbarSlot.Length; i++)
             {
+                Color c = hotbarSlot[i].color;
                 if (hotbarSlot[i].sprite == Plank)
                 {
                     hotbarSlot[i].sprite = emptySprite;
+                    c.a = 0;
+                    hotbarSlot[i].color = c;
                     break;
                 }
             }
@@ -52,9 +61,12 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 0; i < hotbarSlot.Length; i++)
             {
+                Color c = hotbarSlot[i].color;
                 if (hotbarSlot[i].sprite == Rope)
                 {
                     hotbarSlot[i].sprite = emptySprite;
+                    c.a = 0;
+                    hotbarSlot[i].color = c;
                     break;
                 }
             }
