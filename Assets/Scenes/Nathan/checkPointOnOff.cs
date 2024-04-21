@@ -6,11 +6,13 @@ using UnityEngine.UI;
 public class checkPointOnOff : MonoBehaviour
 {
     [SerializeField] GameObject[] checkpoints;
+    private bool activated = false;
     
 
 
     public void onButtonPressed()
     {
+        activated = true;
         foreach (GameObject checkpoint in checkpoints)
         {
             if (checkpoint.activeInHierarchy)
@@ -22,6 +24,11 @@ public class checkPointOnOff : MonoBehaviour
                 checkpoint.SetActive(true);
             }
         }
+    }
+
+    public bool isActivated()
+    {
+        return activated;
     }
 
 }

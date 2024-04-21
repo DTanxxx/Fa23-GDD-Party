@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
-    [SerializeField] GameObject player;
+    [SerializeField] private GameObject player;
     [SerializeField] private GameObject[] tileManagers;
+    private GameObject[] copies;
     
     
     
@@ -18,6 +19,32 @@ public class Checkpoint : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        whenDead();
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            copies = new GameObject[tileManagers.Length];
+            for (int i = 0; i < tileManagers.Length; i++)
+            {
+                copies[i] = Instantiate(tileManagers[i]);
+            }
+        }
+    }
+
+    private void whenDead()
+    {
+        bool dead = player.GetComponent<PlayerHealth>().GetIsPlayerDead();
+        if (dead)
+        {
+            for (int i = 0; i < copies.Length; i++)
+            {
+                tileManagers[i] = copies[i];
+            }
+            player.transform.position = transform.position;
+        }
     }
 }
