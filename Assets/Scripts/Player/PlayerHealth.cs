@@ -18,7 +18,7 @@ namespace Lurkers.Control
     {
         public static Action<DeathCause, Vector3, GameObject> onDeath;
 
-        private bool isDead = false;
+        public bool isDead = false;
 
         private void OnCollisionEnter(Collision collision)
         {

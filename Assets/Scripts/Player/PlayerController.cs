@@ -32,7 +32,7 @@ namespace Lurkers.Control
         private Vector3 dir;
         private int curFrameDelay;
         private Vector3 lastDirection;
-        private bool isDead = false;
+        public bool isDead = false;
         private bool isFrozen = false;
         private float animSpeed;
         private WaitForSeconds waitForPauseBeforeAppearance;
@@ -183,7 +183,7 @@ namespace Lurkers.Control
             isFrozen = true;
         }
 
-        private void UnfreezePlayer()
+        public void UnfreezePlayer()
         {
             Debug.Log("Player unfrozen");
             myCollider.enabled = true;
