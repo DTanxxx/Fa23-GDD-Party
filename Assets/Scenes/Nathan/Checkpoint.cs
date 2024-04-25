@@ -2,12 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Lurkers.Control;
+using UnityEditor.Animations;
+using Lurkers.Environment.Vision.ColorTile;
+
+
+[System.Serializable] public struct SaveData
+{
+    public Dictionary<GameObject, TileColor[]> saved;
+    public bool[] tileRaised;
+    public Vector3 checkLoc;
+}
+
 
 public class Checkpoint : MonoBehaviour
 {
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject deathPanel;
     [SerializeField] private GameObject[] tileManagers;
+    private SaveData data;
+    //private Dictionary<GameObject, TileColor[]> save;
+    //private bool[] tileRaised;
     [SerializeField] private float timer;
     private float TIMER;
     private bool changed = false;
@@ -39,12 +53,31 @@ public class Checkpoint : MonoBehaviour
         if (other.tag == "Player" && !changed)
         {
             changed = true;
-            copies = new GameObject[tileManagers.Length];
-            for (int i = 0; i < tileManagers.Length; i++)
-            {
-                copies[i] = tileManagers[i];
-            }
+            saveFunctionality();
         }
+    }
+
+    private void saveFunctionality()
+    {
+        foreach (GameObject tileMan in tileManagers)
+        {
+            TileColor[] colors = new TileColor[(int)tileMan.GetComponent<ColorTileManager>().matrixSize.x * (int)tileMan.GetComponent<ColorTileManager>().matrixSize.y];
+            data.tileRaised = new bool[(int)tileMan.GetComponent<ColorTileManager>().matrixSize.x * (int)tileMan.GetComponent<ColorTileManager>().matrixSize.y];
+            int row = (int)tileMan.GetComponent<ColorTileManager>().matrixSize.x;
+            int col = (int)tileMan.GetComponent<ColorTileManager>().matrixSize.y;
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < col; j++)
+                {
+                    colors[(i * row) + j] = tileMan.GetComponent<ColorTileManager>().matrix[i, j].GetComponent<ColorTile>().GetTileColor();
+                    data.tileRaised[(i * row) + j] = tileMan.GetComponent<ColorTileManager>().matrix[i, j].GetComponent<ColorTile>().GetIsRaised();
+                }
+            }
+            data.saved.Add(tileMan, colors);
+        }
+        data.checkLoc = transform.position;
+
+
     }
 
     private void whenDead()
@@ -54,10 +87,7 @@ public class Checkpoint : MonoBehaviour
         if (dead)
         {
             isDead = true;
-            for (int i = 0; i < copies.Length; i++)
-            {
-                tileManagers[i] = copies[i];
-            }
+            Dictionary<GameObject, TileColor[]>.KeyCollection keyColl = data.saved.Keys;
             deathPanel.SetActive(false);
             if (timer <= 0)
             {
