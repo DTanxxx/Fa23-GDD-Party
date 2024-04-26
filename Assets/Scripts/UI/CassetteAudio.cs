@@ -8,9 +8,13 @@ namespace Lurkers.Audio.Hearing
     public class CassetteAudio : MonoBehaviour
     {
         AudioSource aud;
-        [SerializeField] private float wait_time;
         [SerializeField] private Button cassetteButton = null;
-        
+
+        private void Start()
+        {
+            aud = GetComponent<AudioSource>();
+        }
+
         private void OnEnable()
         {
             cassetteButton.onClick.AddListener(PlayCassette);
@@ -23,15 +27,9 @@ namespace Lurkers.Audio.Hearing
 
         private void PlayCassette()
         {
-            aud = GetComponent<AudioSource>();
             aud.loop = false;
-            aud.PlayOneShot(aud.clip);
-            //Invoke("StopPlay", wait_time);
-        }
-
-        void StopPlay()
-        {
             aud.Stop();
+            aud.PlayOneShot(aud.clip);
         }
     }
 }

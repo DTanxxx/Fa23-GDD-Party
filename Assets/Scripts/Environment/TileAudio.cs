@@ -15,6 +15,7 @@ namespace Lurkers.Audio.Hearing
         bool moving;
         [SerializeField] private float distance;
         [SerializeField] private float soundRange = 100f;
+        [SerializeField] private float soundAmplitude = 10f;
         // Start is called before the first frame update
 
         void Start()
@@ -38,7 +39,7 @@ namespace Lurkers.Audio.Hearing
             {
                 aud.Play();
                 isOn = true;
-                var sound = new Sound(transform.position, soundRange);
+                var sound = new Sound(transform.position, soundRange, soundAmplitude);
                 sound.soundType = Sound.SoundType.Gravel;
                 Sounds.MakeSound(sound);
                 another = other;

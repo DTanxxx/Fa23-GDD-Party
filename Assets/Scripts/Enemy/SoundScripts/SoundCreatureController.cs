@@ -10,11 +10,16 @@ namespace Lurkers.Control.Hearing.Character
 	{
 		private NavMeshAgent agent;
 		[SerializeField] private float chaseSpeed;
+		[SerializeField] private float soundThreshold = 5f;
+		[SerializeField] private float soundExpireDuration = 3.0f;
 		// public float listeningRange = 50f;
 
 		// These lists of soundtypes should have no overlap
 		[SerializeField] private List<Sound.SoundType> InterestingSounds;
 		[SerializeField] private List<Sound.SoundType> DangerousSounds;
+
+		private float curAmplitude;
+		private float soundExpiringTimer;
 
 		private void Start()
 		{
@@ -28,19 +33,46 @@ namespace Lurkers.Control.Hearing.Character
 			DangerousSounds.Add(Sound.SoundType.Bats);
 		}
 
-		public void RespondToSound(Sound sound)
-		{
-			if (InterestingSounds.Contains(sound.soundType))
-			{
-				MoveTo(sound.pos);
-			}
-			else if (DangerousSounds.Contains(sound.soundType))
-			{
-				Vector3 dir = sound.pos - transform.position;
+        private void Update()
+        {
+            if (soundExpiringTimer > 0f)
+            {
+				soundExpiringTimer -= Time.deltaTime;
+            }
+			else
+            {
+				// expire curSound
+				curAmplitude = 0f;
+            }
+        }
 
-				MoveTo(sound.pos - (dir * 10f));
+        public void RespondToSound(Sound sound)
+		{
+			// check if sound's amplitude is detectable
+			float distToSound = Vector3.Distance(transform.position, sound.pos);
+			float amplitude = sound.amplitude * (1 - distToSound / sound.range);
+
+			if (amplitude >= soundThreshold)
+            {
+				if (amplitude > curAmplitude)
+                {
+					// detected!
+					if (InterestingSounds.Contains(sound.soundType))
+					{
+						MoveTo(sound.pos);
+					}
+					else if (DangerousSounds.Contains(sound.soundType))
+					{
+						Vector3 dir = sound.pos - transform.position;
+
+						MoveTo(sound.pos - (dir * 10f));
+					}
+
+					Debug.Log(name + " responding to sound at " + sound.pos);
+					curAmplitude = amplitude;
+					soundExpiringTimer = soundExpireDuration;
+				}
 			}
-			Debug.Log(name + " responding to sound at " + sound.pos);
 		}
 
 		private void MoveTo(Vector3 pos)
@@ -50,6 +82,5 @@ namespace Lurkers.Control.Hearing.Character
 			agent.isStopped = false;
 			agent.speed = chaseSpeed;
 		}
-
 	}
 }
