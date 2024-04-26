@@ -36,6 +36,15 @@ namespace Lurkers.Environment.Vision.ColorTile
         [SerializeField] private Sprite yellowSprite;
         [SerializeField] private Sprite magentaSprite;
         [SerializeField] private Sprite purpleSprite;
+        [SerializeField] private Sprite whiteSideSprite;
+        [SerializeField] private Sprite redSideSprite;
+        [SerializeField] private Sprite cyanSideSprite;
+        [SerializeField] private Sprite blackSideSprite;
+        [SerializeField] private Sprite greenSideSprite;
+        [SerializeField] private Sprite blueSideSprite;
+        [SerializeField] private Sprite yellowSideSprite;
+        [SerializeField] private Sprite magentaSideSprite;
+        [SerializeField] private Sprite purpleSideSprite;
         [SerializeField] private string tileFlatLayer;
         [SerializeField] private string tileRaisedLayer;
         [SerializeField] private Transform leftSide = null;
@@ -44,10 +53,12 @@ namespace Lurkers.Environment.Vision.ColorTile
         [SerializeField] private Transform botSide = null;
         [SerializeField] private float blueTileSlideDuration = 0.5f;
         [SerializeField] private float tileRaiseDuration = 1.0f;
+        [SerializeField] private SpriteRenderer[] topSpriteRends;
+        [SerializeField] private SpriteRenderer[] sideSpriteRends;
 
+        private SpriteRenderer[] allSpriteRends;
         private ColorTileManager tileManager;
         private Collider _collider;
-        private SpriteRenderer[] spriteRenderers;
         private bool offTile = false;
         private bool onTile = false;
         private Coroutine slideCoroutine;
@@ -63,9 +74,9 @@ namespace Lurkers.Environment.Vision.ColorTile
         private void Awake()
         {
             _collider = GetComponent<Collider>();
+            allSpriteRends = GetComponentsInChildren<SpriteRenderer>();
             _collider.isTrigger = true;
             offTile = false;
-            spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
         }
 
         public void SetData(TileColor c, ColorTileManager manager, bool raised)
@@ -77,7 +88,7 @@ namespace Lurkers.Environment.Vision.ColorTile
             if (isRaised)
             {
                 // set top surface and sides of tile's layer to tileRaised
-                foreach (SpriteRenderer rend in spriteRenderers)
+                foreach (SpriteRenderer rend in allSpriteRends)
                 {
                     rend.sortingLayerName = tileRaisedLayer;
                 }
@@ -85,7 +96,7 @@ namespace Lurkers.Environment.Vision.ColorTile
             else
             {
                 // set top surface and sides of tile's layer to tileFlat
-                foreach (SpriteRenderer rend in spriteRenderers)
+                foreach (SpriteRenderer rend in allSpriteRends)
                 {
                     rend.sortingLayerName = tileFlatLayer;
                 }
@@ -94,31 +105,31 @@ namespace Lurkers.Environment.Vision.ColorTile
             switch (tileColor)
             {
                 case TileColor.White:
-                    SetSprite(whiteSprite);
+                    SetSprite(whiteSprite, whiteSideSprite);
                     break;
                 case TileColor.Red:
-                    SetSprite(redSprite);
+                    SetSprite(redSprite, redSideSprite);
                     break;
                 case TileColor.Cyan:
-                    SetSprite(cyanSprite);
+                    SetSprite(cyanSprite, cyanSideSprite);
                     break;
                 case TileColor.Black:
-                    SetSprite(blackSprite);
+                    SetSprite(blackSprite, blackSideSprite);
                     break;
                 case TileColor.Green:
-                    SetSprite(greenSprite);
+                    SetSprite(greenSprite, greenSideSprite);
                     break;
                 case TileColor.Blue:
-                    SetSprite(blueSprite);
+                    SetSprite(blueSprite, blueSideSprite);
                     break;
                 case TileColor.Yellow:
-                    SetSprite(yellowSprite);
+                    SetSprite(yellowSprite, yellowSideSprite);
                     break;
                 case TileColor.Magenta:
-                    SetSprite(magentaSprite);
+                    SetSprite(magentaSprite, magentaSideSprite);
                     break;
                 case TileColor.Purple:
-                    SetSprite(purpleSprite);
+                    SetSprite(purpleSprite, purpleSideSprite);
                     break;
             }
         }
@@ -141,18 +152,14 @@ namespace Lurkers.Environment.Vision.ColorTile
             switch (tileColor)
             {
                 case TileColor.White:
-                    Debug.Log("white");
-                    Debug.Log(collision.GetInstanceID());
                     break;
 
                 case TileColor.Red:
-                    Debug.Log("red");
                     health.SetIsPlayerDead();
                     onIncinerate?.Invoke();
                     break;
 
                 case TileColor.Cyan:
-                    Debug.Log("cyan");
                     tileManager.ActivateCyan();
                     break;
 
@@ -193,26 +200,30 @@ namespace Lurkers.Environment.Vision.ColorTile
 
         public TileColor GetTileColor() { return tileColor; }
 
-        private void SetSprite(Sprite sp)
+        private void SetSprite(Sprite sp, Sprite sideSp)
         {
-            foreach (SpriteRenderer spriteRenderer in spriteRenderers)
+            foreach (SpriteRenderer spriteRenderer in topSpriteRends)
             {
                 spriteRenderer.sprite = sp;
             }
-            Debug.Log(sp);
+
+            foreach (SpriteRenderer spriteRenderer in sideSpriteRends)
+            {
+                spriteRenderer.sprite = sideSp;
+            }
         }
 
         //Cyan Tile
         public void TurnRed()
         {
             tileColor = TileColor.Red;
-            SetSprite(redSprite);
+            SetSprite(redSprite, redSideSprite);
             Debug.Log(tileColor);
         }
         public void TurnWhite()
         {
             tileColor = TileColor.White;
-            SetSprite(whiteSprite);
+            SetSprite(whiteSprite, whiteSideSprite);
             Debug.Log(tileColor);
         }
 
@@ -321,10 +332,11 @@ namespace Lurkers.Environment.Vision.ColorTile
             if (state == "raise")
             {
                 // set top surface and sides of tile's layer to tileRaised
-                foreach (SpriteRenderer rend in spriteRenderers)
+                foreach (SpriteRenderer rend in allSpriteRends)
                 {
                     rend.sortingLayerName = tileRaisedLayer;
                 }
+
             }
 
             if (onTile)
@@ -361,7 +373,7 @@ namespace Lurkers.Environment.Vision.ColorTile
             if (state == "lower")
             {
                 // set top surface and sides of tile's layer to tileFlat
-                foreach (SpriteRenderer rend in spriteRenderers)
+                foreach (SpriteRenderer rend in allSpriteRends)
                 {
                     rend.sortingLayerName = tileFlatLayer;
                 }

@@ -8,10 +8,11 @@ namespace Lurkers.Hearing
 	{
 		public enum SoundType { Footstep, Rock, Bats, Gravel, Water }
 
-		public Sound(Vector3 _pos, float _range)
+		public Sound(Vector3 _pos, float _range, float _amp)
 		{
 			pos = _pos;
 			range = _range;
+			amplitude = _amp;
 			// escapeDistance: how scary a sound is if it is danger
 		}
 
@@ -20,5 +21,7 @@ namespace Lurkers.Hearing
 		public readonly Vector3 pos;
 
 		public readonly float range;
+
+		public readonly float amplitude;
 	}
 }
