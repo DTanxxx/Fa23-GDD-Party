@@ -18,6 +18,7 @@ public class checkPointOnOff : MonoBehaviour
             if (checkpoint.activeInHierarchy)
             {
                 checkpoint.SetActive(false);
+
             } 
             else 
             {

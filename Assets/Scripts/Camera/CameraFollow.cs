@@ -17,7 +17,7 @@ namespace Lurkers.Camera
         [SerializeField] private float focusReachDistance = 1f;
 
         private Vector3 playerPos;
-        private GameObject player;
+        public GameObject player;
         private GameObject room;
         private WaitForSeconds waitForCameraPause;
         private CameraLock cameraLock;
