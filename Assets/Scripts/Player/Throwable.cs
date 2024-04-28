@@ -12,12 +12,13 @@ public class Throwable : MonoBehaviour
     public GameObject item; 
     public GameObject tempParent; 
     public bool isInHand = false; 
-    private float holdDownStartTime; 
+    private float holdDownStartTime;
+    Animator PlayerAnimatorController;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        PlayerAnimatorController = gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -50,8 +51,10 @@ public class Throwable : MonoBehaviour
             if (Input.GetKeyUp(KeyCode.Space)) {
                 float holdDownTime = Time.time - holdDownStartTime;
                 // item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up.normalized * throwForce);
+                PlayerAnimatorController.SetTrigger("Rock Throwing");
                 item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up.normalized * CalculateHoldDownForce(holdDownTime));
-                item.GetComponent<Rigidbody>().drag = 1;
+                item.GetComponent<Rigidbody>().drag = 1; 
+                
                 isInHand = false; 
             }
         }
