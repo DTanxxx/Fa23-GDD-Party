@@ -6,7 +6,7 @@ namespace Lurkers.Environment.Vision
 {
     public class ColorTileDialogueTrigger : MonoBehaviour
     {
-        private bool firstTime = true;
+        private static bool firstTime = true;
 
         public static Action onColorTileIntro;
 

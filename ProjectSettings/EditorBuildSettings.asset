@@ -24,6 +24,9 @@ EditorBuildSettings:
     path: Assets/Scenes/BackupDemo/Mod_5/Mod_5.unity
     guid: 4e80286b9a2ae9a4395cfb042f577e85
   - enabled: 1
-    path: Assets/Scenes/Playtest/Audio/Audio_Sandbox.unity
+    path: Assets/Scenes/Playtest/Audio/Vision_Auditory_Transition.unity
+    guid: cd436f27ebca5b741946ebe0a19b9ecd
+  - enabled: 1
+    path: Assets/Scenes/Playtest/Audio/Auditory_1.unity
     guid: 838f5092d7c3f2945a305d099404d94f
   m_configObjects: {}

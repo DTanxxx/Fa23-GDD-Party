@@ -9,7 +9,10 @@ namespace Lurkers.Environment.Vision
     {
         private bool flickering = false;
 
+        private static bool firstTime = true;
+
         public static Action onFlashlightFlicker;
+        public static Action onFlashlightFlickerFirstTime;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -20,6 +23,12 @@ namespace Lurkers.Environment.Vision
                 {
                     flickering = true;
                     onFlashlightFlicker?.Invoke();
+
+                    if (firstTime)
+                    {
+                        firstTime = false;
+                        onFlashlightFlickerFirstTime?.Invoke();
+                    }
                 }
             }
         }

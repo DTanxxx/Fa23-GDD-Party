@@ -97,37 +97,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueOptions:
-  - type: 0
+  - type: 1
     lines:
     - Hmm, all these statues look eerily similar.
     - Not my choice of decor.
-  - type: 1
+  - type: 2
     lines:
     - Light seems to stop their movement.
     - I better hope this flashlight doesn't die anytime soon.
-  - type: 2
+  - type: 3
     lines:
     - "Phew. Now that\u2019s done."
     - Did that statue.. Just move?
     - "Ahh, they\u2019re alive!"
-  - type: 3
+  - type: 4
     lines:
     - The power outage must be affecting the elevators. Let's see if there is a way
       I can get this running again.
     - WASD to move, use the flashlight to your advantage.
-  - type: 4
+  - type: 5
     lines:
     - These color tiles serve as defensive mechanisms to keep out intruders.
     - Each color has a different functionality.
     - Doubt there will be any intruders now...
-  - type: 5
+  - type: 6
     lines:
     - Here's the key!
     - The statues...only become active when I pull the lever, right?
-  - type: 6
+  - type: 7
     lines:
     - What's happening?
     - Ugh! My flashlight is acting weird.
+  - type: 8
+    lines:
+    - A dead colleague... What is this?
+    - An empty cassette player?
+  - type: 9
+    lines:
+    - An echolocator too, can be helpful with navigation
+  - type: 10
+    lines:
+    - A notebook with some blank pages.
+    - Thank you, friend. I will come back for you and give you a proper burial...
+  - type: 11
+    lines:
+    - Shoot, the flashlight has worn out!
+    - Looks like the wire connections are corroded. Thank god I found the echolocator.
   uiContainer: {fileID: 1489605429915218888}
   text: {fileID: 6917387366776039385}
   lines: []

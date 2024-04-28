@@ -14,6 +14,7 @@ namespace Lurkers.Control.Level
         [SerializeField] private float fadeDuration = 3f;
         [SerializeField] private float pauseBeforeRising = 1f;
         [SerializeField] private float risingDuration = 4f;
+        [SerializeField] private bool isElevator = true;
 
         private WaitForSeconds waitForPauseBeforeRising;
         private WaitForSeconds waitForRisingDuration;
@@ -56,9 +57,13 @@ namespace Lurkers.Control.Level
 
             yield return waitForPauseBeforeRising;
 
-            // play rising sfx
-            AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, transform, "Elevator", (float)Elevator.State.MOVING);
-            yield return waitForRisingDuration;
+            if (isElevator)
+            {
+                // play rising sfx
+                AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, transform, "Elevator", (float)Elevator.State.MOVING);
+                yield return waitForRisingDuration;
+            }
+            
             levelManager.LoadNextScene();
         }
     }

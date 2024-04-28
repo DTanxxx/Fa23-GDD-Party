@@ -441,6 +441,8 @@ GameObject:
   - component: {fileID: 10591371867480534}
   - component: {fileID: 1874399694581070384}
   - component: {fileID: 614533026188154047}
+  - component: {fileID: 1829130504748127331}
+  - component: {fileID: 6548400011585784051}
   m_Layer: 0
   m_Name: Flashlight
   m_TagString: Untagged
@@ -539,6 +541,7 @@ MonoBehaviour:
   lightTransform: {fileID: 4281932373405533685}
   damping: 20
   dialogueTriggerRange: 7
+  animator: {fileID: 1829130504748127331}
 --- !u!114 &614533026188154047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -553,6 +556,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 180
   minIntensity: 0.5
+--- !u!95 &1829130504748127331
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2450738550327382472}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5d41a3f01eabd914bb474d78679d53e4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6548400011585784051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2450738550327382472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dc9ce800488ac54ca1c2f6dcfa6d907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3201889589371621395
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,8 +664,11 @@ MonoBehaviour:
   - {fileID: 8694835557312243491}
   - {fileID: 10591371867480534}
   debugMode: 0
+  flashlightObj:
+  - {fileID: 1774353913862582178}
+  - {fileID: 6434771183136385183}
+  echolocatorContainer: {fileID: 977593700576105801}
   inDialogue: 0
-  _playerSprinter: {fileID: 0}
 --- !u!114 &5671322162475284958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -883,6 +922,7 @@ MonoBehaviour:
   lightTransform: {fileID: 0}
   damping: 20
   dialogueTriggerRange: 5
+  animator: {fileID: 0}
 --- !u!114 &2420717643816769330
 MonoBehaviour:
   m_ObjectHideFlags: 0
