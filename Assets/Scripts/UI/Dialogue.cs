@@ -7,12 +7,15 @@ using Lurkers.Control;
 using Lurkers.Control.Vision;
 using Lurkers.Environment.Vision;
 using Lurkers.Cam;
+using Lurkers.UI.Hearing;
+using Lurkers.Event;
 
 namespace Lurkers.UI
 {
     [System.Serializable]
     public enum DialogueType
     {
+        NONE,
         FIRST_ENEMY_ENCOUNTER,
         FIRST_ENEMY_FREEZE,
         FIRST_LEVER_PULL,
@@ -20,7 +23,10 @@ namespace Lurkers.UI
         COLOR_TILE_INTRO,
         FIRST_KEY_PICKUP,
         FIRST_FLICKER,
-
+        PICKUP_CASSETTE,
+        PICKUP_ECHO,
+        PICKUP_NOTEBOOK,
+        FLASHLIGHT_BREAK,
     }
 
     [System.Serializable]
@@ -39,10 +45,11 @@ namespace Lurkers.UI
         public string[] lines;
         public float textSpeed;
         private int index;
+        private DialogueType curType = DialogueType.NONE;
         public PlayerController player;
 
-        public static Action active;
-        public static Action unactive;
+        public static Action<DialogueType> active;
+        public static Action<DialogueType> unactive;
 
         private void Update()
         {
@@ -73,7 +80,12 @@ namespace Lurkers.UI
             ElevatorOpen.onFirstTimeClose += OnFirstTimeElevatorClose;
             ColorTileDialogueTrigger.onColorTileIntro += OnColorTileIntro;
             Vault.onFirstTimeOpen += OnFirstTimeKeyPickup;
-            FlickerTrigger.onFlashlightFlicker += OnFirstTimeFlicker;
+            FlickerTrigger.onFlashlightFlickerFirstTime += OnFirstTimeFlicker;
+            PlayerAnimationEvents.onFlashlightBreak += OnFlashlightBreak;
+
+            AuditoryUIEnabler.onCorpseCollide += OnPickupCassette;
+            AuditoryUIEnabler.onCassetteFinish += OnPickupEcholocator;
+            AuditoryUIEnabler.onEcholocatorFinish += OnPickupNotebook;
         }
 
         private void OnDisable()
@@ -84,7 +96,12 @@ namespace Lurkers.UI
             ElevatorOpen.onFirstTimeClose -= OnFirstTimeElevatorClose;
             ColorTileDialogueTrigger.onColorTileIntro -= OnColorTileIntro;
             Vault.onFirstTimeOpen -= OnFirstTimeKeyPickup;
-            FlickerTrigger.onFlashlightFlicker -= OnFirstTimeFlicker;
+            FlickerTrigger.onFlashlightFlickerFirstTime -= OnFirstTimeFlicker;
+            PlayerAnimationEvents.onFlashlightBreak -= OnFlashlightBreak;
+
+            AuditoryUIEnabler.onCorpseCollide -= OnPickupCassette;
+            AuditoryUIEnabler.onCassetteFinish -= OnPickupEcholocator;
+            AuditoryUIEnabler.onEcholocatorFinish -= OnPickupNotebook;
         }
 
         private void DisplayDialogue()
@@ -94,7 +111,7 @@ namespace Lurkers.UI
             {
                 player.inDialogue = true;
             }
-            active?.Invoke();
+            active?.Invoke(curType);
             text.text = "";
             StartCoroutine(TypeLine());
         }
@@ -120,7 +137,7 @@ namespace Lurkers.UI
             {
                 player.inDialogue = false;
                 uiContainer.SetActive(false);
-                unactive?.Invoke();
+                unactive?.Invoke(curType);
             }
         }
 
@@ -173,8 +190,38 @@ namespace Lurkers.UI
             DisplayDialogue();
         }
 
+        private void OnPickupCassette()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.PICKUP_CASSETTE);
+            DisplayDialogue();
+        }
+
+        private void OnPickupEcholocator()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.PICKUP_ECHO);
+            DisplayDialogue();
+        }
+
+        private void OnPickupNotebook()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.PICKUP_NOTEBOOK);
+            DisplayDialogue();
+        }
+
+        private void OnFlashlightBreak()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.FLASHLIGHT_BREAK);
+            DisplayDialogue();
+        }
+
         private void InitDialogueState(DialogueType type)
         {
+            curType = type;
+
             foreach (var option in dialogueOptions)
             {
                 if (option.type == type)

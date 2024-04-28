@@ -1,6 +1,5 @@
-using Lurkers.Environment.Vision;
-using Lurkers.UI;
 using Lurkers.Vision;
+using Lurkers.Environment.Hearing;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,14 +18,15 @@ namespace Lurkers.Control.Vision
         [SerializeField] private Transform lightTransform;
         [SerializeField] private float damping = 20.0f;
         [SerializeField] private float dialogueTriggerRange = 5f;
+        [SerializeField] private Animator animator = null;
 
         private Light2D lightComponent;
         private Vector3 currDirection;
         private Vector3 tempDirection;
         private float sphereCastRadius;
-
-        private static bool firstTime;
-        private bool firstTimeAfter;
+        
+        private static bool firstTimeAfter = true;
+        private static bool firstTime = true;
 
         public static Action onFirstEnemyEncounter;
         public static Action onFirstFreezeEnemy;
@@ -43,10 +43,18 @@ namespace Lurkers.Control.Vision
             lightComponent = GetComponent<Light2D>();
 
             sphereCastRadius = Mathf.Atan(lightComponent.pointLightOuterAngle / 2.0f * Mathf.Deg2Rad) * lightComponent.pointLightOuterRadius;
-            firstTime = true;
-            firstTimeAfter = true;
 
             //clueGlow = GameObject.Find("EventSystem").GetComponent<ClueGlow>();
+        }
+
+        private void OnEnable()
+        {
+            BreakFlashlight.onBreakFlashlight += BreakAnimate;
+        }
+
+        private void OnDisable()
+        {
+            BreakFlashlight.onBreakFlashlight -= BreakAnimate;
         }
 
         private void FixedUpdate()
@@ -125,10 +133,14 @@ namespace Lurkers.Control.Vision
             Gizmos.DrawWireSphere(lightContainer.transform.position + tempDirection * sphereCastHitDistance, sphereCastRadius);
         }
 
+        private void BreakAnimate()
+        {
+            animator.SetTrigger("Break");
+        }
+
         public void ClueSpot()
         {
             //clueGlow.ClueSpot(transform.position, sphereCastRadius, tempDirection, lightComponent, ~playerLayer, playerMovement.gameObject);
         }
-
     }
 }

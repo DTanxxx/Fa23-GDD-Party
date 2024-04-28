@@ -8,6 +8,7 @@ using Lurkers.Environment.Vision;
 using Lurkers.Cam;
 using Lurkers.Environment.Vision.ColorTile;
 using Lurkers.Control.Level;
+using Lurkers.UI;
 
 namespace Lurkers.Control
 {
@@ -27,6 +28,8 @@ namespace Lurkers.Control
         [SerializeField] private float playerTransitionRate = 0.25f;
         [SerializeField] private Light2D[] lights;
         [SerializeField] private bool debugMode = false;
+        [SerializeField] private GameObject[] flashlightObj;
+        [SerializeField] private GameObject echolocatorContainer = null;
 
         private int currFrames;
         private Vector3 dir;
@@ -35,8 +38,7 @@ namespace Lurkers.Control
         private bool isDead = false;
         private bool isFrozen = false;
         private float animSpeed;
-        private WaitForSeconds waitForPauseBeforeAppearance;
-        private float tempSpeed;
+        private PlayerSprinter _playerSprinter;
         public bool inDialogue;
 
         public static Action onPlayerSlide;
@@ -46,13 +48,11 @@ namespace Lurkers.Control
 
         // For all other scripts to reference the Player transform in order to play non-spatial SFX
         public static Transform playerTransform;
-        public PlayerSprinter _playerSprinter;
 
         private void Start()
         {
             _playerSprinter = GetComponent<PlayerSprinter>();
             dir = new Vector3(1, 0, 0);
-            waitForPauseBeforeAppearance = new WaitForSeconds(pauseBeforeAppearance);
             
             if (!debugMode)
             {
@@ -71,6 +71,7 @@ namespace Lurkers.Control
             ElevatorOpen.onElevatorClose += UnfreezePlayer;
             NextLevelTrigger.onBeginLevelTransition += FreezePlayer;
             ColorTile.onIncinerate += Incinerate;
+            Dialogue.unactive += EquipEcholocator;
         }
 
         private void OnDisable()
@@ -82,7 +83,7 @@ namespace Lurkers.Control
             ElevatorOpen.onElevatorClose -= UnfreezePlayer;
             NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
             ColorTile.onIncinerate -= Incinerate;
-
+            Dialogue.unactive -= EquipEcholocator;
         }
 
         private void FixedUpdate()
@@ -280,6 +281,22 @@ namespace Lurkers.Control
             onPlayerEndSlide?.Invoke();
             animator.SetTrigger("Recover");
             isFrozen = false;
+        }
+
+        private void EquipEcholocator(DialogueType type)
+        {
+            if (type == DialogueType.FLASHLIGHT_BREAK)
+            {
+                // change animator layer
+                animator.SetLayerWeight(1, 1);
+                // disable flashlight
+                foreach (var obj in flashlightObj)
+                {
+                    obj.SetActive(false);
+                }
+                // enable echolocator
+                echolocatorContainer.SetActive(true);
+            }
         }
 
         public Vector3 GetDir()

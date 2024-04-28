@@ -135,7 +135,7 @@ namespace Lurkers.Control.Vision.Character
             return enemyActive;
         }
 
-        public void DialogueActive()
+        public void DialogueActive(DialogueType type)
         {
             Debug.Log("WeepingAngelDialogue");
             agent.velocity = Vector3.zero;
@@ -143,7 +143,7 @@ namespace Lurkers.Control.Vision.Character
             inMonologue = true;
         }
 
-        public void DialogueInactive()
+        public void DialogueInactive(DialogueType type)
         {
             agent.isStopped = false;
             inMonologue = false;
