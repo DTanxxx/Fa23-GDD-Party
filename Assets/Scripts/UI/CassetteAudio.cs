@@ -10,6 +10,12 @@ namespace Lurkers.Audio.Hearing
         AudioSource aud;
         [SerializeField] private float wait_time;
         [SerializeField] private Button cassetteButton = null;
+        [SerializeField] Animator animator;
+        
+        void Start()
+        {
+        
+        }
         
         private void OnEnable()
         {
@@ -20,18 +26,20 @@ namespace Lurkers.Audio.Hearing
         {
             cassetteButton.onClick.RemoveListener(PlayCassette);
         }
-
         private void PlayCassette()
         {
             aud = GetComponent<AudioSource>();
             aud.loop = false;
             aud.PlayOneShot(aud.clip);
-            //Invoke("StopPlay", wait_time);
         }
-
+        public void Playing()
+        {
+            animator.SetBool("ButtonPressed", true);
+            Invoke("StopPlay", wait_time);
+        }
         void StopPlay()
         {
-            aud.Stop();
+            animator.SetBool("ButtonPressed", false);
         }
     }
 }
