@@ -32,7 +32,7 @@ namespace Lurkers.Control
         private Vector3 dir;
         private int curFrameDelay;
         private Vector3 lastDirection;
-        public bool isDead = false;
+        private bool isDead = false;
         private bool isFrozen = false;
         private float animSpeed;
         private WaitForSeconds waitForPauseBeforeAppearance;
@@ -190,6 +190,11 @@ namespace Lurkers.Control
             myRigidbody.velocity = Vector3.zero;
             animator.speed = animSpeed;
             isFrozen = false;
+        }
+
+        public void CheckPointRevive()
+        {
+            isDead = false;
         }
 
         private void TriggerDeathAnimation(DeathCause cause, Vector3 enemyPosition, GameObject enemy = null)

@@ -137,8 +137,8 @@ public class Checkpoint : MonoBehaviour
                 animator.SetTrigger("Respawn");
                 player.SetActive(true);
                 player.GetComponent<PlayerController>().UnfreezePlayer();
-                player.GetComponent<PlayerController>().isDead = false;
-                player.GetComponent<PlayerHealth>().isDead = false;
+                player.GetComponent<PlayerController>().CheckPointRevive();
+                player.GetComponent<PlayerHealth>().SetIsPlayerAlive();
                 
             }
         }
