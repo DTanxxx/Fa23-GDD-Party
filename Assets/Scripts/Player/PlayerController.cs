@@ -14,7 +14,6 @@ namespace Lurkers.Control
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private float maxSpeed = 0.2f;
         [SerializeField] private int accFrames = 9;
         [SerializeField] private int lookFrames = 2;
         [SerializeField] private int frameDelay = 1;
@@ -38,6 +37,7 @@ namespace Lurkers.Control
         private bool isDead = false;
         private bool isFrozen = false;
         private float animSpeed;
+        private float maxSpeed;
         private PlayerSprinter _playerSprinter;
         public bool inDialogue;
 
@@ -96,6 +96,7 @@ namespace Lurkers.Control
             if (inDialogue)
             {
                 animator.SetBool("Walking", false);
+                myRigidbody.velocity = Vector3.zero;
                 return;
             }
 
@@ -131,7 +132,7 @@ namespace Lurkers.Control
                 animator.SetBool("Walking", true);
                 moving?.Invoke();
                 dir = lastDirection.normalized;
-                gameObject.transform.Translate(dir * maxSpeed * (currFrames - lookFrames) / accFrames);
+                myRigidbody.velocity = dir * maxSpeed * (currFrames - lookFrames) / accFrames;
 
                 if (dir.x > 0)
                 {
@@ -147,6 +148,7 @@ namespace Lurkers.Control
             else
             {
                 // not walking
+                myRigidbody.velocity = Vector3.zero;
                 animator.SetBool("Walking", false);
                 notMoving?.Invoke();
             }

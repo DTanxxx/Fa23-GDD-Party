@@ -9,15 +9,43 @@ namespace Lurkers.Control.Level
 {
     public class LevelManager : MonoBehaviour
     {
+        [SerializeField] private float ostDur = 47.5f;
+
         public static Action onPauseGame;
         public static Action onUnpausegame;
+
+        private static bool mainMenu = true;
+        private float timer = 0f;
+        private FMOD.Studio.EventInstance inst;
 
         // play main menu theme
         private void Awake()
         {
             if (SceneManager.GetActiveScene().buildIndex == 0)
             {
-                AudioManager.instance.Play(FMODEvents.instance.mainMenu, transform);
+                inst = AudioManager.instance.Play(FMODEvents.instance.mainMenu, transform);
+                timer = ostDur;
+            }
+            else
+            {
+                mainMenu = false;
+            }
+        }
+
+        private void Update()
+        {
+            if (!mainMenu)
+            {
+                return;
+            }
+
+            timer -= Time.deltaTime;
+            if (timer < 0f)
+            {
+                // stop OST and restart
+                timer = ostDur;
+                AudioManager.instance.Stop(inst);
+                inst = AudioManager.instance.Play(FMODEvents.instance.mainMenu, transform);
             }
         }
 
@@ -25,6 +53,7 @@ namespace Lurkers.Control.Level
         public void LoadNextScene()
         {
             AudioManager.instance.StopAll();
+            mainMenu = false;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 

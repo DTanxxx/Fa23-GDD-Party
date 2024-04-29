@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Lurkers.Control.Vision.Character;
+using Lurkers.Control.Level;
 
 namespace Lurkers.Control
 {
@@ -20,9 +21,72 @@ namespace Lurkers.Control
         public static Action<DeathCause, Vector3, GameObject> onDeath;
 
         private bool isDead = false;
+        private bool isImmune = false;
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnEnable()
         {
+            NextLevelTrigger.onBeginLevelTransition += PlayerImmune;
+        }
+
+        private void OnDisable()
+        {
+            NextLevelTrigger.onBeginLevelTransition -= PlayerImmune;
+        }
+
+        private void PlayerImmune()
+        {
+            isImmune = true;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (isImmune)
+            {
+                return;
+            }
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
+            {
+                bool enemyActive = other.gameObject.GetComponentInParent<WeepingAngelController>().IsActive();
+                if (onDeath != null && enemyActive)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.WEEPINGANGEL, other.transform.position, other.transform.parent.gameObject);
+                }
+            }
+            else if (other.gameObject.layer == LayerMask.NameToLayer("FaceHugger"))
+            {
+                if (onDeath != null)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.FACEHUGGER, other.transform.position, other.transform.parent.gameObject);
+                }
+            }
+            else if (other.gameObject.layer == LayerMask.NameToLayer("Cthulhu"))
+            {
+                if (onDeath != null)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.CTHULHU, other.transform.position, other.transform.parent.gameObject);
+                }
+            }
+            else if (other.gameObject.layer == LayerMask.NameToLayer("MothMan"))
+            {
+                if (onDeath != null)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.MOTHMAN, other.transform.position, other.transform.parent.gameObject);
+                }
+            }
+        }
+
+        /*private void OnCollisionEnter(Collision collision)
+        {
+            if (isImmune)
+            {
+                return;
+            }
+
             if (collision.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
             {
                 bool enemyActive = collision.gameObject.GetComponentInParent<WeepingAngelController>().IsActive();
@@ -56,7 +120,7 @@ namespace Lurkers.Control
                     onDeath?.Invoke(DeathCause.MOTHMAN, collision.transform.position, collision.transform.parent.gameObject);
                 }
             }
-        }
+        }*/
 
         public void SetIsPlayerDead()
         {

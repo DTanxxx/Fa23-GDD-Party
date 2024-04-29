@@ -29,6 +29,13 @@ namespace Lurkers.UI.Hearing
 
         private void OnTriggerEnter(Collider other)
         {
+            GameObject player = other.transform.parent.parent.gameObject;
+
+            if (!player.gameObject.CompareTag("Player"))
+            {
+                return;
+            }
+
             if (!ended)
             {
                 ended = true;
