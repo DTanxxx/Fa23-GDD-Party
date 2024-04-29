@@ -18,7 +18,7 @@ public class Throwable : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PlayerAnimatorController = gameObject.GetComponent<Animator>();
+        PlayerAnimatorController = tempParent.GetComponent<Animator>();
     }
 
     // Update is called once per frame

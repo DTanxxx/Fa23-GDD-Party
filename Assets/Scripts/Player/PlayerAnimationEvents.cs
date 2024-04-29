@@ -11,6 +11,9 @@ namespace Lurkers.Event
         public static Action onEndPlayerDeathAnim;
         public static Action onSkullCrush;
         public static Action onFacehug;
+        public static Action onFinishThrow;
+
+
 
         // animation event
         public void OnEndDeathAnimation()
@@ -34,6 +37,11 @@ namespace Lurkers.Event
         public void OnFootstep()
         {
             onFootstep?.Invoke();
+        }
+
+        public void OnFinishThrow()
+        {
+            onFinishThrow?.Invoke();
         }
     }
 }
