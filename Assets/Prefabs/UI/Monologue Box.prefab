@@ -114,7 +114,9 @@ MonoBehaviour:
     lines:
     - The power outage must be affecting the elevators. Let's see if there is a way
       I can get this running again.
-    - WASD to move, use the flashlight to your advantage.
+    - 'WASD to move, Left Shift to sprint. Use the flashlight to your advantage. '
+    - I am pretty unfit so I can only sprint for 5 seconds straight before needing
+      a break!
   - type: 5
     lines:
     - These color tiles serve as defensive mechanisms to keep out intruders.
@@ -330,10 +332,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4848067110966454524}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.29939777, y: 0.10825927}
-  m_AnchorMax: {x: 0.94970834, y: 0.34769666}
-  m_AnchoredPosition: {x: 4.850464, y: -0.09326172}
-  m_SizeDelta: {x: 4.8846436, y: -9.531748}
+  m_AnchorMin: {x: 0.29939777, y: 0.114703715}
+  m_AnchorMax: {x: 0.8874376, y: 0.34769666}
+  m_AnchoredPosition: {x: -0.26522827, y: -3.5932617}
+  m_SizeDelta: {x: -5.3468018, y: -2.5317993}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2321759438600213456
 CanvasRenderer:

@@ -242,7 +242,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6478608060545904792}
-  - component: {fileID: 4176752185370769491}
+  - component: {fileID: 1073280970064262070}
   m_Layer: 10
   m_Name: Environment Collision
   m_TagString: Player
@@ -265,8 +265,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4268195423564296596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &4176752185370769491
-CapsuleCollider:
+--- !u!65 &1073280970064262070
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -283,11 +283,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.15
-  m_Height: 5
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 3
+  m_Size: {x: 2.0392609, y: 1, z: 4.121704}
+  m_Center: {x: 0.02092743, y: 0, z: 0.32260132}
 --- !u!1 &1774353913862582178
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,7 +646,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc3ffa0866f483946a13305c43b23978, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 0.15
   accFrames: 9
   lookFrames: 2
   frameDelay: 5
@@ -791,15 +788,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0
-  maxStamina: 3
+  maxStamina: 5
   currStamina: 0
   hasRegenerated: 1
   weAreSprinting: 0
-  staminaRegen: 1
+  staminaRegen: 2
   staminaDrain: 1
-  slowedRunSpeed: 0.1
-  normalRunSpeed: 0.2
-  sprintingRunSpeed: 0.3
+  slowedRunSpeed: 4
+  normalRunSpeed: 7
+  sprintingRunSpeed: 11
 --- !u!1 &3440088088827517426
 GameObject:
   m_ObjectHideFlags: 0

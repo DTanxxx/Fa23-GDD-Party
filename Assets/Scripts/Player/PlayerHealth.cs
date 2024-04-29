@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Lurkers.Control.Vision.Character;
+using Lurkers.Control.Level;
 
 namespace Lurkers.Control
 {
@@ -20,9 +21,30 @@ namespace Lurkers.Control
         public static Action<DeathCause, Vector3, GameObject> onDeath;
 
         private bool isDead = false;
+        private bool isImmune = false;
+
+        private void OnEnable()
+        {
+            NextLevelTrigger.onBeginLevelTransition += PlayerImmune;
+        }
+
+        private void OnDisable()
+        {
+            NextLevelTrigger.onBeginLevelTransition -= PlayerImmune;
+        }
+
+        private void PlayerImmune()
+        {
+            isImmune = true;
+        }
 
         private void OnCollisionEnter(Collision collision)
         {
+            if (isImmune)
+            {
+                return;
+            }
+
             if (collision.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
             {
                 bool enemyActive = collision.gameObject.GetComponentInParent<WeepingAngelController>().IsActive();
