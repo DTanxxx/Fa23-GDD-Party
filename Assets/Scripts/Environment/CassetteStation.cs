@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.UI;
 
 namespace Lurkers.Environment.Hearing
@@ -19,6 +20,9 @@ namespace Lurkers.Environment.Hearing
         [SerializeField] private bool _showOnlyWhileSelected = true;
         [SerializeField] private Color _gizmoColor;*/
 
+        private static bool firstTime = true;
+
+        public static Action onFirstTimeCassette;
 
         private void Awake()
         {
@@ -74,6 +78,12 @@ namespace Lurkers.Environment.Hearing
 
         void OnTriggerEnter(Collider other)
         {
+            if (firstTime)
+            {
+                firstTime = false;
+                onFirstTimeCassette?.Invoke();
+            }
+
             if (other.gameObject.CompareTag("Player"))
             {
                 button.interactable = true;

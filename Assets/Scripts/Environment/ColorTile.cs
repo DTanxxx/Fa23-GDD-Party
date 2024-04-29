@@ -185,6 +185,13 @@ namespace Lurkers.Environment.Vision.ColorTile
 
         private void OnTriggerExit(Collider collision)
         {
+            GameObject player = collision.transform.parent.parent.gameObject;
+
+            if (!player.gameObject.CompareTag("Player")) 
+            { 
+                return;
+            }
+
             if (tileColor == TileColor.Yellow)
             {
                 // TODO remove all instances of AudioManager... and fire a C# event instead

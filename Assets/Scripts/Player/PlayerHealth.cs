@@ -38,7 +38,49 @@ namespace Lurkers.Control
             isImmune = true;
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnTriggerEnter(Collider other)
+        {
+            if (isImmune)
+            {
+                return;
+            }
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("WeepingAngel"))
+            {
+                bool enemyActive = other.gameObject.GetComponentInParent<WeepingAngelController>().IsActive();
+                if (onDeath != null && enemyActive)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.WEEPINGANGEL, other.transform.position, other.transform.parent.gameObject);
+                }
+            }
+            else if (other.gameObject.layer == LayerMask.NameToLayer("FaceHugger"))
+            {
+                if (onDeath != null)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.FACEHUGGER, other.transform.position, other.transform.parent.gameObject);
+                }
+            }
+            else if (other.gameObject.layer == LayerMask.NameToLayer("Cthulhu"))
+            {
+                if (onDeath != null)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.CTHULHU, other.transform.position, other.transform.parent.gameObject);
+                }
+            }
+            else if (other.gameObject.layer == LayerMask.NameToLayer("MothMan"))
+            {
+                if (onDeath != null)
+                {
+                    isDead = true;
+                    onDeath?.Invoke(DeathCause.MOTHMAN, other.transform.position, other.transform.parent.gameObject);
+                }
+            }
+        }
+
+        /*private void OnCollisionEnter(Collision collision)
         {
             if (isImmune)
             {
@@ -78,7 +120,7 @@ namespace Lurkers.Control
                     onDeath?.Invoke(DeathCause.MOTHMAN, collision.transform.position, collision.transform.parent.gameObject);
                 }
             }
-        }
+        }*/
 
         public void SetIsPlayerDead()
         {

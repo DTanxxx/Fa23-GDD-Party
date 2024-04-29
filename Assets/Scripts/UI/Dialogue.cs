@@ -6,8 +6,10 @@ using TMPro;
 using Lurkers.Control;
 using Lurkers.Control.Vision;
 using Lurkers.Environment.Vision;
+using Lurkers.Environment.Hearing;
 using Lurkers.Cam;
 using Lurkers.UI.Hearing;
+using Lurkers.UI.Vision;
 using Lurkers.Event;
 
 namespace Lurkers.UI
@@ -27,6 +29,9 @@ namespace Lurkers.UI
         PICKUP_ECHO,
         PICKUP_NOTEBOOK,
         FLASHLIGHT_BREAK,
+        PICKUP_CAM,
+        FIRST_TIME_FIND_CASSETTE,
+        FIRST_TIME_PLAY_CASSETTE,
     }
 
     [System.Serializable]
@@ -82,6 +87,9 @@ namespace Lurkers.UI
             Vault.onFirstTimeOpen += OnFirstTimeKeyPickup;
             FlickerTrigger.onFlashlightFlickerFirstTime += OnFirstTimeFlicker;
             PlayerAnimationEvents.onFlashlightBreak += OnFlashlightBreak;
+            SecurityCamEnabler.onFirstTimeCamPickup += OnPickupSecurityCam;
+            CassetteStation.onFirstTimeCassette += OnFirstTimeCassette;
+            CassetteAudio.onFirstTimePlayCassette += OnFirstTimePlayCassette;
 
             AuditoryUIEnabler.onCorpseCollide += OnPickupCassette;
             AuditoryUIEnabler.onCassetteFinish += OnPickupEcholocator;
@@ -98,6 +106,9 @@ namespace Lurkers.UI
             Vault.onFirstTimeOpen -= OnFirstTimeKeyPickup;
             FlickerTrigger.onFlashlightFlickerFirstTime -= OnFirstTimeFlicker;
             PlayerAnimationEvents.onFlashlightBreak -= OnFlashlightBreak;
+            SecurityCamEnabler.onFirstTimeCamPickup -= OnPickupSecurityCam;
+            CassetteStation.onFirstTimeCassette -= OnFirstTimeCassette;
+            CassetteAudio.onFirstTimePlayCassette -= OnFirstTimePlayCassette;
 
             AuditoryUIEnabler.onCorpseCollide -= OnPickupCassette;
             AuditoryUIEnabler.onCassetteFinish -= OnPickupEcholocator;
@@ -215,6 +226,27 @@ namespace Lurkers.UI
         {
             uiContainer.SetActive(true);
             InitDialogueState(DialogueType.FLASHLIGHT_BREAK);
+            DisplayDialogue();
+        }
+
+        private void OnPickupSecurityCam()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.PICKUP_CAM);
+            DisplayDialogue();
+        }
+
+        private void OnFirstTimeCassette()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.FIRST_TIME_FIND_CASSETTE);
+            DisplayDialogue();
+        }
+
+        private void OnFirstTimePlayCassette()
+        {
+            uiContainer.SetActive(true);
+            InitDialogueState(DialogueType.FIRST_TIME_PLAY_CASSETTE);
             DisplayDialogue();
         }
 
