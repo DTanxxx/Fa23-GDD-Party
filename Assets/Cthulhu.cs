@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.UI.Image;
 
 namespace Lurkers.Control.Hearing.Character
 {
@@ -27,7 +26,6 @@ namespace Lurkers.Control.Hearing.Character
         [SerializeField] private GameObject startPatrol;
         [SerializeField] private GameObject endPatrol;
 
-
         // These lists of soundtypes should have no overlap
         [SerializeField] private List<Sound.SoundType> InterestingSounds;
         [SerializeField] private List<Sound.SoundType> DangerousSounds;
@@ -43,31 +41,23 @@ namespace Lurkers.Control.Hearing.Character
         private bool enemyActive = false;
         private bool inMonologue;
         private Animator animator;
-        /*private bool enraged = false;*/
         private bool sToe = true;
         private SpriteRenderer spriteRenderer;
         private bool check;
+
         private void Start()
         {
-
             agent = GetComponentInParent<NavMeshAgent>();
-
-            //added
             agent.autoBraking = false;
             player = GameObject.FindGameObjectWithTag("Player");
             myCollider = GetComponent<Collider>();
             spriteRenderer = spriteRendererObj.GetComponent<SpriteRenderer>();
             animator = animatorObj.GetComponent<Animator>();
-            /*InterestingSounds = new List<Sound.SoundType>();
-			InterestingSounds.Add(Sound.SoundType.Footstep);
-			InterestingSounds.Add(Sound.SoundType.Rock);*/
             enemyActive = true;
             DangerousSounds = new List<Sound.SoundType>();
             DangerousSounds.Add(Sound.SoundType.Bats);
-
-
-
         }
+
         //added OnEnable and OnDisable
         private void OnEnable()
         {
@@ -85,29 +75,20 @@ namespace Lurkers.Control.Hearing.Character
 
         private void Update()
         {
-            /*            if (soundExpiringTimer > 0f)
-                        {
-                            soundExpiringTimer -= Time.deltaTime;
-                        }
-                        else
-                        {
-                            // expire curSound
-                            curAmplitude = 0f;
-                        }*/
             if (isPlayerDead || !enemyActive || inMonologue)
             {
                 return;
             }
 
-            /*if (enraged)
+            if (soundExpiringTimer > 0f)
             {
-                if (freezeTimer > 0)
-                {
-                    freezeTimer -= Time.deltaTime;
-                    return;
-                }
-            }*/
-
+                soundExpiringTimer -= Time.deltaTime;
+            }
+            else
+            {
+                // expire curSound
+                curAmplitude = 0f;
+            }
 
             if ((agent.destination.x - transform.position.x) > 0)
             {
@@ -117,6 +98,7 @@ namespace Lurkers.Control.Hearing.Character
             {
                 spriteRenderer.flipX = true;
             }
+
             //added
             if (!agent.pathPending && agent.remainingDistance < 0.5f && !(Vector3.Distance(player.transform.position, transform.position) <= playerDetectionRadius))
             {
@@ -137,8 +119,8 @@ namespace Lurkers.Control.Hearing.Character
                 animator.SetBool("Run   ", false);
                 animator.SetBool("Sound", false);
                 animator.SetBool("Walk", true);
-
             }
+
             if (Vector3.Distance(player.transform.position, transform.position) <= playerDetectionRadius)
             {
                 agent.SetDestination(player.transform.position);
@@ -211,35 +193,14 @@ namespace Lurkers.Control.Hearing.Character
             }
         }
 
-        //added all functions added
-        public void SetActive()
-        {
-            enemyActive = true;
-            // animation transition
-            /*animator.SetTrigger("Activate");*/
-        }
-
-        public void SetInActive()
-        {
-            enemyActive = false;
-        }
-
         public void OnHit()
         {
             freezeTimer = freezeDuration;
             agent.velocity = Vector3.zero;
             agent.isStopped = true;
-            // animation transition (with antennae -> no antennae and mad)
-            /*animator.SetBool("Hit", true);*/
-            /*            enraged = true;*/
         }
 
-        public bool IsActive()
-        {
-            return enemyActive;
-        }
-
-        public void DialogueActive()
+        public void DialogueActive(DialogueType type)
         {
             Debug.Log("WeepingAngelDialogue");
             agent.velocity = Vector3.zero;
@@ -247,7 +208,7 @@ namespace Lurkers.Control.Hearing.Character
             inMonologue = true;
         }
 
-        public void DialogueInactive()
+        public void DialogueInactive(DialogueType type)
         {
             agent.isStopped = false;
             inMonologue = false;
