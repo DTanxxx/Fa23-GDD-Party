@@ -70,17 +70,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaseSpeed: 16
-  soundThreshold: 5
+  soundThreshold: 1
   soundExpireDuration: 3
-  playerDetectionRadius: 7
-  freezeDuration: 5
-  animatorObj: {fileID: 4332209966031701191}
+  playerDetectionRadius: 5
+  animator: {fileID: 4682500910000568420}
   spriteRenderer: {fileID: 500652625376251084}
   myCollider: {fileID: 4429362906702640300}
   startPatrol: {fileID: 0}
   endPatrol: {fileID: 0}
   InterestingSounds: 0300000004000000
   DangerousSounds: 
+  freezeDuration: 5
 --- !u!1 &4332209966031701191
 GameObject:
   m_ObjectHideFlags: 0

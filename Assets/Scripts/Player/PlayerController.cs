@@ -225,8 +225,7 @@ namespace Lurkers.Control
                     animator.SetTrigger("RedDeath");
                     break;
                 case DeathCause.CTHULHU:
-                    //animator.SetTrigger("Cthulhu");
-                    PlayerAnimationEvents.onEndPlayerDeathAnim?.Invoke();  // TO BE REMOVED
+                    animator.SetTrigger("Cthulhu");
                     break;
                 default:
                     Debug.LogError("UNKNOWN DEATH CAUSE");
@@ -236,31 +235,46 @@ namespace Lurkers.Control
             isDead = true;
             FreezePlayer();
 
-            if (cause == DeathCause.WEEPINGANGEL)
+            switch (cause)
             {
-                if (enemyPosition.x < transform.position.x)
-                {
-                    // flip sprite
-                    spriteRenderer.flipX = true;
-                }
-                else
-                {
-                    // don't flip
-                    spriteRenderer.flipX = false;
-                }
-            }
-            else if (cause == DeathCause.FACEHUGGER)
-            {
-                if (enemyPosition.x < transform.position.x)
-                {
-                    // don't flip
-                    spriteRenderer.flipX = false;
-                }
-                else
-                {
-                    // flip sprite
-                    spriteRenderer.flipX = true;
-                }
+                case DeathCause.WEEPINGANGEL:
+                    if (enemyPosition.x < transform.position.x)
+                    {
+                        // flip sprite
+                        spriteRenderer.flipX = true;
+                    }
+                    else
+                    {
+                        // don't flip
+                        spriteRenderer.flipX = false;
+                    }
+                    break;
+                case DeathCause.FACEHUGGER:
+                    if (enemyPosition.x < transform.position.x)
+                    {
+                        // don't flip
+                        spriteRenderer.flipX = false;
+                    }
+                    else
+                    {
+                        // flip sprite
+                        spriteRenderer.flipX = true;
+                    }
+                    break;
+                case DeathCause.CTHULHU:
+                    if (enemyPosition.x < transform.position.x)
+                    {
+                        // don't flip
+                        spriteRenderer.flipX = false;
+                    }
+                    else
+                    {
+                        // flip sprite
+                        spriteRenderer.flipX = true;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 

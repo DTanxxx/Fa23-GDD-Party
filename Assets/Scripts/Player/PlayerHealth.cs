@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Lurkers.Control.Vision.Character;
+using Lurkers.Control.Vision;
 using Lurkers.Control.Level;
 
 namespace Lurkers.Control

@@ -221,7 +221,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -1190099522927035651}
-    m_Position: {x: 270, y: 120, z: 0}
+    m_Position: {x: 280, y: 110, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -242,8 +242,7 @@ AnimatorState:
   m_Name: Transform
   m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions:
-  - {fileID: 8171975415738568662}
+  m_Transitions: []
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0

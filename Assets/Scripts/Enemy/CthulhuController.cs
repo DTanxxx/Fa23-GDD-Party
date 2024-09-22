@@ -6,16 +6,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Lurkers.Control.Hearing.Character
+namespace Lurkers.Control.Hearing
 {
-	public class SoundCreatureController : MonoBehaviour, Listen
+	public class CthulhuController : MonoBehaviour, Listen
 	{
-		private NavMeshAgent agent;
+        // Common
 		[SerializeField] private float chaseSpeed = 6f;
 		[SerializeField] private float soundThreshold = 5f;
         [SerializeField] private float soundExpireDuration = 3.0f;
         [SerializeField] private float playerDetectionRadius = 7f;
-        [SerializeField] private float freezeDuration = 5f;
         [SerializeField] private Animator animator;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private Collider myCollider;
@@ -26,10 +25,12 @@ namespace Lurkers.Control.Hearing.Character
         [SerializeField] private List<Sound.SoundType> InterestingSounds;
 		[SerializeField] private List<Sound.SoundType> DangerousSounds;
 
-		private float curAmplitude;
-		private float soundExpiringTimer;
+        // Cthulhu
+        [SerializeField] private float freezeDuration = 5f;
 
-		//added
+        private float curAmplitude;
+		private float soundExpiringTimer;
+        private NavMeshAgent agent;
         private GameObject player;
         private bool isPlayerDead = false;
         private float freezeTimer;
@@ -42,6 +43,8 @@ namespace Lurkers.Control.Hearing.Character
 		{
             agent = GetComponent<NavMeshAgent>();
             agent.autoBraking = false;
+            enemyActive = true;
+            MoveTo(startPatrol.transform.position);
             player = GameObject.FindGameObjectWithTag("Player");
         }
 
@@ -85,7 +88,28 @@ namespace Lurkers.Control.Hearing.Character
                 spriteRenderer.flipX = true;
             }
 
+            if (!agent.pathPending && agent.remainingDistance < 0.5f && !(Vector3.Distance(player.transform.position, transform.position) <= playerDetectionRadius))
+            {
+                /*animator.SetBool("Freeze", false);*/
+                if (sToe)
+                {
+                    MoveTo(endPatrol.transform.position);
+                    sToe = false;
+                }
+                else
+                {
+                    MoveTo(startPatrol.transform.position);
+                    sToe = true;
+                }
 
+                animator.SetTrigger("Walk");
+            }
+
+            if (Vector3.Distance(player.transform.position, transform.position) <= playerDetectionRadius)
+            {
+                animator.SetTrigger("Seek");
+                MoveTo(player.transform.position);
+            }
         }
 
         private void OnPlayerDeath(DeathCause cause, Vector3 enemyPosition, GameObject enemy = null)
@@ -123,42 +147,28 @@ namespace Lurkers.Control.Hearing.Character
                         MoveTo(sound.pos - (dir * 10f));
                     }
 
+                    animator.SetTrigger("Seek");
+
                     Debug.Log(name + " responding to sound at " + sound.pos);
                     curAmplitude = amplitude;
                     soundExpiringTimer = soundExpireDuration;
                 }
             }
-
             Debug.Log(name + " responding to sound at " + sound.pos);
         }
 
 		private void MoveTo(Vector3 pos)
 		{
-            // might want to check if the player is in LOS or if the distance the agent needs to // travel is within a certain range
-            if (Vector3.Distance(player.transform.position, transform.position) <= playerDetectionRadius)
-            {
-                agent.SetDestination(pos);
-                agent.isStopped = false;
-                agent.speed = chaseSpeed;
-            }
-            else
-            {
-                if (!agent.pathPending && agent.remainingDistance < 0.5f)
-                {
-                    if (sToe)
-                    {
-                        agent.SetDestination(endPatrol.transform.position);
-                    }
-                    else
-                    {
-                        agent.SetDestination(startPatrol.transform.position);
-                    }
-                    agent.isStopped = false;
-                    agent.speed = chaseSpeed;
-                    animator.SetBool("Sound", false);
-                    animator.SetBool("Walk", true);
-                }
-            }
+            agent.SetDestination(pos);
+            agent.isStopped = false;
+            agent.speed = chaseSpeed;
+        }
+
+        public void OnHit()
+        {
+            freezeTimer = freezeDuration;
+            agent.velocity = Vector3.zero;
+            agent.isStopped = true;
         }
 
         public void DialogueActive(DialogueType type)
