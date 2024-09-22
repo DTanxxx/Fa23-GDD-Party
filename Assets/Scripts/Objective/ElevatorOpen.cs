@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Lurkers.Audio;
 using Lurkers.UI;
+using Unity.VisualScripting;
 
 namespace Lurkers.Environment.Vision
 {
@@ -19,12 +20,25 @@ namespace Lurkers.Environment.Vision
         public static Action onElevatorClose;
         public static Action onPlayerEntrance;
         public static Action onFirstTimeClose;
+        public static Action onSkipAnimation; 
 
         private static bool firstTimeClose = true;
+        private bool elevatorSequenceOver = false;
 
         private void Start()
         {
             nextLevelTrigger.SetActive(false);
+        }
+        
+        // added update loop to check and skip the beginning animation sequence. 
+        public void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space) && !elevatorSequenceOver)
+            {
+                SkipAnimation();
+                Debug.Log("hiiiiii");
+                elevatorSequenceOver = true;
+            }
         }
 
         private void OnEnable()
@@ -93,6 +107,15 @@ namespace Lurkers.Environment.Vision
             AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, AudioManager.instance.playerTransform(), "Elevator", (float)Elevator.State.OPEN);
             animator.SetTrigger("Exit");
             opened = true;
+        }
+
+        // A animation that is referenced to skip the beginning animation and text
+        public void SkipAnimation() {
+            onSkipAnimation?.Invoke();
+            animator.SetTrigger("Skip");
+            onElevatorClose?.Invoke();
+            AchieveGoal();
+            OnDisable();
         }
     }
 }
