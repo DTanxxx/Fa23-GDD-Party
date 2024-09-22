@@ -60,7 +60,7 @@ namespace Lurkers.Control.Level
         // button event
         public void QuitGame()
         {
-            Application.Quit();
+            SceneManager.LoadScene(0);
         }
 
         // button event
