@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Lurkers.Control.Vision.Character;
+using Lurkers.Control.Vision;
 
 namespace Lurkers.Audio.Enemy
 {

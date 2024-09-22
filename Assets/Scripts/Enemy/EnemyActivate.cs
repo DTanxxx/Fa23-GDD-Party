@@ -5,7 +5,7 @@ using UnityEngine;
 using Lurkers.Inventory;
 using Lurkers.Cam;
 using Lurkers.Event;
-using Lurkers.Control.Vision.Character;
+using Lurkers.Control.Vision;
 using Lurkers.Environment.Vision;
 
 namespace Lurkers.Control

@@ -9,11 +9,12 @@ namespace Lurkers.Hearing
 	{
 		public static void MakeSound(Sound sound)
 		{
-			Collider[] col = Physics.OverlapSphere(sound.pos, sound.range);
+			Collider[] col = Physics.OverlapSphere(sound.pos, sound.range, 
+				(1 << LayerMask.NameToLayer("Cthulhu")) | (1 << LayerMask.NameToLayer("MothMan")));
 
 			for (int i = 0; i < col.Length; i++)
 			{
-				if (col[i].TryGetComponent(out Listen listener))
+				if (col[i].transform.parent.TryGetComponent(out Listen listener))
 				{
 					listener.RespondToSound(sound);
 				}

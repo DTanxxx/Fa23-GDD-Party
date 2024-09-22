@@ -7,7 +7,7 @@ using FMOD.Studio;  // TODO make a script/event so that we don't have to use thi
 using Lurkers.Vision;
 using Lurkers.Audio;
 
-namespace Lurkers.Control.Vision.Character
+namespace Lurkers.Control.Vision
 {
     public class FaceHuggerController : MonoBehaviour, IFlashable
     {

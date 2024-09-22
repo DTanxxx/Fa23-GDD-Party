@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using Lurkers.Vision;
 using Lurkers.UI;
 
-namespace Lurkers.Control.Vision.Character
+namespace Lurkers.Control.Vision
 {
     public class WeepingAngelController : MonoBehaviour, IFlashable
     {
