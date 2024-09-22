@@ -9,7 +9,7 @@ namespace Lurkers.Environment.Vision
         [SerializeField] private Light2D spotlight;
         [SerializeField] private Light2D flashlight;
         [SerializeField] private Color desiredColor;
-        [SerializeField] private float flickerPerMin = 12f;
+        [SerializeField] private float flickerPerMin = 6f;
 
         private Color spotColor;
         private Color flashColor;
