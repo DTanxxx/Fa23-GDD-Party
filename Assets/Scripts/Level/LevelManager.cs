@@ -18,6 +18,8 @@ namespace Lurkers.Control.Level
         private float timer = 0f;
         private FMOD.Studio.EventInstance inst;
 
+        public static LevelManager Instance;
+
         // play main menu theme
         private void Awake()
         {
@@ -29,6 +31,15 @@ namespace Lurkers.Control.Level
             else
             {
                 mainMenu = false;
+            }
+
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
             }
         }
 
