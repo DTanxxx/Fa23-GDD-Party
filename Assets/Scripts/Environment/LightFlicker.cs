@@ -9,7 +9,9 @@ namespace Lurkers.Environment.Vision
         [SerializeField] private Light2D spotlight;
         [SerializeField] private Light2D flashlight;
         [SerializeField] private Color desiredColor;
-        [SerializeField] private float flickerPerMin = 6f;
+        [SerializeField] private float darker_red_duration = 5f; // 0.7
+        [SerializeField] private float RED_duration = 5f; // 1.0 
+        [SerializeField] private float normal_light_duration = 2f; // 0
 
         private Color spotColor;
         private Color flashColor;
@@ -44,19 +46,20 @@ namespace Lurkers.Environment.Vision
         {
             while (true)
             {
-                yield return new WaitForSeconds(1f);
 
-                ChangeColor(0.7f);
-                yield return new WaitForSeconds(0.75f);
+                ChangeColor(1f); // full red
+                yield return new WaitForSeconds(RED_duration);
+                
+                ChangeColor(0f); // normal color 
+                yield return new WaitForSecondsRealtime(normal_light_duration);
+                
+                ChangeColor(0.7f); // darker red
+                yield return new WaitForSeconds(darker_red_duration);
 
-                ChangeColor(0.3f);
-                yield return new WaitForSeconds(0.75f);
+                ChangeColor(0f); // normal color 
+                yield return new WaitForSecondsRealtime(normal_light_duration);
 
-                ChangeColor(1f);
-                yield return new WaitForSeconds(0.75f);
-
-                ChangeColor(0f);
-                yield return new WaitForSecondsRealtime(60 / flickerPerMin);
+                
             }
         }
 
