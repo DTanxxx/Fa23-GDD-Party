@@ -48,15 +48,14 @@ namespace Lurkers.Environment.Vision
             if (cam.Count > 0 && Input.GetKeyDown("c"))
             {
                 //Debug.Log(onCamera);
-                switch (!onCamera)
+                if (onCamera)
                 {
-                    case true:
-                        freezeOn?.Invoke();
-                        break;
-                    case false:
-                        freezeOff?.Invoke();
-                        break;
+                    freezeOff?.Invoke();
+                } else
+                {
+                    freezeOn?.Invoke();
                 }
+                
                 onCamera = !onCamera;
                 cam[index].SetActive(!cam[index].activeSelf);
 
