@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Lurkers.UI.Vision;
+using System;
 
 namespace Lurkers.Environment.Vision
 {
@@ -14,6 +15,8 @@ namespace Lurkers.Environment.Vision
 
         public bool camEnabled = false;
 
+        public static Action freezeOn;
+        public static Action freezeOff;
         void Start()
         {
             onCamera = false;
@@ -44,8 +47,19 @@ namespace Lurkers.Environment.Vision
 
             if (cam.Count > 0 && Input.GetKeyDown("c"))
             {
+                //Debug.Log(onCamera);
+                switch (!onCamera)
+                {
+                    case true:
+                        freezeOn?.Invoke();
+                        break;
+                    case false:
+                        freezeOff?.Invoke();
+                        break;
+                }
                 onCamera = !onCamera;
                 cam[index].SetActive(!cam[index].activeSelf);
+
             }
             if (onCamera && Input.GetKeyDown("e"))
             {
