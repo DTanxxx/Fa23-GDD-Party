@@ -47,7 +47,6 @@ namespace Lurkers.Environment.Vision
 
             if (cam.Count > 0 && Input.GetKeyDown("c"))
             {
-                //Debug.Log(onCamera);
                 if (onCamera)
                 {
                     freezeOff?.Invoke();

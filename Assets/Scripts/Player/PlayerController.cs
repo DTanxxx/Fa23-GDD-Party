@@ -64,7 +64,6 @@ namespace Lurkers.Control
 
         private void OnEnable()
         {
-            Debug.Log("Player enable");
             PlayerHealth.onDeath += TriggerDeathAnimation;
             LeverPullAnimationEvents.onBeginLeverCinematicSequence += FreezePlayer;
             ElevatorOpen.onPlayerEntrance += TransitionIntoLevel;
@@ -85,6 +84,8 @@ namespace Lurkers.Control
             CameraFollow.onCameraRestoreComplete -= UnfreezePlayer;
             ElevatorOpen.onElevatorClose -= UnfreezePlayer;
             NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
+            SecurityCameras.freezeOn -= FreezePlayer;
+            SecurityCameras.freezeOff -= UnfreezePlayer;
             ColorTile.onIncinerate -= Incinerate;
             Dialogue.unactive -= EquipEcholocator;
         }
