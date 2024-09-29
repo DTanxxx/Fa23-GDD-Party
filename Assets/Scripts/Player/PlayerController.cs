@@ -15,8 +15,8 @@ namespace Lurkers.Control
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private int accFrames = 9;
-        [SerializeField] private int lookFrames = 2;
-        [SerializeField] private int frameDelay = 1;
+        [SerializeField] private int lookFrames = 3;
+        [SerializeField] private int frameDelay = 0;
         [SerializeField] private Animator animator = null;
         [SerializeField] private SpriteRenderer spriteRenderer = null;
         [SerializeField] private Collider myCollider = null;
@@ -115,7 +115,7 @@ namespace Lurkers.Control
                 currFrames = 0;
             }
 
-            if (curFrameDelay == frameDelay)
+            if (curFrameDelay - 3 == frameDelay)
             {
                 lastDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
                 curFrameDelay = 0;
