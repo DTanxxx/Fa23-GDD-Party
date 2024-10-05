@@ -11,6 +11,7 @@ using Lurkers.Cam;
 using Lurkers.UI.Hearing;
 using Lurkers.UI.Vision;
 using Lurkers.Event;
+using Unity.VisualScripting;
 
 namespace Lurkers.UI
 {
@@ -75,6 +76,11 @@ namespace Lurkers.UI
                     text.text = lines[index];
                 }
             }
+            if (Input.GetKeyDown(KeyCode.P)) // debugging for setting new game dialogue state 
+            {
+                PlayerPrefs.DeleteAll(); // deletes all presave prefenece dialogue options 
+
+            }
         }
 
         private void OnEnable()
@@ -126,7 +132,7 @@ namespace Lurkers.UI
             text.text = "";
             StartCoroutine(TypeLine());
         }
-        
+
         private IEnumerator TypeLine()
         {
             foreach (char c in lines[index].ToCharArray())
@@ -152,102 +158,190 @@ namespace Lurkers.UI
             }
         }
 
+        private string OnFirstEnemyEncounterBoolean = "IntroDialogueState";
+        private string OnFirstFreezeEnemyBoolean = "IntroDialogueState";
+        private string OnFirstLeverPullBoolean = "IntroDialogueState";
+        private string OnFirstTimeElevatorCloseBoolean = "IntroDialogueState";
+        private string OnColorTileIntroBoolean = "IntroDialogueState";
+        private string OnFirstTimeKeyPickupBoolean = "IntroDialogueState";
+        private string OnFirstTimeFlickerBoolean = "IntroDialogueState";
+        private string OnPickupCassetteBoolean = "IntroDialogueState";
+        private string OnFirstTimePlayCassetteBoolean = "IntroDialogueState";
+        private string OnPickupEcholocatorBoolean = "IntroDialogueState";
+        private string OnPickupNotebookBoolean = "IntroDialogueState";
+        private string OnFlashlightBreakBoolean = "IntroDialogueState";
+        private string OnPickupSecurityCamBoolean = "IntroDialogueState";
+        private string OnFirstTimeCassetteBoolean = "IntroDialogueState";
+
+
         private void OnFirstEnemyEncounter()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.FIRST_ENEMY_ENCOUNTER);
-            DisplayDialogue();
+            // if not displayed 
+            if (PlayerPrefs.GetString(OnFirstEnemyEncounterBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.FIRST_ENEMY_ENCOUNTER);
+                DisplayDialogue();
+
+                PlayerPrefs.SetString(OnFirstEnemyEncounterBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void OnFirstFreezeEnemy()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.FIRST_ENEMY_FREEZE);
-            DisplayDialogue();
+            // if not displayed 
+            if (PlayerPrefs.GetString(OnFirstFreezeEnemyBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.FIRST_ENEMY_FREEZE);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnFirstEnemyEncounterBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void OnFirstLeverPull()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.FIRST_LEVER_PULL);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnFirstLeverPullBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.FIRST_LEVER_PULL);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnFirstLeverPullBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void OnFirstTimeElevatorClose()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.INTRO);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnFirstTimeElevatorCloseBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.INTRO);
+                DisplayDialogue();
+                PlayerPrefs.SetString("true", OnFirstTimeElevatorCloseBoolean);
+            }
         }
 
         private void OnColorTileIntro()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.COLOR_TILE_INTRO);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnColorTileIntroBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.COLOR_TILE_INTRO);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnColorTileIntroBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void OnFirstTimeKeyPickup()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.FIRST_KEY_PICKUP);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnFirstTimeKeyPickupBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.FIRST_KEY_PICKUP);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnFirstTimeKeyPickupBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void OnFirstTimeFlicker()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.FIRST_FLICKER);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnFirstTimeFlickerBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.FIRST_FLICKER);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnFirstTimeFlickerBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void OnPickupCassette()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.PICKUP_CASSETTE);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnPickupCassetteBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.PICKUP_CASSETTE);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnPickupCassetteBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void OnPickupEcholocator()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.PICKUP_ECHO);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnPickupEcholocatorBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.PICKUP_ECHO);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnPickupEcholocatorBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void OnPickupNotebook()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.PICKUP_NOTEBOOK);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnPickupNotebookBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.PICKUP_NOTEBOOK);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnPickupNotebookBoolean, "true");
+                // update displayed = True
+            }
         }
 
         private void OnFlashlightBreak()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.FLASHLIGHT_BREAK);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnFlashlightBreakBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.FLASHLIGHT_BREAK);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnFlashlightBreakBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void OnPickupSecurityCam()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.PICKUP_CAM);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnPickupSecurityCamBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.PICKUP_CAM);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnPickupSecurityCamBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void OnFirstTimeCassette()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.FIRST_TIME_FIND_CASSETTE);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnFirstTimeCassetteBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.FIRST_TIME_FIND_CASSETTE);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnFirstTimeCassetteBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void OnFirstTimePlayCassette()
         {
-            uiContainer.SetActive(true);
-            InitDialogueState(DialogueType.FIRST_TIME_PLAY_CASSETTE);
-            DisplayDialogue();
+            if (PlayerPrefs.GetString(OnFirstTimePlayCassetteBoolean, "") == "")
+            {
+                uiContainer.SetActive(true);
+                InitDialogueState(DialogueType.FIRST_TIME_PLAY_CASSETTE);
+                DisplayDialogue();
+                PlayerPrefs.SetString(OnFirstTimePlayCassetteBoolean, "true");
+                // update displayed = True 
+            }
         }
 
         private void InitDialogueState(DialogueType type)
