@@ -17,6 +17,7 @@ public class Door : MonoBehaviour
     {
         locks = new Lock[numLocks];
 
+        //populate
         for (int i = 0; i <= numLocks; i++)
         {
             locks[i] = new Lock(); 
@@ -36,6 +37,7 @@ public class Door : MonoBehaviour
         if (isOpen)
         {
             Debug.Log("door open" + isOpen);
+            GetComponent<SpriteRenderer>().enabled = !isOpen;
         } 
 
     }
