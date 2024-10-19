@@ -72,4 +72,35 @@ public class Hotbar : MonoBehaviour
             }
         }
     }
+
+
+    public void addItem(Sprite itemToAdd) 
+    {
+        foreach(Image image in hotbarSlot)
+            {
+                Color c = image.color;
+                if (image.sprite == emptySprite)
+                {
+                    image.sprite = itemToAdd;
+                    c.a = 100;
+                    image.color = c;
+                    break;
+                }
+            }
+    }
+
+    public void removeItem(Sprite itemToDelete)
+    {
+        for (int i = 0; i < hotbarSlot.Length; i++)
+            {
+                Color c = hotbarSlot[i].color;
+                if (hotbarSlot[i].sprite == itemToDelete)
+                {
+                    hotbarSlot[i].sprite = emptySprite;
+                    c.a = 0;
+                    hotbarSlot[i].color = c;
+                    break;
+                }
+            }
+    }
 }
