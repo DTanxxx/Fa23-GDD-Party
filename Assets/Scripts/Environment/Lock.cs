@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Lock : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private Flavor exactFlav; 
+    private bool isLocked = true;
 
-    public bool isLocked = false;
     void Start()
     {
         
@@ -17,4 +17,15 @@ public class Lock : MonoBehaviour
     {
         
     }
+
+    //attempts to openLock
+    public void Dissolve(Flavor flavor)
+    {
+        if (isLocked && flavor.Equals(exactFlav))
+        {
+            isLocked = false;
+        }
+    }
+
+    public bool getLocked { get {  return isLocked; } }
 }
