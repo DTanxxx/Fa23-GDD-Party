@@ -9,6 +9,7 @@ using Lurkers.Cam;
 using Lurkers.Environment.Vision.ColorTile;
 using Lurkers.Control.Level;
 using Lurkers.UI;
+using UnityEngine.UIElements;
 
 namespace Lurkers.Control
 {
@@ -29,6 +30,8 @@ namespace Lurkers.Control
         [SerializeField] private bool debugMode = false;
         [SerializeField] private GameObject[] flashlightObj;
         [SerializeField] private GameObject echolocatorContainer = null;
+
+        public List<Flavor> flavorCombinations = new List<Flavor>();
 
         private int currFrames;
         private Vector3 dir;
@@ -60,6 +63,16 @@ namespace Lurkers.Control
             }
 
             playerTransform = transform;
+
+            foreach (Flavor flavor in flavorCombinations)
+            {
+                // shows the total flavor combinations
+                Debug.Log("Combination Flavor - Sweet: " + flavor.sweet);
+                Debug.Log("Combination Flavor - Bitter: " + flavor.sour);
+                Debug.Log("Combination Flavor - Bitter: " + flavor.bitter);
+                Debug.Log("Combination Flavor - Bitter: " + flavor.salty);
+                Debug.Log("Combination Flavor - Bitter: " + flavor.umami);
+            }
         }
 
         private void OnEnable()
@@ -158,6 +171,23 @@ namespace Lurkers.Control
 
             }
         }
+
+        // Method to set a new flavors
+        public void SetFlavor(Flavor[] newFlavors)
+        {
+            // Clear current flavor combinations
+            flavorCombinations.Clear();
+
+            // Add the new flavors
+            foreach (Flavor flavor in newFlavors)
+            {
+                flavorCombinations.Add(flavor);
+            }
+
+            Debug.Log("Total combinations:" + flavorCombinations.Count);
+
+        }
+
 
         public void SetRunSpeed(float speed)
         {
