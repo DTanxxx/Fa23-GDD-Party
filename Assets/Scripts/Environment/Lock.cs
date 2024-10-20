@@ -21,7 +21,7 @@ public class Lock : MonoBehaviour
     //attempts to openLock
     public void Dissolve(Flavor flavor)
     {
-        if (isLocked && flavor.Equals(exactFlav))
+        if (flavor.Equals(exactFlav))
         {
             isLocked = false;
         }

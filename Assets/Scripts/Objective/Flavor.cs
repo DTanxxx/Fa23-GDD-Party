@@ -28,11 +28,12 @@ public class Flavor : ScriptableObject
         }
         
         Flavor inpFlav = (Flavor) someFlav;
-        if (this.sweet == inpFlav.sweet &&
-            this.bitter == inpFlav.bitter &&
-            this.sour == inpFlav.sour &&
-            this.salty == inpFlav.salty &&
-            this.umami == inpFlav.umami)
+        float tolerance = 0.1f;  
+        if (Mathf.Abs(this.sweet - inpFlav.sweet) < tolerance &&
+            Mathf.Abs(this.bitter - inpFlav.bitter) < tolerance &&
+            Mathf.Abs(this.sour - inpFlav.sour) < tolerance &&
+            Mathf.Abs(this.salty - inpFlav.salty) < tolerance &&
+            Mathf.Abs(this.umami - inpFlav.umami) < tolerance)
         {
             return true;
         }
