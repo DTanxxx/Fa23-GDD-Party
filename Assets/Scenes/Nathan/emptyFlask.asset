@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18a3c1c6b144d444d8d579d7b76581d3, type: 3}
-  m_Name: filled flask
+  m_Name: emptyFlask
   m_EditorClassIdentifier: 
-  id: 2
-  displayName: filled flask
-  icon: {fileID: 21300028, guid: 0bbb4973cb6e355408c55e6857cbc224, type: 3}
+  id: 1
+  displayName: empty flask
+  icon: {fileID: 21300098, guid: 0bbb4973cb6e355408c55e6857cbc224, type: 3}
   prefab: {fileID: 8366760361559130508, guid: 35e22152cdeaa4b498997fe41a2d3080, type: 3}

@@ -8,12 +8,12 @@ namespace Lurkers.Inventory
     {
         [SerializeField] public InventorySystem inventorySystem;
         [SerializeField] private ItemData referenceItem;
-        [SerializeField] Hotbar hb;
+        [SerializeField] private Hotbar hb;
 
         public void PickUp()
         {
             inventorySystem.Add(referenceItem);
-            hb.addItem(referenceItem.icon);
+            hb.addItem(referenceItem);
             Destroy(gameObject);
         }
 
