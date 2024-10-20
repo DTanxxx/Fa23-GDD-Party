@@ -49,20 +49,12 @@ public class Door : MonoBehaviour
             {
 
                 Flavor someFlavor = new Flavor();
-                //fetch flavor stor in someFlavor
+                //fetch flavor store in someFlavor
                 Debug.Log("Key Pressed " + someKey);
 
                 for (int i = 0; i < locks.Length; i++)
                 {
-                    int result = 0;
-                    Int32.TryParse(someKey, out result);
-
-                    //change based on input
-                    if((result - 1) == i)
-                    {
-                        locks[i].Dissolve(someFlavor);
-                        break;
-                    }
+                    locks[i].Dissolve(someFlavor);
                 }
             }
         }
