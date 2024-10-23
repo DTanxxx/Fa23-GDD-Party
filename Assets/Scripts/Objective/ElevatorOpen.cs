@@ -4,7 +4,6 @@ using UnityEngine;
 using System;
 using Lurkers.Audio;
 using Lurkers.UI;
-using Unity.VisualScripting;
 
 namespace Lurkers.Environment.Vision
 {
@@ -20,10 +19,9 @@ namespace Lurkers.Environment.Vision
         public static Action onElevatorClose;
         public static Action onPlayerEntrance;
         public static Action onFirstTimeClose;
-        public static Action onSkipAnimation; 
 
         private static bool firstTimeClose = true;
-        private bool elevatorSequenceOver = false;
+        private bool elevatorSequenceOver = true;
 
         private void Start()
         {
@@ -35,8 +33,7 @@ namespace Lurkers.Environment.Vision
         {
             if (Input.GetKeyDown(KeyCode.Space) && !elevatorSequenceOver)
             {
-                SkipAnimation();
-                Debug.Log("hiiiiii");
+                SkipStartAnimation();
                 elevatorSequenceOver = true;
             }
         }
@@ -73,6 +70,7 @@ namespace Lurkers.Environment.Vision
         // animation event
         public void ElevatorClose()
         {
+            elevatorSequenceOver = true;
             onElevatorClose?.Invoke();
 
             if (firstTimeClose)
@@ -92,6 +90,7 @@ namespace Lurkers.Environment.Vision
         private void BeginElevatorOpen()
         {
             // play animation
+            elevatorSequenceOver = false;
             animator.SetTrigger("Enter");
             AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, AudioManager.instance.playerTransform(), "Elevator", (float)Elevator.State.OPEN_CLOSE);
         }
@@ -109,13 +108,10 @@ namespace Lurkers.Environment.Vision
             opened = true;
         }
 
-        // A animation that is referenced to skip the beginning animation and text
-        public void SkipAnimation() {
-            onSkipAnimation?.Invoke();
-            animator.SetTrigger("Skip");
-            onElevatorClose?.Invoke();
-            AchieveGoal();
-            OnDisable();
+        private void SkipStartAnimation() {
+            animator.Play("Entry", -1, 1f);
+            ShowPlayer();
+            ElevatorClose();
         }
     }
 }
