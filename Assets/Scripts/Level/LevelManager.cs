@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using Lurkers.Audio;
+using Unity.VisualScripting;
 
 namespace Lurkers.Control.Level
 {
@@ -18,7 +19,19 @@ namespace Lurkers.Control.Level
         private float timer = 0f;
         private FMOD.Studio.EventInstance inst;
 
-        public static LevelManager Instance;
+        private static LevelManager instance;
+        public static LevelManager Instance
+        {
+            get
+            {
+                if (LevelManager.instance == null)
+                {
+                    LevelManager.instance = FindObjectOfType<LevelManager>();
+                }
+
+                return instance;
+            }
+        }
 
         // play main menu theme
         private void Awake()
@@ -31,15 +44,6 @@ namespace Lurkers.Control.Level
             else
             {
                 mainMenu = false;
-            }
-
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
             }
         }
 
