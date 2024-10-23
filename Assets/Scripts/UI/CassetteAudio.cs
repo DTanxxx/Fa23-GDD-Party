@@ -10,6 +10,8 @@ namespace Lurkers.Environment.Hearing
     {
         AudioSource aud;
         [SerializeField] private Button cassetteButton = null;
+        [SerializeField] Animator animator;
+        [SerializeField] private float waitTime = 1.0f;
 
         private static bool firstTime = true;
 
@@ -46,6 +48,17 @@ namespace Lurkers.Environment.Hearing
             aud.loop = false;
             aud.Stop();
             aud.PlayOneShot(aud.clip);
+        }
+
+        public void Playing()
+        {
+            animator.SetBool("ButtonPressed", true);
+            Invoke("StopPlay", waitTime);
+        }
+
+        void StopPlay()
+        {
+            animator.SetBool("ButtonPressed", false);
         }
     }
 }
