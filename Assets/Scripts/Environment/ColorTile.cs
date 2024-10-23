@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using System;
 using Lurkers.Control;  // TODO this dependency should be removed to prevent cyclic dependency
@@ -223,15 +222,12 @@ namespace Lurkers.Environment.Vision.ColorTile
         //Cyan Tile
         public void TurnRed()
         {
-            tileColor = TileColor.Red;
-            SetSprite(redSprite, redSideSprite);
-            Debug.Log(tileColor);
+            TurnColor(TileColor.Red);
         }
+
         public void TurnWhite()
         {
-            tileColor = TileColor.White;
-            SetSprite(whiteSprite, whiteSideSprite);
-            Debug.Log(tileColor);
+            TurnColor(TileColor.White);
         }
 
         //Blue Tile
@@ -279,6 +275,14 @@ namespace Lurkers.Environment.Vision.ColorTile
             //player.GetComponent<PlayerController>().Immobile(false);
         }
 
+        private void SetSprite(Sprite sp)
+        {
+            foreach (SpriteRenderer spriteRenderer in allSpriteRends)
+            {
+                spriteRenderer.sprite = sp;
+            }
+        }
+       
         public bool GetIsRaised()
         {
             return isRaised;
@@ -416,6 +420,42 @@ namespace Lurkers.Environment.Vision.ColorTile
             {
                 StopCoroutine(slideCoroutine);
                 slideCoroutine = null;
+            }
+        }
+
+        // Color changes
+        public void TurnColor(TileColor newColor)
+        {
+            tileColor = newColor;
+            switch (newColor)
+            {
+                case TileColor.White:
+                    SetSprite(whiteSprite);
+                    break;
+                case TileColor.Red:
+                    SetSprite(redSprite);
+                    break;
+                case TileColor.Cyan:
+                    SetSprite(cyanSprite);
+                    break;
+                case TileColor.Black:
+                    SetSprite(blackSprite);
+                    break;
+                case TileColor.Green:
+                    SetSprite(greenSprite);
+                    break;
+                case TileColor.Blue:
+                    SetSprite(blueSprite);
+                    break;
+                case TileColor.Yellow:
+                    SetSprite(yellowSprite);
+                    break;
+                case TileColor.Magenta:
+                    SetSprite(magentaSprite);
+                    break;
+                case TileColor.Purple:
+                    SetSprite(purpleSprite);
+                    break;
             }
         }
     }
