@@ -175,7 +175,7 @@ public class tongue_monster : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void ReactToFlavor()
+    /*public void ReactToFlavor()
     {
         if (PlayerController.flavorCombinations != null) // checks if null player flavors
         {
@@ -189,6 +189,6 @@ public class tongue_monster : MonoBehaviour
             
 
         }
-    }
+    }*/
 
 }

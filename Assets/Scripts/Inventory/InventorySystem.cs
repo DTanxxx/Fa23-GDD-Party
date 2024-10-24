@@ -47,7 +47,7 @@ namespace Lurkers.Inventory
                 inventory.Add(newItem);
                 m_itemDictionary.Add(referenceData, newItem);
             }
-            hotBar.GetComponent<Hotbar>().showItem(referenceData);
+            hotBar.GetComponent<Hotbar>().addItem(referenceData);
         }
 
         public void Remove(ItemData referenceData)
