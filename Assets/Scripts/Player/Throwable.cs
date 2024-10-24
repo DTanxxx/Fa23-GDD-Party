@@ -15,6 +15,12 @@ namespace Lurkers.Environment.Hearing
         public GameObject tempParent;
         public bool isInHand = false;
         private float holdDownStartTime;
+        private Animator PlayerAnimatorController;
+
+        void Start()
+        {
+            PlayerAnimatorController = tempParent.GetComponent<Animator>();
+        }
 
         // Update is called once per frame
         void Update()
@@ -49,6 +55,7 @@ namespace Lurkers.Environment.Hearing
                 {
                     float holdDownTime = Time.time - holdDownStartTime;
                     // item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up.normalized * throwForce);
+                    PlayerAnimatorController.SetTrigger("Rock Throwing");
                     item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up.normalized * CalculateHoldDownForce(holdDownTime));
                     item.GetComponent<Rigidbody>().drag = 1;
                     isInHand = false;
@@ -61,9 +68,7 @@ namespace Lurkers.Environment.Hearing
                 item.GetComponent<Rigidbody>().useGravity = true;
                 item.transform.position = objectPos;
                 item.GetComponent<Rigidbody>().detectCollisions = true;
-
             }
-
         }
 
         private float CalculateHoldDownForce(float HoldTime)
