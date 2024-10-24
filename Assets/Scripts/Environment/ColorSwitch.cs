@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace Lurkers.Environment.Vision.ColorTile
+namespace Lurkers.Environment.Vision
 {
     public enum SwitchColor
     {

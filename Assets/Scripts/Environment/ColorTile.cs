@@ -5,7 +5,7 @@ using System;
 using Lurkers.Control;  // TODO this dependency should be removed to prevent cyclic dependency
 using Lurkers.Audio;  // TODO this dependency should be removed to prevent cyclic dependency, use C# event listened by TileAudioSources
 
-namespace Lurkers.Environment.Vision.ColorTile
+namespace Lurkers.Environment.Vision
 {
     public enum TileColor
     {

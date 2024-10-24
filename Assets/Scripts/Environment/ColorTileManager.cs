@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Lurkers.Environment.Vision.ColorTile
+namespace Lurkers.Environment.Vision
 {
     [System.Serializable]
     public struct ChildTileManager
