@@ -9,11 +9,14 @@ namespace Lurkers.Inventory
     {
         [SerializeField] private GameObject pickupGUI;
 
+        [SerializeField] private GameObject hotBar;
+
         private Dictionary<ItemData, InventoryItemData> m_itemDictionary;
 
         public List<InventoryItemData> inventory { get; private set; }
 
         public static InventorySystem instance;
+
 
         private void Awake()
         {
@@ -44,6 +47,7 @@ namespace Lurkers.Inventory
                 inventory.Add(newItem);
                 m_itemDictionary.Add(referenceData, newItem);
             }
+            hotBar.GetComponent<Hotbar>().showItem(referenceData);
         }
 
         public void Remove(ItemData referenceData)
@@ -57,6 +61,7 @@ namespace Lurkers.Inventory
                     inventory.Remove(value);
                     m_itemDictionary.Remove(referenceData);
                 }
+                hotBar.GetComponent<Hotbar>().removeItem(referenceData);
             }
         }
 

@@ -4,7 +4,6 @@ using UnityEngine;
 using FMOD.Studio;
 using Lurkers.Event;
 using Lurkers.Environment.Vision;
-using Lurkers.Environment.Vision.ColorTile;
 using Lurkers.Control;
 using Lurkers.Control.Level;
 using Lurkers.Cam;

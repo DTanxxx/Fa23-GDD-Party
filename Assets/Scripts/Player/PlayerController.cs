@@ -6,7 +6,6 @@ using UnityEngine.Rendering.Universal;
 using Lurkers.Event;
 using Lurkers.Environment.Vision;
 using Lurkers.Cam;
-using Lurkers.Environment.Vision.ColorTile;
 using Lurkers.Control.Level;
 using Lurkers.UI;
 
@@ -207,13 +206,18 @@ namespace Lurkers.Control
             isFrozen = true;
         }
 
-        private void UnfreezePlayer()
+        public void UnfreezePlayer()
         {
             Debug.Log("Player unfrozen");
             myCollider.enabled = true;
             myRigidbody.velocity = Vector3.zero;
             animator.speed = animSpeed;
             isFrozen = false;
+        }
+
+        public void CheckPointRevive()
+        {
+            isDead = false;
         }
 
         private void TriggerDeathAnimation(DeathCause cause, Vector3 enemyPosition, GameObject enemy = null)

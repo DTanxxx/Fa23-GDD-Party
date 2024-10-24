@@ -131,5 +131,10 @@ namespace Lurkers.Control
         {
             return isDead;
         }
+
+        public void SetIsPlayerAlive()
+        {
+            isDead = false;
+        }
     }
 }
