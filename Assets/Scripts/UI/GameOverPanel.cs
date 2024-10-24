@@ -43,6 +43,7 @@ namespace Lurkers.UI
 
         private IEnumerator FadeInGameOverPanel()
         {
+            yield return new WaitForSeconds(1);
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
 
