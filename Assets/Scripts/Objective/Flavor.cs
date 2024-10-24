@@ -20,5 +20,24 @@ public class Flavor : ScriptableObject
     [Range(0f, 1f)]
     public float umami;
 
+    bool Equals(Object someFlav)
+    {
+        if (this == null || someFlav == null || someFlav is not Flavor)
+        {
+            return false;
+        }
+        
+        Flavor inpFlav = (Flavor) someFlav;
+        float tolerance = 0.1f;  
+        if (Mathf.Abs(this.sweet - inpFlav.sweet) < tolerance &&
+            Mathf.Abs(this.bitter - inpFlav.bitter) < tolerance &&
+            Mathf.Abs(this.sour - inpFlav.sour) < tolerance &&
+            Mathf.Abs(this.salty - inpFlav.salty) < tolerance &&
+            Mathf.Abs(this.umami - inpFlav.umami) < tolerance)
+        {
+            return true;
+        }
+        return false;
+    }
 
 }
