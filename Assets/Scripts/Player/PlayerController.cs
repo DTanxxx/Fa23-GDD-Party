@@ -70,6 +70,8 @@ namespace Lurkers.Control
             CameraFollow.onCameraRestoreComplete += UnfreezePlayer;
             ElevatorOpen.onElevatorClose += UnfreezePlayer;
             NextLevelTrigger.onBeginLevelTransition += FreezePlayer;
+            SecurityCameras.freezeOn += FreezePlayer;
+            SecurityCameras.freezeOff += UnfreezePlayer;
             ColorTile.onIncinerate += Incinerate;
             Dialogue.unactive += EquipEcholocator;
         }
@@ -82,6 +84,8 @@ namespace Lurkers.Control
             CameraFollow.onCameraRestoreComplete -= UnfreezePlayer;
             ElevatorOpen.onElevatorClose -= UnfreezePlayer;
             NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
+            SecurityCameras.freezeOn -= FreezePlayer;
+            SecurityCameras.freezeOff -= UnfreezePlayer;
             ColorTile.onIncinerate -= Incinerate;
             Dialogue.unactive -= EquipEcholocator;
         }
@@ -192,6 +196,7 @@ namespace Lurkers.Control
 
         private void FreezePlayer()
         {
+            Debug.Log("Player frozen");
             myCollider.enabled = false;
             myRigidbody.velocity = Vector3.zero;
             animSpeed = animator.speed;
