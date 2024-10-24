@@ -62,6 +62,11 @@ namespace Lurkers.Environment.Vision
         private bool onTile = false;
         private Coroutine slideCoroutine;
         private bool isRaised = false;
+        private bool playerColliding = false;
+        private bool hasTriggered = false;
+        private Collider savedEnterCollider;
+        private GameObject playerObject;
+        private bool checker = false;
         
         private enum TileActivation
         {
@@ -136,15 +141,39 @@ namespace Lurkers.Environment.Vision
         private void OnTriggerEnter(Collider collision)
         {
             // TODO remove all instances of Lurkers.Control classes, and use C# event instead
-            GameObject player = collision.transform.parent.parent.gameObject;
-            PlayerController pm = player.GetComponent<PlayerController>();
-            PlayerHealth health = player.GetComponent<PlayerHealth>();
+            playerObject = collision.transform.parent.parent.gameObject;
+            PlayerController pm = playerObject.GetComponent<PlayerController>();
+            PlayerHealth health = playerObject.GetComponent<PlayerHealth>();
 
-            if (!player.gameObject.CompareTag("Player") || health.GetIsPlayerDead())
+            if (!playerObject.gameObject.CompareTag("Player") || health.GetIsPlayerDead())
             {
                 return;
             }
+            
+            savedEnterCollider = collision;
+            checker = false;
+            
+        }
 
+        void Update() 
+        {
+            if (playerObject != null)
+            {
+                PlayerController pm = playerObject.GetComponent<PlayerController>();
+                if (!checker && (pm.tileTriggerCounter == 0) )
+                {
+                    runTile(playerObject, savedEnterCollider);
+                    checker = true;
+                    pm.tileTriggerCounter += 1;
+                }
+            }
+            
+            
+        }
+
+        private void runTile(GameObject player, Collider collision)
+        {
+            PlayerHealth health = player.GetComponent<PlayerHealth>();
             Animator animator = player.GetComponentInChildren<Animator>();
             string enter = EnterDirection(collision);
 
@@ -182,6 +211,7 @@ namespace Lurkers.Environment.Vision
             }
         }
 
+
         private void OnTriggerExit(Collider collision)
         {
             GameObject player = collision.transform.parent.parent.gameObject;
@@ -190,6 +220,9 @@ namespace Lurkers.Environment.Vision
             { 
                 return;
             }
+            PlayerController pm = player.GetComponent<PlayerController>();
+            pm.tileTriggerCounter = 0;
+            
 
             if (tileColor == TileColor.Yellow)
             {
