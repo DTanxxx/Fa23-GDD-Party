@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    [SerializeField] private Lock[] locks; 
+    [SerializeField] private Lock[] locks;
+    [SerializeField] private Flavor reqFlavor;
     private bool isOpen = false;
     private bool isTouching = false;
     //private const int numLocks = 4;
@@ -15,12 +16,15 @@ public class Door : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //temp population of locks
         for (int i = 0; i < locks.Length; i++)
         {
             locks[i] = new Lock();
         }
         
+        Flavor firstFlav = new Flavor();
+        firstFlav.bitter = 1f;
+        firstFlav.salty = 0.5f;
+        locks[0].setFlav(firstFlav);    
     }
 
     // Update is called once per frame
@@ -45,16 +49,20 @@ public class Door : MonoBehaviour
         if (Input.anyKeyDown)
         {
             string someKey = Input.inputString;
+            int keyNum = Int32.Parse(someKey);
             if (!string.IsNullOrEmpty(someKey)) 
             {
-
-                Flavor someFlavor = new Flavor();
                 //fetch flavor store in someFlavor
                 Debug.Log("Key Pressed " + someKey);
 
+
                 for (int i = 0; i < locks.Length; i++)
                 {
-                    locks[i].Dissolve(someFlavor);
+                    if (locks[i].getLocked && (keyNum <= locks.Length) && (keyNum >= 0))
+                    {
+                        Debug.Log("correct input");
+                        locks[keyNum].Dissolve(reqFlavor);
+                    }
                 }
             }
         }
