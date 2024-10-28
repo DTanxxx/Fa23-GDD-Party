@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Formula : MonoBehaviour
 {
-
+    
     public static Flavor Combine(Flavor A, Flavor B)
     {
         Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
@@ -19,4 +19,5 @@ public class Formula : MonoBehaviour
 
         
     }
+    
 }
