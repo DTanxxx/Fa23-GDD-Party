@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Lock : MonoBehaviour
@@ -24,8 +25,11 @@ public class Lock : MonoBehaviour
         if (flavor.Equals(exactFlav))
         {
             isLocked = false;
-        }
+            //Debug.Log("Dissolved");
+        } 
     }
 
     public bool getLocked { get {  return isLocked; } }
+    public void setFlav(Flavor someFlav) { exactFlav = someFlav; }
+   
 }
