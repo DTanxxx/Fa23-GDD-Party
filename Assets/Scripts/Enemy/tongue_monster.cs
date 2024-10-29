@@ -18,16 +18,18 @@ public class tongue_monster : MonoBehaviour
     [SerializeField] private float chaseSpeed = 5f;
     [SerializeField] private float attackTimer = 2f;
     [SerializeField] private float DefaultattackTimer = 2f;
-    [SerializeField] List<Flavor> VulnerableFlavorComp; // 0.1 sweet + 0.2 sour
+    List<Flavor> VulnerableFlavorComp; // 0.1 salty  + 0.1 bitter 
 
 
-    private GameObject player;  
+    private GameObject player;
+    private PlayerController playerControl;
     private bool isPlayerDead = false;
     private float freezeTimer = 0f;
     private int num_of_encounter = 0;
     private bool isDead = false;
     private bool cooldown = false;
-    private int attackType = 1; 
+    private int attackType = 1;
+    public Flavor[] flavors = new Flavor[2];
 
 
 
@@ -36,7 +38,28 @@ public class tongue_monster : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        Debug.Log(player);
         agent = GetComponent<NavMeshAgent>();
+        playerControl = player.GetComponent<PlayerController>();
+        Debug.Log(playerControl);
+
+        // playerControl.flavorCombinations = new List<Flavor>();
+        //test flavor 0.1 salty + 0.1 bitter 
+        Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
+        newFlavor.salty = 0.1f;
+        newFlavor.umami = 0.0f;
+        newFlavor.bitter = 0.1f;
+        newFlavor.sour = 0.0f;
+        newFlavor.sweet = 0.0f;
+        flavors[0] = newFlavor;
+        if (playerControl == null)
+        {
+            Debug.LogError("PlayerControl is not assigned!");
+        }
+        playerControl.SetFlavor(flavors);
+
+        
+
     }
 
     private void OnEnable()
@@ -52,10 +75,14 @@ public class tongue_monster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //react to flavor test
+        ReactToFlavor();
+
         if (isPlayerDead || isDead)
         {
             return;
         }
+
 
          // game object is enabled 
 
@@ -177,17 +204,16 @@ public class tongue_monster : MonoBehaviour
 
     public void ReactToFlavor()
     {
-        if (PlayerController.flavorCombinations != null) // checks if null player flavors
+        if (playerControl != null && playerControl.flavorCombinations != null)
         {
-            Flavor playerFlavor = player.currentFlavor;
-
-            // Example of reacting to sweetness
-            if (PlayerController.flavorCombinations == VulnerableFlavorComp)
+            if (playerControl.flavorCombinations.Contains(flavors[0]) && Input.GetKeyDown(KeyCode.L))
             {
-                IncreaseAttraction("sweet");
+                Debug.Log("Combination Flavor - Sweet: " + flavors[0].sweet);
+                Debug.Log("Combination Flavor - Bitter: " + flavors[0].sour);
+                Debug.Log("Combination Flavor - Bitter: " + flavors[0].bitter);
+                Debug.Log("Combination Flavor - Bitter: " + flavors[0].salty);
+                Debug.Log("Combination Flavor - Bitter: " + flavors[0].umami);
             }
-            
-
         }
     }
 
