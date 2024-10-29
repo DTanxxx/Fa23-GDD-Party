@@ -1,64 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Lurkers.UI.Vision;
+using UnityEngine.UI;
 using System;
+using Lurkers.Control;
 
-namespace Lurkers.Environment.Vision
+namespace Lurkers.UI.Vision
 {
     public class SecurityCameras : MonoBehaviour
     {
-        // Start is called before the first frame update   
-        public List<GameObject> cam;
+        [SerializeField] private Button cctvButton = null; 
+        [SerializeField] private List<GameObject> cam;
+
         private bool onCamera;
         private int index;
+        private PlayerController player;
 
-        public bool camEnabled = false;
-
-        public static Action freezeOn;
-        public static Action freezeOff;
         void Start()
         {
             onCamera = false;
             index = 0;
+            player = GetComponent<PlayerController>();
         }
 
         private void OnEnable()
         {
-            SecurityCamEnabler.onSecurityCamPickup += EnableCam;    
+            SecurityCamEnabler.onSecurityCamPickup += EnableCam;
+
+            cctvButton.onClick.AddListener(OpenCCTV);
         }
 
         private void OnDisable()
         {
             SecurityCamEnabler.onSecurityCamPickup -= EnableCam;
+
+            cctvButton.onClick.RemoveListener(OpenCCTV);
         }
 
         private void EnableCam()
         {
-            camEnabled = true;
+            cctvButton.gameObject.SetActive(true);
         }
 
-        void Update()
+        private void OpenCCTV()
         {
-            if (!camEnabled)
+            if (cam.Count == 0)
             {
                 return;
             }
 
-            if (cam.Count > 0 && Input.GetKeyDown("c"))
+            if (onCamera)
             {
-                if (onCamera)
-                {
-                    freezeOff?.Invoke();
-                } else
-                {
-                    freezeOn?.Invoke();
-                }
-                
-                onCamera = !onCamera;
-                cam[index].SetActive(!cam[index].activeSelf);
-
+                player.UnfreezePlayer();
             }
+            else
+            {
+                player.FreezePlayer();
+            }
+
+            onCamera = !onCamera;
+            cam[index].SetActive(!cam[index].activeSelf);
+        }
+
+        void Update()
+        {
             if (onCamera && Input.GetKeyDown("e"))
             {
                 cam[index].SetActive(!cam[index].activeSelf);

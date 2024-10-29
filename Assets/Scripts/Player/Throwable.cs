@@ -1,6 +1,8 @@
+using Lurkers.Control;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Diagnostics;
 
 namespace Lurkers.Environment.Hearing
 {
@@ -45,7 +47,8 @@ namespace Lurkers.Environment.Hearing
                 item.GetComponent<Rigidbody>().detectCollisions = false;
                 item.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 item.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                item.transform.SetParent(tempParent.transform);
+                item.transform.position = transform.position;
+                //item.transform.SetParent(tempParent.transform);
 
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
@@ -56,7 +59,7 @@ namespace Lurkers.Environment.Hearing
                     float holdDownTime = Time.time - holdDownStartTime;
                     // item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up.normalized * throwForce);
                     PlayerAnimatorController.SetTrigger("Rock Throwing");
-                    item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up.normalized * CalculateHoldDownForce(holdDownTime));
+                    item.GetComponent<Rigidbody>().AddForce((Vector3.up + GetComponent<PlayerController>().GetDir()).normalized * CalculateHoldDownForce(holdDownTime));
                     item.GetComponent<Rigidbody>().drag = 1;
                     isInHand = false;
                 }

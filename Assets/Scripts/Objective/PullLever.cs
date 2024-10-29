@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Lurkers.Audio;
-using Lurkers.Inventory;  // TODO pulling lever should not depend on inventory
 
 namespace Lurkers.Environment.Vision
 {
@@ -11,19 +10,18 @@ namespace Lurkers.Environment.Vision
     {
         [SerializeField] bool triggerLightFlicker = false;
         [SerializeField] bool lockable = false;
-        [SerializeField] InventorySystem inventorySystem;
         [SerializeField] private Animator animator;
 
         public static Action onLeverPulled;
+        public static Action<bool, Vector3> onApproachLever;
+        public static Action onLeaveLever;
 
-        private GameObject item;
         private bool pulled = false;
         private bool locked;
 
         private void Awake()
         {
             locked = lockable;
-            inventorySystem = FindObjectOfType<InventorySystem>();
             animator = GetComponentInChildren<Animator>();
         }
 
@@ -39,9 +37,9 @@ namespace Lurkers.Environment.Vision
 
         private void Update()
         {
-            if (item != null && !pulled && !locked)
+            if (!pulled && !locked)
             {
-                if (Input.GetKeyDown(KeyCode.E))
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
                     LeverPulled();
                 }
@@ -60,27 +58,14 @@ namespace Lurkers.Environment.Vision
                 return;
             }
 
-            item = other.gameObject;
-
-            if (other != null)
-            {
-                if (locked)
-                {
-                    inventorySystem.OpenGUI("Lever is locked! Search for the key in a vault somewhere...");
-                }
-                else
-                {
-                    inventorySystem.OpenGUI("Press E to pull lever");
-                }
-            }
+            onApproachLever?.Invoke(!locked, transform.position);
         }
 
         private void OnTriggerExit(Collider other)
         {
             if (other != null)
             {
-                inventorySystem.CloseGUI();
-                item = null;
+                onLeaveLever?.Invoke();
             }
         }
 
@@ -91,15 +76,10 @@ namespace Lurkers.Environment.Vision
             if (animator != null)
             {
                 pulled = true;
-                inventorySystem.CloseGUI();
-                item = null;
+                onLeaveLever?.Invoke();
 
                 animator.SetTrigger("Pulled");
                 AudioManager.instance.PlayOneShot(FMODEvents.instance.lever, transform);
-            }
-            else
-            {
-                Debug.LogError("One of the fields is null!");
             }
         }
     }

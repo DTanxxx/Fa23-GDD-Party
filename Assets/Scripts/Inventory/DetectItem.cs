@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,39 +8,40 @@ namespace Lurkers.Inventory
     public class DetectItem : MonoBehaviour
     {
         [SerializeField] InventorySystem inventorySystem;
+        
         private ItemObject item;
+
+        public static Action onLeaveItem;
+        public static Action<Vector3> onApproachItem;
 
         // Update is called once per frame
         void Update()
         {
             if (item != null)
             {
-                if (Input.GetKeyDown(KeyCode.E))
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
                     item.PickUp();
-                    inventorySystem.CloseGUI();
-
+                    onLeaveItem?.Invoke();
                 }
             }
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnTriggerEnter(Collider other)
         {
-            item = collision.gameObject.GetComponent<ItemObject>();
+            item = other.gameObject.GetComponent<ItemObject>();
             if (item != null)
             {
-                Debug.Log("touch");
-                inventorySystem.OpenGUI();
+                onApproachItem?.Invoke(transform.position);
             }
         }
 
-        private void OnCollisionExit(Collision collision)
+        private void OnTriggerExit(Collider other)
         {
-            item = collision.gameObject.GetComponent<ItemObject>();
+            item = other.gameObject.GetComponent<ItemObject>();
             if (item != null)
             {
-                Debug.Log("not");
-                inventorySystem.CloseGUI();
+                onLeaveItem?.Invoke();
                 item = null;
             }
 

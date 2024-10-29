@@ -81,10 +81,7 @@ namespace Lurkers.Control
             LeverPullAnimationEvents.onBeginLeverCinematicSequence += FreezePlayer;
             ElevatorOpen.onPlayerEntrance += TransitionIntoLevel;
             CameraFollow.onCameraRestoreComplete += UnfreezePlayer;
-            ElevatorOpen.onElevatorClose += UnfreezePlayer;
             NextLevelTrigger.onBeginLevelTransition += FreezePlayer;
-            SecurityCameras.freezeOn += FreezePlayer;
-            SecurityCameras.freezeOff += UnfreezePlayer;
             ColorTile.onIncinerate += Incinerate;
             Dialogue.unactive += EquipEcholocator;
         }
@@ -95,10 +92,7 @@ namespace Lurkers.Control
             LeverPullAnimationEvents.onBeginLeverCinematicSequence -= FreezePlayer;
             ElevatorOpen.onPlayerEntrance -= TransitionIntoLevel;
             CameraFollow.onCameraRestoreComplete -= UnfreezePlayer;
-            ElevatorOpen.onElevatorClose -= UnfreezePlayer;
             NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
-            SecurityCameras.freezeOn -= FreezePlayer;
-            SecurityCameras.freezeOff -= UnfreezePlayer;
             ColorTile.onIncinerate -= Incinerate;
             Dialogue.unactive -= EquipEcholocator;
         }
@@ -209,6 +203,7 @@ namespace Lurkers.Control
             }
 
             transform.position = beginTransform.position;
+            UnfreezePlayer();
         }
 
         /*private IEnumerator BeginTransitioning()
@@ -224,7 +219,7 @@ namespace Lurkers.Control
             }
         }*/
 
-        private void FreezePlayer()
+        public void FreezePlayer()
         {
             Debug.Log("Player frozen");
             myCollider.enabled = false;

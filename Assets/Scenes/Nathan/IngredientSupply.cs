@@ -2,14 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Lurkers.Inventory;
+using System;
 
 public class IngredientSupply : MonoBehaviour
 {
     [SerializeField] public InventorySystem inventorySystem;
     [SerializeField] private Hotbar hb;
     [SerializeField] private ItemData filledFlask;
-    private bool interacting = false;
     
+    private bool interacting = false;
+
+    public static Action onLeaveStation;
+    public static Action<Vector3> onApproachStation;
     
     private void Update()
     {
@@ -29,7 +33,7 @@ public class IngredientSupply : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            inventorySystem.OpenGUI("Press Q to fill up flask");
+            onApproachStation?.Invoke(transform.position);
             interacting = true;
             
         }
@@ -39,9 +43,8 @@ public class IngredientSupply : MonoBehaviour
     {
         if (other != null)
         {
-            inventorySystem.CloseGUI();
+            onLeaveStation?.Invoke();
             interacting = false;
-
         }
     }
 
@@ -59,42 +62,5 @@ public class IngredientSupply : MonoBehaviour
         newflav.sour = 0;
         newflav.umami = 0;
         
-    }
-
-    
-
-    [CreateAssetMenu]
-    public class Flavor : ScriptableObject
-    {
-        [Range(0f, 1f)]
-        public float sweet;
-
-        [Range(0f, 1f)]
-        public float bitter;
-
-        [Range(0f, 1f)]
-        public float sour;
-
-        [Range(0f, 1f)]
-        public float salty;
-
-        [Range(0f, 1f)]
-        public float umami;
-    }
-
-
-    public class Formula : MonoBehaviour
-    {
-        public static Flavor Combine(Flavor A, Flavor B)
-        {
-            Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
-            newFlavor.sweet = (A.sweet + B.sweet) / 2;
-            newFlavor.bitter = (A.bitter + B.bitter) / 2;
-            newFlavor.salty = (A.salty + B.salty) / 2;
-            newFlavor.sour = (A.sour + B.sour) / 2;
-            newFlavor.umami = (A.umami + B.umami) / 2;
-            return newFlavor;
-            
-        }
     }
 }

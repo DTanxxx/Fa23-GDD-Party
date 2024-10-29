@@ -7,8 +7,6 @@ namespace Lurkers.Inventory
 {
     public class InventorySystem : MonoBehaviour
     {
-        [SerializeField] private GameObject pickupGUI;
-
         [SerializeField] private GameObject hotBar;
 
         private Dictionary<ItemData, InventoryItemData> m_itemDictionary;
@@ -23,7 +21,6 @@ namespace Lurkers.Inventory
             instance = this;
             inventory = new List<InventoryItemData>();
             m_itemDictionary = new Dictionary<ItemData, InventoryItemData>();
-            pickupGUI.SetActive(false);
         }
 
         public InventoryItemData Get(ItemData referenceData)
@@ -64,18 +61,5 @@ namespace Lurkers.Inventory
                 hotBar.GetComponent<Hotbar>().removeItem(referenceData);
             }
         }
-
-        // TODO GUI functionalities should be in a standalone script rather than being associated with inventory
-        public void OpenGUI(string input = "Press E to pick up item")
-        {
-            pickupGUI.GetComponentInChildren<TextMeshProUGUI>().text = input;
-            pickupGUI.SetActive(true);
-        }
-
-        public void CloseGUI()
-        {
-            pickupGUI.SetActive(false);
-        }
-        //======================================================================================
     }
 }

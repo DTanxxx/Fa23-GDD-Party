@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8293603396900116318}
   - component: {fileID: 2594121693361846875}
   - component: {fileID: 6215848093025689383}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 8645230538319884529}
   - component: {fileID: 7642300127196886503}
   - component: {fileID: 4258454446199178155}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Lever
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerLightFlicker: 0
   lockable: 0
-  inventorySystem: {fileID: 0}
   animator: {fileID: 2594121693361846875}
 --- !u!65 &4258454446199178155
 BoxCollider:
@@ -189,5 +188,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.816473, y: 5.04, z: 1.7423732}
-  m_Center: {x: 0.00011634827, y: -0.81, z: 0.57468665}
+  m_Size: {x: 3.81, y: 5.04, z: 4.14}
+  m_Center: {x: 0.00011634827, y: -0.81, z: 1.39}

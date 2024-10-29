@@ -97,30 +97,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueOptions:
-  - type: 1
-    lines:
-    - Hmm, all these statues look eerily similar.
-    - Not my choice of decor.
   - type: 2
     lines:
     - Light seems to stop their movement.
-    - I better hope this flashlight doesn't die anytime soon.
   - type: 3
     lines:
     - "Phew. Now that\u2019s done."
-    - Did that statue.. Just move?
-    - "Ahh, they\u2019re alive!"
+    - Did that statue... Just move?
   - type: 4
     lines:
     - The power outage must be affecting the elevators. Let's see if there is a way
       I can get this running again.
-    - 'WASD to move, Left Shift to sprint. Use the flashlight to your advantage. '
-    - I am pretty unfit so I can only sprint for 5 seconds straight before needing
-      a break!
   - type: 5
     lines:
     - These color tiles serve as defensive mechanisms to keep out intruders.
-    - Each color has a different functionality.
     - Doubt there will be any intruders now...
   - type: 6
     lines:
@@ -128,7 +118,6 @@ MonoBehaviour:
     - I have an eerie feeling. The statues...stay still until I pull the lever right?
   - type: 7
     lines:
-    - What's happening?
     - Ugh! My flashlight is acting weird.
   - type: 8
     lines:
@@ -140,7 +129,6 @@ MonoBehaviour:
   - type: 10
     lines:
     - A notebook with some blank pages.
-    - Thank you, friend. I will come back for you and give you a proper burial...
   - type: 11
     lines:
     - Shoot, the flashlight has worn out!
@@ -148,7 +136,6 @@ MonoBehaviour:
   - type: 12
     lines:
     - Hey, I found a CCTV monitor!
-    - Press "C" to enable CCTV, press "E" and "Q" to switch between the cameras.
   - type: 13
     lines:
     - Ah! Another body! What happened here?

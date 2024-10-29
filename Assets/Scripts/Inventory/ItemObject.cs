@@ -13,7 +13,6 @@ namespace Lurkers.Inventory
         public void PickUp()
         {
             inventorySystem.Add(referenceItem);
-            hb.addItem(referenceItem);
             Destroy(gameObject);
         }
 

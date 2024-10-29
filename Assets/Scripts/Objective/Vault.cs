@@ -9,11 +9,12 @@ namespace Lurkers.Environment.Vision
 {
     public class Vault : MonoBehaviour
     {
-        [SerializeField] InventorySystem inventorySystem;
         [SerializeField] private Animator animator;
 
         public static Action onVaultOpened;
         public static Action onFirstTimeOpen;
+        public static Action<Vector3> onApproachVault;
+        public static Action onLeaveVault;
 
         private GameObject item;
         private bool opened = false;
@@ -22,7 +23,6 @@ namespace Lurkers.Environment.Vision
 
         private void Awake()
         {
-            inventorySystem = FindObjectOfType<InventorySystem>();
             animator = GetComponentInChildren<Animator>();
         }
 
@@ -30,7 +30,7 @@ namespace Lurkers.Environment.Vision
         {
             if (item != null && !opened)
             {
-                if (Input.GetKeyDown(KeyCode.E))
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
                     OpenVault();
                 }
@@ -44,19 +44,14 @@ namespace Lurkers.Environment.Vision
                 return;
             }
 
-            item = other.gameObject;
-
-            if (other != null)
-            {
-                inventorySystem.OpenGUI("Press E to open vault and grab key");
-            }
+            onApproachVault?.Invoke(transform.position);
         }
 
         private void OnTriggerExit(Collider other)
         {
             if (other != null)
             {
-                inventorySystem.CloseGUI();
+                onLeaveVault?.Invoke();
                 item = null;
             }
         }
@@ -74,8 +69,7 @@ namespace Lurkers.Environment.Vision
             if (animator != null)
             {
                 opened = true;
-                inventorySystem.CloseGUI();
-                item = null;
+                onLeaveVault?.Invoke();
 
                 // TODO need to refactor this line
                 Invoke("ShowConfirmation", 1.0f);
@@ -91,13 +85,12 @@ namespace Lurkers.Environment.Vision
 
         private void ShowConfirmation()
         {
-            inventorySystem.OpenGUI("Key obtained!");
             Invoke("CloseGUI", 1.0f);
         }
 
         private void CloseGUI()
         {
-            inventorySystem.CloseGUI();
+            onLeaveVault?.Invoke();
         }
     }
 }
