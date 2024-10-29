@@ -20,7 +20,7 @@ public class Flavor : ScriptableObject
     [Range(0f, 1f)]
     public float umami;
 
-    bool Equals(Object someFlav)
+    public override bool Equals(object someFlav)
     {
         if (this == null || someFlav == null || someFlav is not Flavor)
         {
