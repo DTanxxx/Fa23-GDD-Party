@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Lurkers.Control;  // TODO this dependency should be removed to prevent cyclic dependency
 using Lurkers.Audio;  // TODO this dependency should be removed to prevent cyclic dependency, use C# event listened by TileAudioSources
+using Lurkers.Inventory;
 
 namespace Lurkers.Environment.Vision
 {
@@ -54,6 +55,8 @@ namespace Lurkers.Environment.Vision
         [SerializeField] private float tileRaiseDuration = 1.0f;
         [SerializeField] private SpriteRenderer[] topSpriteRends;
         [SerializeField] private SpriteRenderer[] sideSpriteRends;
+        [SerializeField] private ItemData key;
+        [SerializeField] private InventorySystem inventorySystem; //logic from itemcheck.cs
 
         private SpriteRenderer[] allSpriteRends;
         private ColorTileManager tileManager;
@@ -67,6 +70,7 @@ namespace Lurkers.Environment.Vision
         private Collider savedEnterCollider;
         private GameObject playerObject;
         private bool checker = false;
+        private bool inside = false;
         
         private enum TileActivation
         {
@@ -82,6 +86,8 @@ namespace Lurkers.Environment.Vision
             _collider.isTrigger = true;
             offTile = false;
         }
+
+
 
         public void SetData(TileColor c, ColorTileManager manager, bool raised)
         {
@@ -133,7 +139,8 @@ namespace Lurkers.Environment.Vision
                     SetSprite(magentaSprite, magentaSideSprite);
                     break;
                 case TileColor.Purple:
-                    SetSprite(purpleSprite, purpleSideSprite);
+                    //SetSprite(purpleSprite, purpleSideSprite);
+                    SetSprite(magentaSprite, magentaSideSprite);
                     break;
             }
         }
@@ -167,8 +174,14 @@ namespace Lurkers.Environment.Vision
                     pm.tileTriggerCounter += 1;
                 }
             }
-            
-            
+
+            if (Input.GetKey(KeyCode.Q) && inside && tileColor == TileColor.Purple) //for key: inventorySystem.Get(key) != null && inventorySystem.Get(key).stackSize == 1
+            {
+                Debug.Log("Here");
+                AudioManager.instance.SetPlayOneShot(FMODEvents.instance.tileActivation, transform, "TileActivation", (float)TileActivation.MOVE);
+
+                tileManager.ActivatePurple();
+            }
         }
 
         private void runTile(GameObject player, Collider collision)
@@ -176,7 +189,8 @@ namespace Lurkers.Environment.Vision
             PlayerHealth health = player.GetComponent<PlayerHealth>();
             Animator animator = player.GetComponentInChildren<Animator>();
             string enter = EnterDirection(collision);
-
+            inside = true;
+            
             switch (tileColor)
             {
                 case TileColor.White:
@@ -215,7 +229,7 @@ namespace Lurkers.Environment.Vision
         private void OnTriggerExit(Collider collision)
         {
             GameObject player = collision.transform.parent.parent.gameObject;
-
+            inside = false;
             if (!player.gameObject.CompareTag("Player")) 
             { 
                 return;

@@ -23,6 +23,7 @@ namespace Lurkers.Environment.Vision
         private List<GameObject> greenList = new List<GameObject>();
         private List<GameObject> blueList = new List<GameObject>();
         private List<(GameObject, bool)> blackList = new List<(GameObject, bool)>();
+        private List<(GameObject, bool)> purpleList = new List<(GameObject, bool)>();
 
         public GameObject[,] matrix;
 
@@ -91,6 +92,9 @@ namespace Lurkers.Environment.Vision
 
                     case TileColor.Blue:
                         blueList.Add(placed);
+                        break;
+                    case TileColor.Purple:
+                        purpleList.Add((placed, tile.raised));
                         break;
                 }
 
@@ -338,6 +342,30 @@ namespace Lurkers.Environment.Vision
                 foreach (var childTileMan in childrenTileMan)
                 {
                     childTileMan.manager.ActivateBlack(true);
+                }
+            }
+        }
+        public void ActivatePurple(bool isChild = false)
+        {
+            List<(GameObject tile, bool raised)> nextPurpleList = new List<(GameObject tile, bool raised)>();
+            foreach ((GameObject tile, bool raised) in purpleList)
+            {
+                ColorTile colorTile = tile.GetComponent<ColorTile>();
+                if (colorTile != null)
+                {
+                    if (raised)
+                    {
+                        StartCoroutine(colorTile.Mover(tile, "lower"));
+                        Debug.Log("Here2");
+                    }
+                    purpleList = nextPurpleList;
+                }
+                if (!isChild)
+                {
+                    foreach (var childTileMan in childrenTileMan)
+                    {
+                        childTileMan.manager.ActivatePurple(true);
+                    }
                 }
             }
         }
