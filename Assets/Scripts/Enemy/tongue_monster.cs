@@ -4,6 +4,7 @@ using Lurkers.Control;
 using Lurkers.Vision;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,7 +19,7 @@ public class tongue_monster : MonoBehaviour
     [SerializeField] private float chaseSpeed = 5f;
     [SerializeField] private float attackTimer = 2f;
     [SerializeField] private float DefaultattackTimer = 2f;
-    List<Flavor> VulnerableFlavorComp; // 0.1 salty  + 0.1 bitter 
+    [SerializeField] Flavor VulnerableFlavorComp; 
 
 
     private GameObject player;
@@ -37,10 +38,10 @@ public class tongue_monster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        playerControl = GameObject.FindObjectOfType<PlayerController>();
         Debug.Log(player);
         agent = GetComponent<NavMeshAgent>();
-        playerControl = player.GetComponent<PlayerController>();
+        //playerControl = player.GetComponent<PlayerController>();
         Debug.Log(playerControl);
 
         // playerControl.flavorCombinations = new List<Flavor>();
@@ -52,11 +53,13 @@ public class tongue_monster : MonoBehaviour
         newFlavor.sour = 0.0f;
         newFlavor.sweet = 0.0f;
         flavors[0] = newFlavor;
+
+        Debug.Log(newFlavor);
         if (playerControl == null)
         {
             Debug.LogError("PlayerControl is not assigned!");
         }
-        playerControl.SetFlavor(flavors);
+        // playerControl.SetFlavor(flavors);
 
         
 
@@ -84,13 +87,15 @@ public class tongue_monster : MonoBehaviour
         }
 
 
-         // game object is enabled 
+        // game object is enabled 
 
-        if (Input.GetKeyDown(KeyCode.M) && num_of_encounter < 4) // to do when chemical concoction is thrown at it
+        //Input.GetKeyDown(KeyCode.M) &&
+        if (Input.GetKeyDown(KeyCode.L) && num_of_encounter < 4 && compareFlavorAttributes(flavors[0], VulnerableFlavorComp)) // to do when chemical concoction is thrown at it
         {
             // disables movement for 20 seconds 
             if (num_of_encounter == 0)
             {
+                
                 freezeTimer = 20f;
                 StartCoroutine(Freeze());
                 num_of_encounter++;
@@ -157,6 +162,18 @@ public class tongue_monster : MonoBehaviour
         gameObject.SetActive(false);
         yield return new WaitForSeconds(freezeTimer);
         gameObject.SetActive(true);
+    }
+
+    bool compareFlavorAttributes(Flavor flav1, Flavor flav2)
+    {
+        if (flav1.bitter != flav2.bitter 
+            && flav1.umami != flav2.umami
+            && flav1.sweet != flav2.sweet
+            && flav1.salty != flav2.salty
+            && flav1.sour != flav2.sour) {
+            return false; 
+        }
+        return true; 
     }
 
     void AttackTypeTimer()
