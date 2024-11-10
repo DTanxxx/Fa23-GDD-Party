@@ -47,7 +47,7 @@ public class RefillStation : MonoBehaviour
             {
                 flav.salty = UnityEngine.Random.Range(1, 20) * 5;
             }
-            else if (flav.umami == 0) 
+            else
             {
                 flav.umami = UnityEngine.Random.Range(1, 20) * 5;
             }
