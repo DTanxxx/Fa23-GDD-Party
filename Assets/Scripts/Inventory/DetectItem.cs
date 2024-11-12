@@ -18,6 +18,7 @@ namespace Lurkers.Inventory
                 {
                     item.PickUp();
                     inventorySystem.CloseGUI();
+
                 }
             }
         }
