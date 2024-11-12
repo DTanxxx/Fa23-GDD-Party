@@ -22,8 +22,8 @@ public class Door : MonoBehaviour
         }
         
         Flavor firstFlav = new Flavor();
-        firstFlav.bitter = 1f;
-        firstFlav.salty = 0.5f;
+        firstFlav.bitter = 100;
+        firstFlav.salty = 50;
         locks[0].setFlav(firstFlav);    
     }
 

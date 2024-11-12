@@ -9,6 +9,7 @@ public class RefillStation : MonoBehaviour
     [SerializeField] private int ingredientID;
     
     private Flavor flav;
+    [SerializeField] private GameObject flavors;
     private int[] ranges = new int[5];
 
 
@@ -29,7 +30,7 @@ public class RefillStation : MonoBehaviour
         flav.umami = UnityEngine.Random.Range(0, 20) * 5;
         ranges[4] = flav.umami;
 
-        if (ranges.Count(c =>c == 0) > 3) 
+        if (ranges.Count(c => c == 0) > 3) 
         {
             if (flav.sweet == 0) 
             {
@@ -52,7 +53,7 @@ public class RefillStation : MonoBehaviour
                 flav.umami = UnityEngine.Random.Range(1, 20) * 5;
             }
         }
-        
+        flavors.GetComponent<FlavorComps>().refills[ingredientID] = flav;
         Debug.Log("Refill Station " + ingredientID + " has a sweet level of " + flav.sweet);
         Debug.Log("Refill Station " + ingredientID + " has a bitter level of " + flav.bitter);
         Debug.Log("Refill Station " + ingredientID + " has a sour level of " + flav.sour);
@@ -68,38 +69,8 @@ public class RefillStation : MonoBehaviour
 
     
 
-    [CreateAssetMenu]
-    public class Flavor : ScriptableObject
-    {
-        [Range(0, 100)]
-        public int sweet;
-
-        [Range(0, 100)]
-        public int bitter;
-
-        [Range(0, 100)]
-        public int sour;
-
-        [Range(0, 100)]
-        public int salty;
-
-        [Range(0, 100)]
-        public int umami;
-    }
+    
 
 
-    public class Formula : MonoBehaviour
-    {
-        public static Flavor Combine(Flavor A, Flavor B)
-        {
-            Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
-            newFlavor.sweet = (A.sweet + B.sweet) / 2;
-            newFlavor.bitter = (A.bitter + B.bitter) / 2;
-            newFlavor.salty = (A.salty + B.salty) / 2;
-            newFlavor.sour = (A.sour + B.sour) / 2;
-            newFlavor.umami = (A.umami + B.umami) / 2;
-            return newFlavor;
-            
-        }
-    }
+    
 }
