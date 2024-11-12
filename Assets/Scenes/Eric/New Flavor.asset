@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: New Flavor
   m_EditorClassIdentifier: 
   sweet: 0
-  bitter: 0
+  bitter: 0.1
   sour: 0
-  salty: 0
+  salty: 0.1
   umami: 0

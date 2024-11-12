@@ -137,7 +137,7 @@ public class tongue_monster : MonoBehaviour
             //different attack types 
             if (attackType == 1)
             {
-                attackPattern1();
+                SalivaRainAttack();
                 AttackTypeTimer();
             }
 
@@ -188,10 +188,39 @@ public class tongue_monster : MonoBehaviour
         }
     }
 
+    public int minSalivaCount = 3;
+    public int maxSalivaCount = 5;
+    public GameObject salivaPrefab;
 
-    void attackPattern1 ()
+
+    void SalivaRainAttack ()
     {
+        int salivaCount = Random.Range(minSalivaCount, maxSalivaCount);
+
+        for (int i = 0; i < salivaCount; i++)
+        {
+            Vector3 spawnPosition = Vector3.zero;
+            bool validPosition = false;
+
+            while (!validPosition)
+            {
+
+                Vector2 randPosition = Random.insideUnitCircle;
+                spawnPosition = transform.position + new Vector3(randPosition.x, 0f, randPosition.y);
+
+                if (Physics.Raycast(spawnPosition, Vector3.down, out RaycastHit hitInfo, Mathf.Infinity))
+                {
+                    validPosition = true;
+                    spawnPosition = hitInfo.point;
+
+                }
+            }
+            Instantiate(salivaPrefab, spawnPosition, Quaternion.identity);
+            Destroy(salivaPrefab, 5f);
+        }
+
         Debug.Log("attack 1");
+
     }
 
     void attackPattern2()
