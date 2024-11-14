@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 namespace Lurkers.Inventory
 {
     [CreateAssetMenu(menuName = "Inventory Item Data")]
@@ -9,7 +9,13 @@ namespace Lurkers.Inventory
     {
         public string id;
         public string displayName;
+        public bool stackable = true;
         public Sprite icon;
         public GameObject prefab;
+
+        public virtual void ClickAction()
+        {
+            return;
+        }
     }
 }

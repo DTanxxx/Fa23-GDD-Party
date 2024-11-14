@@ -32,9 +32,15 @@ namespace Lurkers.Inventory
             return null;
         }
 
+        public InventoryItemData GetIndexInventory(int index)
+        {
+            return inventory[index];
+        }
+
         public void Add(ItemData referenceData)
         {
-            if (m_itemDictionary.TryGetValue(referenceData, out InventoryItemData value))
+            if (m_itemDictionary.TryGetValue(referenceData, out InventoryItemData value) &&
+                referenceData.stackable)
             {
                 value.AddtoStack();
             }
