@@ -47,11 +47,11 @@ public class tongue_monster : MonoBehaviour
         // playerControl.flavorCombinations = new List<Flavor>();
         //test flavor 0.1 salty + 0.1 bitter 
         Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
-        newFlavor.salty = 0.1f;
-        newFlavor.umami = 0.0f;
-        newFlavor.bitter = 0.1f;
-        newFlavor.sour = 0.0f;
-        newFlavor.sweet = 0.0f;
+        newFlavor.salty = 10;
+        newFlavor.umami = 0;
+        newFlavor.bitter = 10;
+        newFlavor.sour = 0;
+        newFlavor.sweet = 0;
         flavors[0] = newFlavor;
 
         Debug.Log(newFlavor);
