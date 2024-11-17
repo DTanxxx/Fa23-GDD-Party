@@ -103,12 +103,14 @@ public class Hotbar : MonoBehaviour{
             } 
             else 
             { 
+                //if empty:
                 hotbarSlot[i].sprite = emptySprite;
                 Color color = hotbarSlot[i].color;
                 color.a = 0f;
                 hotbarSlot[i].color = color;
 
             }
+            //Debug.Log("upd " + i + " " + hotbarSlot[i].sprite);
         }
     }
 }

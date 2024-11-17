@@ -36,6 +36,7 @@ namespace Lurkers.Inventory
             {
                 refFlav = Formula.Combine(refFlav, someFlask.getFlavor());
                 full = false;
+                icon = emptyFlask;
             }
         }
 

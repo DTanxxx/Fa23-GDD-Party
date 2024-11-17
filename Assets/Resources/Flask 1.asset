@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 
   displayName: 
   stackable: 0
-  icon: {fileID: 21300436, guid: 0bbb4973cb6e355408c55e6857cbc224, type: 3}
+  icon: {fileID: 21300008, guid: 0bbb4973cb6e355408c55e6857cbc224, type: 3}
   prefab: {fileID: 0}
   emptyFlask: {fileID: 21300000, guid: 0bbb4973cb6e355408c55e6857cbc224, type: 3}
   refFlav: {fileID: 11400000, guid: 78565908a0eb159428c530f9f7c1c6fe, type: 2}

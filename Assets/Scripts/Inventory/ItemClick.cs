@@ -37,12 +37,11 @@ public class ItemClick : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
 
             // Swap the inventory items
             int targetIndex = targetSlot.inventorySlotIndex;
-            //targetSlot.inventorySlotIndex = inventorySlotIndex;
-            //invSys.inventory[].data = 
-            //inventorySlotIndex = targetIndex;
 
             ItemData thisData = invSys.GetIndexInventory(inventorySlotIndex).data;
             ItemData targetData = invSys.GetIndexInventory(targetIndex).data;
+
+            
             if (thisData is Flask thisFlask &&
                 targetData is Flask targetFlask &&
                 thisFlask.full && targetFlask.full)
@@ -51,12 +50,17 @@ public class ItemClick : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
                 thisFlask.mergeFlask(targetFlask);
                 Debug.Log(thisFlask.getFlavor().bitter);
                 //temp
-                //image.sprite = thisFlask.GetEmpty();
-                targetSlot.image.sprite = thisFlask.GetEmpty();
-
-                //update invSys
-                //theHotbar.updateHotBar();
             }
+
+            //swap inventory index
+            invSys.SetIndexInventory(targetSlot.inventorySlotIndex, thisData);
+            invSys.SetIndexInventory(inventorySlotIndex, targetData);
+
+            //swap inherent index
+            targetSlot.inventorySlotIndex = inventorySlotIndex;
+            inventorySlotIndex = targetIndex;
+
+            theHotbar.updateHotBar();
         }
         transform.SetParent(endParent, false);
         transform.localPosition = Vector3.zero;
@@ -66,13 +70,5 @@ public class ItemClick : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
     public void OnDrag(PointerEventData eventData) 
     {
         transform.position = Input.mousePosition;
-    }
-
-    public void UpdateInvSys()
-    {
-        for (int i = 0; i < invSys.inventory.Count; i++) 
-        {
-
-        }
     }
 }

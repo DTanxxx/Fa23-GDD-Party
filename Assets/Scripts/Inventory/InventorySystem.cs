@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace Lurkers.Inventory
@@ -30,6 +31,15 @@ namespace Lurkers.Inventory
                 return value;
             }
             return null;
+        }
+
+        public void SetIndexInventory(int index, ItemData referenceData)
+        {
+            InventoryItemData tempData = Get(referenceData);
+            if (Get(referenceData) != null) 
+            {
+                inventory[index] = tempData;
+            }
         }
 
         public InventoryItemData GetIndexInventory(int index)
