@@ -170,7 +170,7 @@ namespace Lurkers.Control
             }
         }
 
-        // Method to set a new flavors
+        // Method to set a new flavors ((TO DO LATER --- ADD TO PLAYER INVENTORY))
         public void SetFlavor(Flavor[] newFlavors)
         {
             // Clear current flavor combinations

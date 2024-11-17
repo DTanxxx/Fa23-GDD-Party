@@ -4,6 +4,7 @@ using Lurkers.Control;
 using Lurkers.Vision;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,16 +19,18 @@ public class tongue_monster : MonoBehaviour
     [SerializeField] private float chaseSpeed = 5f;
     [SerializeField] private float attackTimer = 2f;
     [SerializeField] private float DefaultattackTimer = 2f;
-    [SerializeField] List<Flavor> VulnerableFlavorComp; // 0.1 sweet + 0.2 sour
+    [SerializeField] Flavor VulnerableFlavorComp; 
 
 
-    private GameObject player;  
+    private GameObject player;
+    private PlayerController playerControl;
     private bool isPlayerDead = false;
     private float freezeTimer = 0f;
     private int num_of_encounter = 0;
     private bool isDead = false;
     private bool cooldown = false;
-    private int attackType = 1; 
+    private int attackType = 1;
+    public Flavor[] flavors = new Flavor[2];
 
 
 
@@ -35,8 +38,31 @@ public class tongue_monster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        playerControl = GameObject.FindObjectOfType<PlayerController>();
+        Debug.Log(player);
         agent = GetComponent<NavMeshAgent>();
+        //playerControl = player.GetComponent<PlayerController>();
+        Debug.Log(playerControl);
+
+        // playerControl.flavorCombinations = new List<Flavor>();
+        //test flavor 0.1 salty + 0.1 bitter 
+        Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
+        newFlavor.salty = 0.1f;
+        newFlavor.umami = 0.0f;
+        newFlavor.bitter = 0.1f;
+        newFlavor.sour = 0.0f;
+        newFlavor.sweet = 0.0f;
+        flavors[0] = newFlavor;
+
+        Debug.Log(newFlavor);
+        if (playerControl == null)
+        {
+            Debug.LogError("PlayerControl is not assigned!");
+        }
+        // playerControl.SetFlavor(flavors);
+
+        
+
     }
 
     private void OnEnable()
@@ -52,18 +78,24 @@ public class tongue_monster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //react to flavor test
+        ReactToFlavor();
+
         if (isPlayerDead || isDead)
         {
             return;
         }
 
-         // game object is enabled 
 
-        if (Input.GetKeyDown(KeyCode.M) && num_of_encounter < 4) // to do when chemical concoction is thrown at it
+        // game object is enabled 
+
+        //Input.GetKeyDown(KeyCode.M) &&
+        if (Input.GetKeyDown(KeyCode.L) && num_of_encounter < 4 && compareFlavorAttributes(flavors[0], VulnerableFlavorComp)) // to do when chemical concoction is thrown at it
         {
             // disables movement for 20 seconds 
             if (num_of_encounter == 0)
             {
+                
                 freezeTimer = 20f;
                 StartCoroutine(Freeze());
                 num_of_encounter++;
@@ -105,7 +137,7 @@ public class tongue_monster : MonoBehaviour
             //different attack types 
             if (attackType == 1)
             {
-                attackPattern1();
+                SalivaRainAttack();
                 AttackTypeTimer();
             }
 
@@ -132,6 +164,18 @@ public class tongue_monster : MonoBehaviour
         gameObject.SetActive(true);
     }
 
+    bool compareFlavorAttributes(Flavor flav1, Flavor flav2)
+    {
+        if (flav1.bitter != flav2.bitter 
+            && flav1.umami != flav2.umami
+            && flav1.sweet != flav2.sweet
+            && flav1.salty != flav2.salty
+            && flav1.sour != flav2.sour) {
+            return false; 
+        }
+        return true; 
+    }
+
     void AttackTypeTimer()
     {
         cooldown = true; 
@@ -144,10 +188,39 @@ public class tongue_monster : MonoBehaviour
         }
     }
 
+    public int minSalivaCount = 3;
+    public int maxSalivaCount = 5;
+    public GameObject salivaPrefab;
 
-    void attackPattern1 ()
+
+    void SalivaRainAttack ()
     {
+        int salivaCount = Random.Range(minSalivaCount, maxSalivaCount);
+
+        for (int i = 0; i < salivaCount; i++)
+        {
+            Vector3 spawnPosition = Vector3.zero;
+            bool validPosition = false;
+
+            while (!validPosition)
+            {
+
+                Vector2 randPosition = Random.insideUnitCircle;
+                spawnPosition = transform.position + new Vector3(randPosition.x, 0f, randPosition.y);
+
+                if (Physics.Raycast(spawnPosition, Vector3.down, out RaycastHit hitInfo, Mathf.Infinity))
+                {
+                    validPosition = true;
+                    spawnPosition = hitInfo.point;
+
+                }
+            }
+            Instantiate(salivaPrefab, spawnPosition, Quaternion.identity);
+            Destroy(salivaPrefab, 5f);
+        }
+
         Debug.Log("attack 1");
+
     }
 
     void attackPattern2()
@@ -177,17 +250,16 @@ public class tongue_monster : MonoBehaviour
 
     /*public void ReactToFlavor()
     {
-        if (PlayerController.flavorCombinations != null) // checks if null player flavors
+        if (playerControl != null && playerControl.flavorCombinations != null)
         {
-            Flavor playerFlavor = player.currentFlavor;
-
-            // Example of reacting to sweetness
-            if (PlayerController.flavorCombinations == VulnerableFlavorComp)
+            if (playerControl.flavorCombinations.Contains(flavors[0]) && Input.GetKeyDown(KeyCode.L))
             {
-                IncreaseAttraction("sweet");
+                Debug.Log("Combination Flavor - Sweet: " + flavors[0].sweet);
+                Debug.Log("Combination Flavor - Bitter: " + flavors[0].sour);
+                Debug.Log("Combination Flavor - Bitter: " + flavors[0].bitter);
+                Debug.Log("Combination Flavor - Bitter: " + flavors[0].salty);
+                Debug.Log("Combination Flavor - Bitter: " + flavors[0].umami);
             }
-            
-
         }
     }*/
 
