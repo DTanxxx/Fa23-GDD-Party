@@ -248,7 +248,7 @@ public class tongue_monster : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    /*public void ReactToFlavor()
+    public void ReactToFlavor()
     {
         if (playerControl != null && playerControl.flavorCombinations != null)
         {
@@ -261,6 +261,5 @@ public class tongue_monster : MonoBehaviour
                 Debug.Log("Combination Flavor - Bitter: " + flavors[0].umami);
             }
         }
-    }*/
-
+    }
 }
