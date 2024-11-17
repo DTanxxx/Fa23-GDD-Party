@@ -5,20 +5,20 @@ using UnityEngine;
 [CreateAssetMenu]
 public class Flavor : ScriptableObject
 {
-    [Range(0f, 1f)]
-    public float sweet;
+    [Range(0, 100)]
+    public int sweet;
 
-    [Range(0f, 1f)]
-    public float bitter;
+    [Range(0, 100)]
+    public int bitter;
 
-    [Range(0f, 1f)]
-    public float sour;
+    [Range(0, 100)]
+    public int sour;
 
-    [Range(0f, 1f)]
-    public float salty;
+    [Range(0, 100)]
+    public int salty;
 
-    [Range(0f, 1f)]
-    public float umami;
+    [Range(0, 100)]
+    public int umami;
 
     public override bool Equals(object someFlav)
     {
