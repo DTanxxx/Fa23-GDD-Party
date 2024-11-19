@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e484e89ac117454292cb5099c71bfb4, type: 3}
+  m_Name: New Flavor
+  m_EditorClassIdentifier: 
+  sweet: 0
+  bitter: 0.1
+  sour: 0
+  salty: 0.1
+  umami: 0

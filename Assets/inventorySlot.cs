@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class InventorySlot : MonoBehaviour, IDropHandler 
 {
     [SerializeField] InventorySystem inventorySystem;
-    [SerializeField] int inventorySlotIndex;
    
     public void OnDrop(PointerEventData eventData)
     {

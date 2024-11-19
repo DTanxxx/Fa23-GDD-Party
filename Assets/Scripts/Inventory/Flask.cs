@@ -17,26 +17,36 @@ namespace Lurkers.Inventory
         public bool selected = false;
         public bool full = true;
 
-        public override void ClickAction()
+        public override Sprite GetIcon()
         {
-            base.ClickAction();
-            if (selected)
+            if (full)
             {
-                selected = false;
+                return base.GetIcon();
             }
-            else if (prefab.Equals(refFlav))
+            return emptyFlask;
+        }
+
+        public override void Interact(ItemData someItem)
+        {
+            base.Interact(someItem);
+            if (someItem is Flask targetFlask &&
+                full && targetFlask.full)
             {
-                selected = true;
+                Debug.Log("flask 2before " +  targetFlask.refFlav);
+                Debug.Log("flask 1before " +  refFlav);
+                mergeFlask(targetFlask);
+                Debug.Log("flask 1after " +  targetFlask.refFlav);
+                Debug.Log("flask 2after " +  refFlav);
             }
+
         }
 
         public void mergeFlask(Flask someFlask)
         {
             if (someFlask.full && full)
             {
-                refFlav = Formula.Combine(refFlav, someFlask.getFlavor());
+                someFlask.refFlav = Formula.Combine(refFlav, someFlask.getFlavor());
                 full = false;
-                icon = emptyFlask;
             }
         }
 

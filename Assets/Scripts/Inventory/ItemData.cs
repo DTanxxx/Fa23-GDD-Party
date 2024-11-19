@@ -13,9 +13,13 @@ namespace Lurkers.Inventory
         public Sprite icon;
         public GameObject prefab;
 
-        public virtual void ClickAction()
+        public virtual Sprite GetIcon()
         {
-            return;
+            return icon;
+        }
+        public virtual void Interact(ItemData someItem)
+        {
+            
         }
     }
 }

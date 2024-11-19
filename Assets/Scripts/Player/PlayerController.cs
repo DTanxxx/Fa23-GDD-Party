@@ -6,17 +6,17 @@ using UnityEngine.Rendering.Universal;
 using Lurkers.Event;
 using Lurkers.Environment.Vision;
 using Lurkers.Cam;
-using Lurkers.Environment.Vision.ColorTile;
 using Lurkers.Control.Level;
 using Lurkers.UI;
+using UnityEngine.UIElements;
 
 namespace Lurkers.Control
 {
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private int accFrames = 9;
-        [SerializeField] private int lookFrames = 2;
-        [SerializeField] private int frameDelay = 1;
+        [SerializeField] private int lookFrames = 3;
+        [SerializeField] private int frameDelay = -3;
         [SerializeField] private Animator animator = null;
         [SerializeField] private SpriteRenderer spriteRenderer = null;
         [SerializeField] private Collider myCollider = null;
@@ -30,6 +30,8 @@ namespace Lurkers.Control
         [SerializeField] private GameObject[] flashlightObj;
         [SerializeField] private GameObject echolocatorContainer = null;
 
+        public List<Flavor> flavorCombinations = new List<Flavor>();
+
         private int currFrames;
         private Vector3 dir;
         private int curFrameDelay;
@@ -40,6 +42,7 @@ namespace Lurkers.Control
         private float maxSpeed;
         private PlayerSprinter _playerSprinter;
         public bool inDialogue;
+        public int tileTriggerCounter = 0;
 
         public static Action onPlayerSlide;
         public static Action onPlayerEndSlide;
@@ -60,6 +63,16 @@ namespace Lurkers.Control
             }
 
             playerTransform = transform;
+
+            foreach (Flavor flavor in flavorCombinations)
+            {
+                // shows the total flavor combinations
+                Debug.Log("Combination Flavor - Sweet: " + flavor.sweet);
+                Debug.Log("Combination Flavor - Bitter: " + flavor.sour);
+                Debug.Log("Combination Flavor - Bitter: " + flavor.bitter);
+                Debug.Log("Combination Flavor - Bitter: " + flavor.salty);
+                Debug.Log("Combination Flavor - Bitter: " + flavor.umami);
+            }
         }
 
         private void OnEnable()
@@ -68,10 +81,7 @@ namespace Lurkers.Control
             LeverPullAnimationEvents.onBeginLeverCinematicSequence += FreezePlayer;
             ElevatorOpen.onPlayerEntrance += TransitionIntoLevel;
             CameraFollow.onCameraRestoreComplete += UnfreezePlayer;
-            ElevatorOpen.onElevatorClose += UnfreezePlayer;
             NextLevelTrigger.onBeginLevelTransition += FreezePlayer;
-            SecurityCameras.freezeOn += FreezePlayer;
-            SecurityCameras.freezeOff += UnfreezePlayer;
             ColorTile.onIncinerate += Incinerate;
             Dialogue.unactive += EquipEcholocator;
         }
@@ -82,10 +92,7 @@ namespace Lurkers.Control
             LeverPullAnimationEvents.onBeginLeverCinematicSequence -= FreezePlayer;
             ElevatorOpen.onPlayerEntrance -= TransitionIntoLevel;
             CameraFollow.onCameraRestoreComplete -= UnfreezePlayer;
-            ElevatorOpen.onElevatorClose -= UnfreezePlayer;
             NextLevelTrigger.onBeginLevelTransition -= FreezePlayer;
-            SecurityCameras.freezeOn -= FreezePlayer;
-            SecurityCameras.freezeOff -= UnfreezePlayer;
             ColorTile.onIncinerate -= Incinerate;
             Dialogue.unactive -= EquipEcholocator;
         }
@@ -119,7 +126,7 @@ namespace Lurkers.Control
                 currFrames = 0;
             }
 
-            if (curFrameDelay == frameDelay)
+            if (curFrameDelay - 5 == frameDelay)
             {
                 lastDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
                 curFrameDelay = 0;
@@ -163,6 +170,23 @@ namespace Lurkers.Control
             }
         }
 
+        // Method to set a new flavors ((TO DO LATER --- ADD TO PLAYER INVENTORY))
+        public void SetFlavor(Flavor[] newFlavors)
+        {
+            // Clear current flavor combinations
+            flavorCombinations.Clear();
+
+            // Add the new flavors
+            foreach (Flavor flavor in newFlavors)
+            {
+                flavorCombinations.Add(flavor);
+            }
+
+            Debug.Log("Total combinations:" + flavorCombinations.Count);
+
+        }
+
+
         public void SetRunSpeed(float speed)
         {
             maxSpeed = speed;
@@ -179,6 +203,7 @@ namespace Lurkers.Control
             }
 
             transform.position = beginTransform.position;
+            UnfreezePlayer();
         }
 
         /*private IEnumerator BeginTransitioning()
@@ -194,7 +219,7 @@ namespace Lurkers.Control
             }
         }*/
 
-        private void FreezePlayer()
+        public void FreezePlayer()
         {
             Debug.Log("Player frozen");
             myCollider.enabled = false;
@@ -207,13 +232,18 @@ namespace Lurkers.Control
             isFrozen = true;
         }
 
-        private void UnfreezePlayer()
+        public void UnfreezePlayer()
         {
             Debug.Log("Player unfrozen");
             myCollider.enabled = true;
             myRigidbody.velocity = Vector3.zero;
             animator.speed = animSpeed;
             isFrozen = false;
+        }
+
+        public void CheckPointRevive()
+        {
+            isDead = false;
         }
 
         private void TriggerDeathAnimation(DeathCause cause, Vector3 enemyPosition, GameObject enemy = null)

@@ -6,22 +6,22 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/BackupDemo/MainMenu.unity
+    path: Assets/Scenes/Vision/MainMenu.unity
     guid: 84f2dc2a25163544ea586aad468946d9
   - enabled: 1
-    path: Assets/Scenes/BackupDemo/Mod_1/Mod_1.unity
+    path: Assets/Scenes/Vision/Mod_1/Mod_1.unity
     guid: 6312a33cb0251f945ae650c08478679b
   - enabled: 1
-    path: Assets/Scenes/BackupDemo/Mod_2/Mod_2.unity
+    path: Assets/Scenes/Vision/Mod_2/Mod_2.unity
     guid: 93c39b78fd2ee9141a7462dbae29736d
   - enabled: 1
-    path: Assets/Scenes/BackupDemo/Mod_3/Mod_3.unity
+    path: Assets/Scenes/Vision/Mod_3/Mod_3.unity
     guid: 4a764ede241f67c438d3d221a99f3775
   - enabled: 1
-    path: Assets/Scenes/BackupDemo/Mod_4/Mod_4.unity
+    path: Assets/Scenes/Vision/Mod_4/Mod_4.unity
     guid: 1f7e0fafae446bc4eb8d726be6252e07
   - enabled: 1
-    path: Assets/Scenes/BackupDemo/Mod_5/Mod_5.unity
+    path: Assets/Scenes/Vision/Mod_5/Mod_5.unity
     guid: 4e80286b9a2ae9a4395cfb042f577e85
   - enabled: 1
     path: Assets/Scenes/Playtest/Audio/Vision_Auditory_Transition.unity

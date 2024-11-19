@@ -7,7 +7,6 @@ using UnityEngine.Rendering.Universal;
 
 namespace Lurkers.Control.Vision
 {
-
     public class LightDirection : MonoBehaviour
     {
         [SerializeField] private LayerMask weepingAngelLayer;
@@ -24,7 +23,9 @@ namespace Lurkers.Control.Vision
         private Vector3 currDirection;
         private Vector3 tempDirection;
         private float sphereCastRadius;
-        
+        private string currColor;
+        private Color defaultColor;
+
         private static bool firstTimeAfter = true;
         private static bool firstTime = true;
 
@@ -44,6 +45,9 @@ namespace Lurkers.Control.Vision
 
             sphereCastRadius = Mathf.Atan(lightComponent.pointLightOuterAngle / 2.0f * Mathf.Deg2Rad) * lightComponent.pointLightOuterRadius;
 
+            defaultColor = lightComponent.color;
+            currColor = "none";
+
             //clueGlow = GameObject.Find("EventSystem").GetComponent<ClueGlow>();
         }
 
@@ -55,6 +59,30 @@ namespace Lurkers.Control.Vision
         private void OnDisable()
         {
             BreakFlashlight.onBreakFlashlight -= BreakAnimate;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                lightComponent.color = defaultColor;
+                currColor = "none";
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                lightComponent.color = Color.red;
+                currColor = "red";
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                lightComponent.color = Color.green;
+                currColor = "green";
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                lightComponent.color = Color.blue;
+                currColor = "blue";
+            }
         }
 
         private void FixedUpdate()
@@ -136,6 +164,11 @@ namespace Lurkers.Control.Vision
         private void BreakAnimate()
         {
             animator.SetTrigger("Break");
+        }
+
+        public string GetColor()
+        {
+            return currColor;
         }
 
         public void ClueSpot()

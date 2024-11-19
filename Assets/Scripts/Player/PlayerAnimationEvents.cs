@@ -14,6 +14,7 @@ namespace Lurkers.Event
         public static Action onSkullCrush;
         public static Action onFacehug;
         public static Action onFlashlightBreak;
+        public static Action onFinishThrow;
 
         private WaitForSeconds waitForDeathUI;
 
@@ -57,6 +58,12 @@ namespace Lurkers.Event
         public void OnFlashlightBreak()
         {
             onFlashlightBreak?.Invoke();
+        }
+
+        // animation event
+        public void OnFinishThrow()
+        {
+            onFinishThrow?.Invoke();
         }
     }
 }

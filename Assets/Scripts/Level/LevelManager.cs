@@ -18,7 +18,19 @@ namespace Lurkers.Control.Level
         private float timer = 0f;
         private FMOD.Studio.EventInstance inst;
 
-        public static LevelManager Instance;
+        private static LevelManager instance;
+        public static LevelManager Instance
+        {
+            get
+            {
+                if (LevelManager.instance == null)
+                {
+                    LevelManager.instance = FindObjectOfType<LevelManager>();
+                }
+
+                return instance;
+            }
+        }
 
         // play main menu theme
         private void Awake()
@@ -27,19 +39,17 @@ namespace Lurkers.Control.Level
             {
                 inst = AudioManager.instance.Play(FMODEvents.instance.mainMenu, transform);
                 timer = ostDur;
+
+                // if no currLevel PlayerPref key, set continue button to inactive
+                if (!PlayerPrefs.HasKey("currLevel"))
+                {
+                    GameObject continueButton = GameObject.Find("Continue Button");
+                    continueButton.SetActive(false);
+                }
             }
             else
             {
                 mainMenu = false;
-            }
-
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
             }
         }
 
@@ -65,7 +75,20 @@ namespace Lurkers.Control.Level
         {
             AudioManager.instance.StopAll();
             mainMenu = false;
+            // adds "currLevel" PlayerPref key, sets to next level
+            PlayerPrefs.SetInt("currLevel", SceneManager.GetActiveScene().buildIndex + 1);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
+        // button event
+        public void Continue()
+        {
+            // checks for existence of "currLevel" key
+
+            // if non-existent (via corruption, deletion, etc.),
+            // goes to level 1 (this shouldn't be possible, but is kept as a contingency)
+            int sceneIdx = PlayerPrefs.HasKey("currLevel") ? PlayerPrefs.GetInt("currLevel") : 1;
+            SceneManager.LoadScene(sceneIdx);
         }
 
         // button event

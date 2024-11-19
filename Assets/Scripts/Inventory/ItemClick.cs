@@ -21,7 +21,6 @@ public class ItemClick : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
         {
             return;
         }
-        Debug.Log("down");
         endParent = transform.parent;
         transform.SetParent(transform.root.GetComponentInChildren<Canvas>().transform, false);
         transform.SetAsLastSibling();
@@ -41,16 +40,7 @@ public class ItemClick : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
             ItemData thisData = invSys.GetIndexInventory(inventorySlotIndex).data;
             ItemData targetData = invSys.GetIndexInventory(targetIndex).data;
 
-            
-            if (thisData is Flask thisFlask &&
-                targetData is Flask targetFlask &&
-                thisFlask.full && targetFlask.full)
-            {
-                Debug.Log("in " + thisFlask.getFlavor().bitter);
-                thisFlask.mergeFlask(targetFlask);
-                Debug.Log(thisFlask.getFlavor().bitter);
-                //temp
-            }
+            thisData.Interact(targetData);
 
             //swap inventory index
             invSys.SetIndexInventory(targetSlot.inventorySlotIndex, thisData);

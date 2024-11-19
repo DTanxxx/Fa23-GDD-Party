@@ -21,10 +21,21 @@ namespace Lurkers.Environment.Vision
         public static Action onFirstTimeClose;
 
         private static bool firstTimeClose = true;
+        private bool elevatorSequenceOver = true;
 
         private void Start()
         {
             nextLevelTrigger.SetActive(false);
+        }
+        
+        // added update loop to check and skip the beginning animation sequence. 
+        public void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space) && !elevatorSequenceOver)
+            {
+                SkipStartAnimation();
+                elevatorSequenceOver = true;
+            }
         }
 
         private void OnEnable()
@@ -59,6 +70,7 @@ namespace Lurkers.Environment.Vision
         // animation event
         public void ElevatorClose()
         {
+            elevatorSequenceOver = true;
             onElevatorClose?.Invoke();
 
             if (firstTimeClose)
@@ -78,6 +90,7 @@ namespace Lurkers.Environment.Vision
         private void BeginElevatorOpen()
         {
             // play animation
+            elevatorSequenceOver = false;
             animator.SetTrigger("Enter");
             AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, AudioManager.instance.playerTransform(), "Elevator", (float)Elevator.State.OPEN_CLOSE);
         }
@@ -93,6 +106,12 @@ namespace Lurkers.Environment.Vision
             AudioManager.instance.SetPlayOneShot(FMODEvents.instance.elevator, AudioManager.instance.playerTransform(), "Elevator", (float)Elevator.State.OPEN);
             animator.SetTrigger("Exit");
             opened = true;
+        }
+
+        private void SkipStartAnimation() {
+            animator.Play("Entry", -1, 1f);
+            ShowPlayer();
+            ElevatorClose();
         }
     }
 }
