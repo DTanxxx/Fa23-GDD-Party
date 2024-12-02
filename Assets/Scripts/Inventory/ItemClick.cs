@@ -5,18 +5,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Lurkers.Inventory;
+using Lurkers.Audio;
 
 public class ItemClick : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     [SerializeField] Hotbar theHotbar;
     [SerializeField] InventorySystem invSys;
     [SerializeField] int inventorySlotIndex;
-    public Image image;
     [HideInInspector] public Transform endParent;
     [SerializeField] Sprite emptySprite;
+    [SerializeField] AudioSource uiSound;
+    public Image image;
 
     public void OnBeginDrag(PointerEventData eventData) 
     {
+        Debug.Log("up");
         if (image.sprite == emptySprite)
         {
             return;
@@ -28,29 +31,32 @@ public class ItemClick : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
     }
     public void OnEndDrag(PointerEventData eventData) 
     {
-        Debug.Log("up");
         GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
-        if (targetObject != null && targetObject.GetComponent<ItemClick>() != null)
+        if (targetObject.GetComponent<ItemClick>() != null)
         {
             ItemClick targetSlot = targetObject.GetComponent<ItemClick>();
+            if (targetSlot.image.sprite != emptySprite &&
+                targetObject != null)
+            {
+                // Swap the inventory items
+                int targetIndex = targetSlot.inventorySlotIndex;
 
-            // Swap the inventory items
-            int targetIndex = targetSlot.inventorySlotIndex;
+                ItemData thisData = invSys.GetIndexInventory(inventorySlotIndex).data;
+                ItemData targetData = invSys.GetIndexInventory(targetIndex).data;
 
-            ItemData thisData = invSys.GetIndexInventory(inventorySlotIndex).data;
-            ItemData targetData = invSys.GetIndexInventory(targetIndex).data;
+                if (thisData.Interact(targetData))
+                {
+                    theHotbar.updateHotBar(inventorySlotIndex, invSys.GetIndexInventory(inventorySlotIndex).data);
+                    theHotbar.updateHotBar(targetIndex, invSys.GetIndexInventory(targetIndex).data);
+                    uiSound.PlayOneShot(thisData.itemSFX);
+                    //AudioManager.instance.PlayOneShot(thisData.itemSFX, transform);
 
-            thisData.Interact(targetData);
+                }
 
-            //swap inventory index
-            invSys.SetIndexInventory(targetSlot.inventorySlotIndex, thisData);
-            invSys.SetIndexInventory(inventorySlotIndex, targetData);
-
-            //swap inherent index
-            targetSlot.inventorySlotIndex = inventorySlotIndex;
-            inventorySlotIndex = targetIndex;
-
-            theHotbar.updateHotBar();
+                //swap inherent index
+                targetSlot.inventorySlotIndex = inventorySlotIndex;
+                inventorySlotIndex = targetIndex;
+            }
         }
         transform.SetParent(endParent, false);
         transform.localPosition = Vector3.zero;

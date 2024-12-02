@@ -4,6 +4,7 @@ using UnityEngine;
 using Lurkers.Objective;
 using UnityEditor;
 using Unity.VisualScripting;
+using Lurkers.Audio;
 
 
 namespace Lurkers.Inventory
@@ -12,33 +13,31 @@ namespace Lurkers.Inventory
     public class Flask : ItemData
     {
         //reference flavor
+        //do not set emptyFlask the same sprite as emptySprite
         [SerializeField] Sprite emptyFlask;
         [SerializeField] Flavor refFlav;
-        public bool selected = false;
         public bool full = true;
 
         public override Sprite GetIcon()
         {
             if (full)
             {
-                return base.GetIcon();
+                return icon;
             }
             return emptyFlask;
         }
 
-        public override void Interact(ItemData someItem)
+        public override bool Interact(ItemData someItem)
         {
-            base.Interact(someItem);
             if (someItem is Flask targetFlask &&
                 full && targetFlask.full)
             {
-                Debug.Log("flask 2before " +  targetFlask.refFlav);
                 Debug.Log("flask 1before " +  refFlav);
                 mergeFlask(targetFlask);
                 Debug.Log("flask 1after " +  targetFlask.refFlav);
-                Debug.Log("flask 2after " +  refFlav);
+                return true;
             }
-
+            return false;
         }
 
         public void mergeFlask(Flask someFlask)

@@ -12,14 +12,17 @@ namespace Lurkers.Inventory
         public bool stackable = true;
         public Sprite icon;
         public GameObject prefab;
+        public AudioClip itemSFX;
 
         public virtual Sprite GetIcon()
         {
             return icon;
         }
-        public virtual void Interact(ItemData someItem)
+
+        //returns true if there is an interaction
+        public virtual bool Interact(ItemData someItem)
         {
-            
+            return false;
         }
     }
 }

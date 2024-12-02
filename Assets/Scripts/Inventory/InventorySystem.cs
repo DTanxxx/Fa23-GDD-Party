@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -36,7 +37,7 @@ namespace Lurkers.Inventory
         public void SetIndexInventory(int index, ItemData referenceData)
         {
             InventoryItemData tempData = Get(referenceData);
-            if (Get(referenceData) != null) 
+            if (tempData != null) 
             {
                 inventory[index] = tempData;
             }
@@ -76,6 +77,16 @@ namespace Lurkers.Inventory
                 }
                 //hotBar.GetComponent<Hotbar>().removeItem(referenceData);
             }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                sb.Append("index " + i + " sprite: " + inventory[i].data.icon + "\n");
+            }
+            return sb.ToString();
         }
     }
 }
