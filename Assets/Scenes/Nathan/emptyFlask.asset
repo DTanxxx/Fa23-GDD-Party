@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   displayName: empty flask
+  stackable: 1
   icon: {fileID: 21300098, guid: 0bbb4973cb6e355408c55e6857cbc224, type: 3}
   prefab: {fileID: 8366760361559130508, guid: 35e22152cdeaa4b498997fe41a2d3080, type: 3}

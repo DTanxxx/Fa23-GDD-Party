@@ -9,6 +9,7 @@ public class Formula : MonoBehaviour
     {
         Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
 
+        //note this will concatenate with integers
         newFlavor.sweet = (A.sweet + B.sweet) / 2;
         newFlavor.bitter = (A.bitter + B.bitter) / 2;
         newFlavor.salty = (A.salty + B.salty) / 2;

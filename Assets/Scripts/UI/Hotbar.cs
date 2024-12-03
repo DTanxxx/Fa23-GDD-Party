@@ -1,39 +1,54 @@
-using System.Collections;
+using Lurkers.Inventory;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
-using Lurkers.Inventory;
-using System.Linq;
 
 
 public class Hotbar : MonoBehaviour
 {
-    private int hotbarslots = 4;
     [SerializeField] Image[] hotbarSlot = new Image[4];
-    [SerializeField] Sprite emptySprite;
     private string[] itemIDs = new string[4];
     private ItemData[] items = new ItemData[4];
-    [SerializeField] Sprite Plank; //will be set to placeholder sprite for now
-    [SerializeField] Sprite Rope;  //will be set to placeholder sprite for now
+    [SerializeField] Sprite emptySprite, Plank, Rope;
+    [SerializeField] ItemData flaskItem, flaskItem2, Other;  //will be set to placeholder sprite for now
+    [SerializeField] InventorySystem inventorySystem;
 
+    private void Start()
+    {
+        //populating inventory temporarily for testing
+        inventorySystem.Add(flaskItem);
+        inventorySystem.Add(flaskItem2);
+        inventorySystem.Add(Other);
+        //if not populated already: 
+        for (int i = 0; i < hotbarSlot.Length; i++)
+        {
+            if (i < inventorySystem.inventory.Count)
+            {
+                InventoryItemData item = inventorySystem.inventory[i];
+                hotbarSlot[i].sprite = item.data.GetIcon();
+                hotbarSlot[i].color = new Color(1, 1, 1, 1);
+            }
+            else
+            {
+                //if empty:
+                hotbarSlot[i].sprite = emptySprite;
+                Color color = hotbarSlot[i].color;
+                color.a = 0f;
+                hotbarSlot[i].color = color;
+
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.Alpha1))
-        // {
-        //     foreach(Image image in hotbarSlot)
-        //     {
-        //         Color c = image.color;
-        //         if (image.sprite == emptySprite)
-        //         {
-        //             image.sprite = Plank;
-        //             c.a = 100;
-        //             image.color = c;
-        //             break;
-        //         }
-        //     }
-        // }
+         if (Input.GetKeyDown(KeyCode.Alpha1))
+         {
+            Debug.Log(inventorySystem.ToString());
+         }
         // else if (Input.GetKeyDown(KeyCode.Alpha2))
         // {
         //     foreach(Image image in hotbarSlot)
@@ -136,7 +151,14 @@ public class Hotbar : MonoBehaviour
             {
                 return items[i];
             }
+            //Debug.Log("upd " + i + " " + hotbarSlot[i].sprite);
         }
         return null;
+    }
+    public void updateHotBar(int index, ItemData item)
+    {
+        //Debug.Log("putting" + item.GetIcon() + " into " + index);
+        hotbarSlot[index].sprite = item.GetIcon();
+        hotbarSlot[index].color = new Color(1, 1, 1, 1);
     }
 }

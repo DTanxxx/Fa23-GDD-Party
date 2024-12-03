@@ -1,0 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DillutionStation : MonoBehaviour
+{
+    [SerializeField] static float multiplier = 0.5f;
+
+    public static Flavor MultiplyComponents(Flavor originalFlavor)
+    {
+        return Station.MultiplyComponents(originalFlavor, multiplier);
+    }
+}
