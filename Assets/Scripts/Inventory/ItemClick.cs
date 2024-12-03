@@ -50,12 +50,11 @@ public class ItemClick : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
                     theHotbar.updateHotBar(targetIndex, invSys.GetIndexInventory(targetIndex).data);
                     uiSound.PlayOneShot(thisData.itemSFX);
                     //AudioManager.instance.PlayOneShot(thisData.itemSFX, transform);
-
                 }
 
                 //swap inherent index
-                targetSlot.inventorySlotIndex = inventorySlotIndex;
-                inventorySlotIndex = targetIndex;
+                //targetSlot.inventorySlotIndex = inventorySlotIndex;
+                //inventorySlotIndex = targetIndex;
             }
         }
         transform.SetParent(endParent, false);
