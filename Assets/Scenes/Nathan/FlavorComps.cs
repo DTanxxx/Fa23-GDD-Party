@@ -7,7 +7,7 @@ public class FlavorComps : MonoBehaviour
     public Flavor[] refills = new Flavor[5];
 
 
-    private Flavor newFlavorComp(Flavor[] flavs, int mixTimes) 
+    private Flavor NewFlavorComp(Flavor[] flavs, int mixTimes) 
     {
         int cnt = mixTimes;
         int index1 = UnityEngine.Random.Range(0, flavs.Length - 1);
