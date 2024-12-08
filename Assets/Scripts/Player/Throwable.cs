@@ -22,9 +22,14 @@ namespace Lurkers.Environment.Hearing
         private bool sol;
         private bool done;
         public float destroytime;
+        public GameObject Splash;
+        private bool thrown;
+        public GameObject PreSplash;
+       
         void Start()
         {
             PlayerAnimatorController = tempParent.GetComponent<Animator>();
+            
         }
 
         // Update is called once per frame
@@ -59,8 +64,14 @@ namespace Lurkers.Environment.Hearing
                     Solution.SetActive(false);
                 }
             }
-            
-            
+            if (thrown && !done && Solution.transform.position.y < 1)
+            {
+                Splash.SetActive(true);
+                Splash.transform.position = Solution.transform.position;
+                Debug.Log("Here");
+                
+            }
+
             if (isInHand && !sol)
             {
                 item.GetComponent<Rigidbody>().useGravity = false;
@@ -73,6 +84,7 @@ namespace Lurkers.Environment.Hearing
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     holdDownStartTime = Time.time;
+                    
                 }
                 if (Input.GetKeyUp(KeyCode.Space))
                 {
@@ -82,6 +94,8 @@ namespace Lurkers.Environment.Hearing
                     item.GetComponent<Rigidbody>().AddForce((Vector3.up + GetComponent<PlayerController>().GetDir()).normalized * CalculateHoldDownForce(holdDownTime));
                     item.GetComponent<Rigidbody>().drag = 1;
                     isInHand = false;
+                    
+
                 }
             }
             else
@@ -100,20 +114,28 @@ namespace Lurkers.Environment.Hearing
                 Solution.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
                 Solution.transform.position = transform.position;
                 //item.transform.SetParent(tempParent.transform);
-
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     holdDownStartTime = Time.time;
+                }
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    
+                    PreSplash.SetActive(true);
+                    PreSplash.transform.position = transform.position + GetComponent<PlayerController>().GetDir() * 13;
+                    //Debug.Log(GetComponent<PlayerController>().GetDir());
                 }
                 if (Input.GetKeyUp(KeyCode.Space))
                 {
                     float holdDownTime = Time.time - holdDownStartTime;
                     // item.GetComponent<Rigidbody>().AddForce(tempParent.transform.up.normalized * throwForce);
+                    PreSplash.SetActive(false);
                     PlayerAnimatorController.SetTrigger("Rock Throwing");
-                    Solution.GetComponent<Rigidbody>().AddForce((Vector3.up + GetComponent<PlayerController>().GetDir()).normalized * CalculateHoldDownForce(holdDownTime));
+                    Solution.GetComponent<Rigidbody>().AddForce((Vector3.up + GetComponent<PlayerController>().GetDir()).normalized * 1000);
+                    Debug.Log(CalculateHoldDownForce(holdDownTime));
                     Solution.GetComponent<Rigidbody>().drag = 1;
                     sol = false;
-                    
+                    thrown = true;
                     StartCoroutine(SelfDestruct());
                 }
             }
@@ -124,6 +146,7 @@ namespace Lurkers.Environment.Hearing
                 Solution.GetComponent<Rigidbody>().useGravity = true;
                 Solution.transform.position = objectPos;
                 Solution.GetComponent<Rigidbody>().detectCollisions = true;
+                
             }
             
         }
