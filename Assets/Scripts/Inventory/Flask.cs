@@ -32,9 +32,9 @@ namespace Lurkers.Inventory
             if (someItem is Flask targetFlask &&
                 full && targetFlask.full)
             {
-                Debug.Log("flask 1before " +  refFlav);
+                Debug.Log("flavor before: 1 flav" + refFlav + " 2 flav " + targetFlask.refFlav);
                 mergeFlask(targetFlask);
-                Debug.Log("flask 1after " +  targetFlask.refFlav);
+                Debug.Log("flavor after: 1 flav" + refFlav + " 2 flav " + targetFlask.refFlav);
                 return true;
             }
             return false;

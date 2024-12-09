@@ -8,6 +8,7 @@ public class IngredientSupply : MonoBehaviour
 {
     [SerializeField] public InventorySystem inventorySystem;
     [SerializeField] private Hotbar hb;
+
     [SerializeField] private ItemData filledFlask;
     
     private bool interacting = false;
@@ -50,17 +51,27 @@ public class IngredientSupply : MonoBehaviour
 
     private void fillFlask()
     {
-        ItemData emptyFlask = hb.getItem("1");
-        hb.removeItem(emptyFlask);
-        inventorySystem.Remove(emptyFlask);
-        hb.addItem(filledFlask);
-        inventorySystem.Add(filledFlask);
-        Flavor newflav = ScriptableObject.CreateInstance<Flavor>();
-        newflav.sweet = 1;
-        newflav.salty = 0;
-        newflav.bitter = 0;
-        newflav.sour = 0;
-        newflav.umami = 0;
+        for (int i = 0; i < inventorySystem.inventory.Count; i++)
+        {
+            ItemData item = inventorySystem.inventory[i].data;
+            if (item is Flask someFlask && !someFlask.full)
+            {
+                inventorySystem.Remove(someFlask);
+                inventorySystem.Add(filledFlask);
+                hb.updateHotBar(i, filledFlask);
+            }
+        }
+        //ItemData emptyFlask = hb.getItem("1");
+        //hb.removeItem(emptyFlask);
+        //inventorySystem.Remove(emptyFlask);
+        //hb.addItem(filledFlask);
+        //inventorySystem.Add(filledFlask);
+       // Flavor newflav = ScriptableObject.CreateInstance<Flavor>();
+       // newflav.sweet = 1;
+       // newflav.salty = 0;
+       // newflav.bitter = 0;
+       // newflav.sour = 0;
+       // newflav.umami = 0;
         
     }
 }

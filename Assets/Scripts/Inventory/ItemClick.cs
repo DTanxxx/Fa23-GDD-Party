@@ -11,7 +11,7 @@ public class ItemClick : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
 {
     [SerializeField] Hotbar theHotbar;
     [SerializeField] InventorySystem invSys;
-    [SerializeField] int inventorySlotIndex;
+    public int inventorySlotIndex;
     [HideInInspector] public Transform endParent;
     [SerializeField] Sprite emptySprite;
     [SerializeField] AudioSource uiSound;
@@ -46,13 +46,15 @@ public class ItemClick : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
 
                 if (thisData.Interact(targetData))
                 {
-                    theHotbar.updateHotBar(inventorySlotIndex, invSys.GetIndexInventory(inventorySlotIndex).data);
-                    theHotbar.updateHotBar(targetIndex, invSys.GetIndexInventory(targetIndex).data);
+                    theHotbar.updateHotBar(inventorySlotIndex, thisData);
+                    theHotbar.updateHotBar(targetIndex, targetData);
                     uiSound.PlayOneShot(thisData.itemSFX);
                     //AudioManager.instance.PlayOneShot(thisData.itemSFX, transform);
                 }
 
                 //swap inherent index
+                //invSys.SetIndexInventory(inventorySlotIndex, targetData); 
+                //invSys.SetIndexInventory(targetIndex, thisData); 
                 //targetSlot.inventorySlotIndex = inventorySlotIndex;
                 //inventorySlotIndex = targetIndex;
             }

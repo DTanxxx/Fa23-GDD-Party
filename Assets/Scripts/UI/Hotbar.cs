@@ -158,7 +158,14 @@ public class Hotbar : MonoBehaviour
     public void updateHotBar(int index, ItemData item)
     {
         //Debug.Log("putting" + item.GetIcon() + " into " + index);
-        hotbarSlot[index].sprite = item.GetIcon();
-        hotbarSlot[index].color = new Color(1, 1, 1, 1);
+        foreach (Image slot in hotbarSlot)
+        {
+            ItemClick slotItem = slot.GetComponent<ItemClick>();
+            if (slotItem.inventorySlotIndex == index)
+            {
+                hotbarSlot[index].sprite = item.GetIcon();
+                hotbarSlot[index].color = new Color(1, 1, 1, 1);
+            }
+        }
     }
 }
