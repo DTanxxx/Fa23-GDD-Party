@@ -695,7 +695,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89dd6c35f24006c4ca4ae6b545cfba96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventorySystem: {fileID: 0}
 --- !u!54 &4396690762092538032
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -815,10 +814,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94d14b5b7cab02d43b571b167d9364b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHold: 0
-  item: {fileID: 0}
+  destroyTime: 8
+  throwForce: 1000
   tempParent: {fileID: 296740382966683234}
-  isInHand: 0
 --- !u!1 &3440088088827517426
 GameObject:
   m_ObjectHideFlags: 0

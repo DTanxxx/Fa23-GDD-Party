@@ -45,6 +45,7 @@ namespace Lurkers.Control.Hearing
             agent.autoBraking = false;
             enemyActive = true;
             MoveTo(startPatrol.transform.position);
+            animator.SetTrigger("Walk");
             player = GameObject.FindGameObjectWithTag("Player");
         }
 

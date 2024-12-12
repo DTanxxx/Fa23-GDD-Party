@@ -6,16 +6,13 @@ using UnityEngine;
 namespace Lurkers.Inventory
 {
     public class DetectItem : MonoBehaviour
-    {
-        [SerializeField] InventorySystem inventorySystem;
-        
+    {        
         private ItemObject item;
 
         public static Action onLeaveItem;
         public static Action<Vector3> onApproachItem;
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
             if (item != null)
             {
@@ -44,7 +41,6 @@ namespace Lurkers.Inventory
                 onLeaveItem?.Invoke();
                 item = null;
             }
-
         }
     }
 }

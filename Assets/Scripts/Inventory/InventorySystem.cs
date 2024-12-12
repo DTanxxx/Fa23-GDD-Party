@@ -1,28 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using TMPro;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace Lurkers.Inventory
 {
     public class InventorySystem : MonoBehaviour
     {
-        [SerializeField] private GameObject hotBar;
+        [SerializeField] private int maxInventorySize = 4;
 
         private Dictionary<ItemData, InventoryItemData> m_itemDictionary;
+        private List<InventoryItemData> inventoryList;  // ordering here is important
 
-        public List<InventoryItemData> inventory { get; private set; }
-
-        public static InventorySystem instance;
-
+        public static InventorySystem Instance;
+        public static Action onUpdateInventory;
 
         private void Awake()
         {
-            instance = this;
-            inventory = new List<InventoryItemData>();
+            Instance = this;
+            inventoryList = new List<InventoryItemData>();
             m_itemDictionary = new Dictionary<ItemData, InventoryItemData>();
+        }
+
+        public void Refresh()
+        {
+            onUpdateInventory?.Invoke();
         }
 
         public InventoryItemData Get(ItemData referenceData)
@@ -39,29 +42,46 @@ namespace Lurkers.Inventory
             InventoryItemData tempData = Get(referenceData);
             if (tempData != null) 
             {
-                inventory[index] = tempData;
+                inventoryList[index] = tempData;
+                onUpdateInventory?.Invoke();
             }
         }
 
         public InventoryItemData GetIndexInventory(int index)
         {
-            return inventory[index];
+            if (inventoryList.Count <= index)
+            {
+                return null;
+            }
+            return inventoryList[index];
         }
 
-        public void Add(ItemData referenceData)
+        public List<InventoryItemData> GetInventoryList()
+        {
+            return inventoryList;
+        }
+
+        public bool Add(ItemData referenceData)
         {
             if (m_itemDictionary.TryGetValue(referenceData, out InventoryItemData value) &&
                 referenceData.stackable)
             {
                 value.AddtoStack();
+                onUpdateInventory?.Invoke();
+                return true;
             }
-            else
+            else if (inventoryList.Count < maxInventorySize)
             {
                 InventoryItemData newItem = new InventoryItemData(referenceData);
-                inventory.Add(newItem);
-                m_itemDictionary.Add(referenceData, newItem);
+                inventoryList.Add(newItem);
+                if (!m_itemDictionary.TryGetValue(referenceData, out InventoryItemData v))
+                {
+                    m_itemDictionary.Add(referenceData, newItem);
+                }
+                onUpdateInventory?.Invoke();
+                return true;
             }
-            //hotBar.GetComponent<Hotbar>().addItem(referenceData);
+            return false;
         }
 
         public void Remove(ItemData referenceData)
@@ -72,19 +92,20 @@ namespace Lurkers.Inventory
 
                 if (value.stackSize == 0)
                 {
-                    inventory.Remove(value);
+                    inventoryList.Remove(value);
                     m_itemDictionary.Remove(referenceData);
                 }
-                //hotBar.GetComponent<Hotbar>().removeItem(referenceData);
+
+                onUpdateInventory?.Invoke();
             }
         }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < inventory.Count; i++)
+            for (int i = 0; i < inventoryList.Count; i++)
             {
-                sb.Append("index " + i + " sprite: " + inventory[i].data.icon + "\n");
+                sb.Append("index " + i + " sprite: " + inventoryList[i].data.icon + "\n");
             }
             return sb.ToString();
         }

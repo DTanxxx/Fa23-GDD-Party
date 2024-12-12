@@ -1,24 +1,24 @@
+using Lurkers.Taste;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Formula : MonoBehaviour
+namespace Lurkers.Taste
 {
-    
-    public static Flavor Combine(Flavor A, Flavor B)
+    public class Formula
     {
-        Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
+        public static Flavor Combine(Flavor A, Flavor B)
+        {
+            Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
 
-        //note this will concatenate with integers
-        newFlavor.sweet = (A.sweet + B.sweet) / 2;
-        newFlavor.bitter = (A.bitter + B.bitter) / 2;
-        newFlavor.salty = (A.salty + B.salty) / 2;
-        newFlavor.sour = (A.sour + B.sour) / 2;
-        newFlavor.umami = (A.umami + B.umami) / 2;
+            //note this will concatenate with integers
+            newFlavor.sweet = (A.sweet + B.sweet) / 2;
+            newFlavor.bitter = (A.bitter + B.bitter) / 2;
+            newFlavor.salty = (A.salty + B.salty) / 2;
+            newFlavor.sour = (A.sour + B.sour) / 2;
+            newFlavor.umami = (A.umami + B.umami) / 2;
 
-        return newFlavor;
-
-        
+            return newFlavor;
+        }
     }
-    
 }

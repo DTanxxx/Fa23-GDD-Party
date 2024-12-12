@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40a3cee6d2cd63949b1640d305d1068f, type: 3}
+  m_Name: EmptyFlask
+  m_EditorClassIdentifier: 
+  id: empty_flask
+  displayName: Empty Flask
+  stackable: 0
+  icon: {fileID: 21300290, guid: 0bbb4973cb6e355408c55e6857cbc224, type: 3}
+  prefab: {fileID: 6796533069284626353, guid: 8b7d11fe542d74c4990d67157b527024, type: 3}
+  emptyFlaskSprite: {fileID: 21300026, guid: 0bbb4973cb6e355408c55e6857cbc224, type: 3}
+  refFlav: {fileID: 0}
+  full: 0

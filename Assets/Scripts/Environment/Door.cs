@@ -1,91 +1,90 @@
+using Lurkers.Taste;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+namespace Lurkers.Environment.Taste
 {
-    [SerializeField] private Lock[] locks;
-    [SerializeField] private Flavor reqFlavor;
-    private bool isOpen = false;
-    private bool isTouching = false;
-    //private const int numLocks = 4;
-
-
-    // Start is called before the first frame update
-    void Start()
+    public class Door : MonoBehaviour
     {
-        for (int i = 0; i < locks.Length; i++)
-        {
-            locks[i] = new Lock();
-        }
-        
-        Flavor firstFlav = new Flavor();
-        firstFlav.bitter = 100;
-        firstFlav.salty = 50;
-        locks[0].setFlav(firstFlav);    
-    }
+        [SerializeField] private Lock[] locks;
+        private bool isOpen = false;
+        private bool isTouching = false;
+        //private const int numLocks = 4;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (isTouching)
-        {
-            openLock(); 
-        }
 
-        isOpen = locks.All(x => !x.getLocked);
-        if (isOpen)
+        // Start is called before the first frame update
+        void Start()
         {
-            Debug.Log("door open" + isOpen);
-            GetComponent<SpriteRenderer>().enabled = !isOpen;
-        } 
-    }
-
-    void openLock()
-    {
-        //check which lock to dissolve
-        if (Input.anyKeyDown)
-        {
-            string someKey = Input.inputString;
-            int keyNum = Int32.Parse(someKey);
-            if (!string.IsNullOrEmpty(someKey)) 
+            for (int i = 0; i < locks.Length; i++)
             {
-                //fetch flavor store in someFlavor
-                Debug.Log("Key Pressed " + someKey);
+                locks[i] = new Lock();
+            }
 
+            Flavor firstFlav = new Flavor();
+            firstFlav.bitter = 100;
+            firstFlav.salty = 50;
+            locks[0].SetFlav(firstFlav);
+        }
 
-                for (int i = 0; i < locks.Length; i++)
+        // Update is called once per frame
+        void Update()
+        {
+            if (isTouching)
+            {
+                openLock();
+            }
+
+            isOpen = locks.All(x => !x.GetLocked());
+            if (isOpen)
+            {
+                Debug.Log("door open" + isOpen);
+                GetComponent<SpriteRenderer>().enabled = !isOpen;
+            }
+        }
+
+        void openLock()
+        {
+            //check which lock to dissolve
+            if (Input.anyKeyDown)
+            {
+                string someKey = Input.inputString;
+                int keyNum = Int32.Parse(someKey);
+                if (!string.IsNullOrEmpty(someKey))
                 {
-                    if (locks[i].getLocked && (keyNum <= locks.Length) && (keyNum >= 0))
+                    //fetch flavor store in someFlavor
+                    Debug.Log("Key Pressed " + someKey);
+
+
+                    for (int i = 0; i < locks.Length; i++)
                     {
-                        Debug.Log("correct input");
-                        locks[keyNum].Dissolve(reqFlavor);
+                        if (locks[i].GetLocked() && (keyNum <= locks.Length) && (keyNum >= 0))
+                        {
+                            Debug.Log("correct input");
+                            //locks[keyNum].Dissolve(reqFlavor);
+                        }
                     }
                 }
             }
         }
-    }
 
-    //collision check
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.tag);
-        if (other.CompareTag("Player"))
+        //collision check
+        private void OnTriggerEnter(Collider other)
         {
-            isTouching = true;
-            Debug.Log("in range");
+            if (other.CompareTag("Player"))
+            {
+                isTouching = true;
+            }
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        Debug.Log(other.tag);
-        if (other.CompareTag("Player"))
+        private void OnTriggerExit(Collider other)
         {
-            isTouching = false;
-            Debug.Log("out of range.");
+            if (other.CompareTag("Player"))
+            {
+                isTouching = false;
+            }
         }
     }
 }

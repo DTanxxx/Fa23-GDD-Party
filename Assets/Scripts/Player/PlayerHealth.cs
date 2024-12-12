@@ -67,7 +67,7 @@ namespace Lurkers.Control
                 if (onDeath != null)
                 {
                     isDead = true;
-                    onDeath?.Invoke(DeathCause.CTHULHU, other.transform.position, other.transform.parent.gameObject);
+                    onDeath?.Invoke(DeathCause.MOTHMAN, other.transform.position, other.transform.parent.gameObject);
                 }
             }
             else if (other.gameObject.layer == LayerMask.NameToLayer("MothMan"))

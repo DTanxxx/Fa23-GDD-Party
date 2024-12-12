@@ -1,42 +1,51 @@
+using Lurkers.Taste;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spillage : MonoBehaviour, ITastable
+namespace Lurkers.Environment.Taste
 {
-
-    [SerializeField] public Flavor spill;
-    private bool inside;
-
-    private void OnTriggerEnter(Collider collision)
+    public class Spillage : MonoBehaviour, ITastable
     {
-        GameObject player = collision.transform.parent.parent.gameObject; ;
 
-        if (!player.gameObject.CompareTag("Player"))
+        [SerializeField] public Flavor spill;
+        private bool inside;
+
+        private void OnTriggerEnter(Collider collision)
         {
-            return;
+            GameObject player = collision.transform.parent.parent.gameObject; ;
+
+            if (!player.gameObject.CompareTag("Player"))
+            {
+                return;
+            }
+            inside = true;
         }
-        inside = true;
-    }
-    private void OnTriggerExit(Collider collision)
-    {
-        GameObject player = collision.transform.parent.parent.gameObject;
+        private void OnTriggerExit(Collider collision)
+        {
+            GameObject player = collision.transform.parent.parent.gameObject;
 
-        if (!player.gameObject.CompareTag("Player"))
-        {
-            return;
+            if (!player.gameObject.CompareTag("Player"))
+            {
+                return;
+            }
+            inside = false;
         }
-        inside = false;
-    }
-    public void printComp()
-    {
-        Debug.Log($"Sweet: {spill.sweet}, Bitter: {spill.bitter}, Sour: {spill.sour}, Salty: {spill.salty}, Umami: {spill.umami}");
-    }
-    void Update()
-    {
-        if (Input.GetKey(KeyCode.Q) && inside)
+        public void printComp()
         {
-            printComp();
+            Debug.Log($"Sweet: {spill.sweet}, Bitter: {spill.bitter}, Sour: {spill.sour}, Salty: {spill.salty}, Umami: {spill.umami}");
+        }
+        void Update()
+        {
+            if (Input.GetKey(KeyCode.Q) && inside)
+            {
+                printComp();
+            }
+        }
+
+        public void SetSpill()
+        {
+
         }
     }
 }

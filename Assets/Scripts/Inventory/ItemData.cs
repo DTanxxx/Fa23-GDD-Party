@@ -12,7 +12,6 @@ namespace Lurkers.Inventory
         public bool stackable = true;
         public Sprite icon;
         public GameObject prefab;
-        public AudioClip itemSFX;
 
         public virtual Sprite GetIcon()
         {

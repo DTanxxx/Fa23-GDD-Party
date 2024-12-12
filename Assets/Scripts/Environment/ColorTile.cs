@@ -438,7 +438,7 @@ namespace Lurkers.Environment.Vision
             }
 
             go.transform.position = endPos;
-            offTile = false;
+            offTile = true;
             onTile = false;
 
             yield return null;

@@ -1,21 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
+using Lurkers.Taste;
 using UnityEngine;
-using Lurkers.Objective;
-using UnityEditor;
-using Unity.VisualScripting;
-using Lurkers.Audio;
-
 
 namespace Lurkers.Inventory
 {
-    [CreateAssetMenu(menuName = "Inventory/Flask Item", fileName = "New Flask Item")]
+    [CreateAssetMenu(menuName = "Flask")]
     public class Flask : ItemData
     {
-        //reference flavor
-        //do not set emptyFlask the same sprite as emptySprite
-        [SerializeField] Sprite emptyFlask;
+        [SerializeField] Sprite emptyFlaskSprite;
         [SerializeField] Flavor refFlav;
+
         public bool full = true;
 
         public override Sprite GetIcon()
@@ -24,7 +17,7 @@ namespace Lurkers.Inventory
             {
                 return icon;
             }
-            return emptyFlask;
+            return emptyFlaskSprite;
         }
 
         public override bool Interact(ItemData someItem)
@@ -32,36 +25,48 @@ namespace Lurkers.Inventory
             if (someItem is Flask targetFlask &&
                 full && targetFlask.full)
             {
-                Debug.Log("flask 1before " +  refFlav);
-                mergeFlask(targetFlask);
-                Debug.Log("flask 1after " +  targetFlask.refFlav);
+                MergeFlask(targetFlask);
                 return true;
             }
             return false;
         }
 
-        public void mergeFlask(Flask someFlask)
+        public void MergeFlask(Flask someFlask)
         {
             if (someFlask.full && full)
             {
-                someFlask.refFlav = Formula.Combine(refFlav, someFlask.getFlavor());
+                someFlask.refFlav = Formula.Combine(refFlav, someFlask.GetFlavor());
                 full = false;
             }
         }
 
-        public void setFlav(Flavor someFlav)
+        public void SetFlav(Flavor someFlav)
         {
-            refFlav = someFlav; 
+            refFlav = someFlav;
+            full = true;
         }
 
-        public Flavor getFlavor()
+        public Flavor GetFlavor()
         {
+            if (!full)
+            {
+                return null;
+            }
             return refFlav;
         }
 
-        public Sprite GetEmpty()
+        public Color GetColor()
         {
-            return emptyFlask;
+            Color c = Color.white;
+
+            if (full)
+            {
+                c.r = (refFlav.sweet + refFlav.bitter + refFlav.sour) / 300f;
+                c.g = (refFlav.bitter + refFlav.sour + refFlav.salty) / 300f;
+                c.b = (refFlav.sour + refFlav.salty + refFlav.umami) / 300f;
+            }
+            
+            return c;
         }
     }
 }

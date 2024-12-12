@@ -1,35 +1,33 @@
+using Lurkers.Taste;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class Lock : MonoBehaviour
+namespace Lurkers.Environment.Taste
 {
-    [SerializeField] private Flavor exactFlav; 
-    private bool isLocked = true;
-
-    void Start()
+    public class Lock : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private Flavor exactFlav;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+        private bool isLocked = true;
 
-    //attempts to openLock
-    public void Dissolve(Flavor flavor)
-    {
-        if (flavor.Equals(exactFlav))
+        //attempts to openLock
+        public void Dissolve(Flavor flavor)
         {
-            isLocked = false;
-            //Debug.Log("Dissolved");
-        } 
-    }
+            if (flavor.Equals(exactFlav))
+            {
+                isLocked = false;
+            }
+        }
 
-    public bool getLocked { get {  return isLocked; } }
-    public void setFlav(Flavor someFlav) { exactFlav = someFlav; }
-   
+        public bool GetLocked()
+        { 
+            return isLocked; 
+        }
+
+        public void SetFlav(Flavor someFlav) 
+        { 
+            exactFlav = someFlav; 
+        }
+    }
 }

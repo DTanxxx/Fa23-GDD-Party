@@ -8,7 +8,7 @@ using Lurkers.Environment.Vision;
 using Lurkers.Cam;
 using Lurkers.Control.Level;
 using Lurkers.UI;
-using UnityEngine.UIElements;
+using Lurkers.Taste;
 
 namespace Lurkers.Control
 {
@@ -259,8 +259,8 @@ namespace Lurkers.Control
                 case DeathCause.REDTILE:
                     animator.SetTrigger("RedDeath");
                     break;
-                case DeathCause.CTHULHU:
-                    animator.SetTrigger("Cthulhu");
+                case DeathCause.MOTHMAN:
+                    animator.SetTrigger("MothmanDeath");
                     break;
                 default:
                     Debug.LogError("UNKNOWN DEATH CAUSE");
@@ -296,7 +296,7 @@ namespace Lurkers.Control
                         spriteRenderer.flipX = true;
                     }
                     break;
-                case DeathCause.CTHULHU:
+                case DeathCause.MOTHMAN:
                     if (enemyPosition.x < transform.position.x)
                     {
                         // don't flip

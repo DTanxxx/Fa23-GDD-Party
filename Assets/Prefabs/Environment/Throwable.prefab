@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 939989889208331983}
   - component: {fileID: 2104090621754216553}
   - component: {fileID: 1558261090763474073}
-  - component: {fileID: 4190855673278091635}
+  - component: {fileID: 1144198975087045994}
   m_Layer: 0
   m_Name: Throwable
   m_TagString: Untagged
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 6796533069284626353}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -135.73914, y: 3.5, z: 115.16904}
+  m_LocalPosition: {x: -134.81654, y: 1, z: 132.49179}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -116,7 +116,7 @@ Rigidbody:
   m_GameObject: {fileID: 6796533069284626353}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 0.5
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -129,12 +129,12 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4190855673278091635
+--- !u!114 &1144198975087045994
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,10 +143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6796533069284626353}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94d14b5b7cab02d43b571b167d9364b0, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a46dd9ff5a3aa84a89822c002cb1664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHold: 1
-  item: {fileID: 6796533069284626353}
-  tempParent: {fileID: 0}
-  isInHand: 0
+  spill: {fileID: 0}

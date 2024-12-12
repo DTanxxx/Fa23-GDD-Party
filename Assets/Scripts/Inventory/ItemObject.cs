@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,19 +7,17 @@ namespace Lurkers.Inventory
 {
     public class ItemObject : MonoBehaviour
     {
-        [SerializeField] public InventorySystem inventorySystem;
-        [SerializeField] private ItemData referenceItem;
-        [SerializeField] private Hotbar hb;
+        [SerializeField] private ItemData pickupItem;
 
+        public static Action onPickup;
+        
         public void PickUp()
         {
-            inventorySystem.Add(referenceItem);
-            Destroy(gameObject);
-        }
-
-        public ItemData GetItemData()
-        {
-            return referenceItem;
+            if (InventorySystem.Instance.Add(Instantiate(pickupItem)))
+            {
+                onPickup?.Invoke();
+                Destroy(gameObject);
+            }
         }
     }
 }

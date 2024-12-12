@@ -1,164 +1,204 @@
+using Lurkers.Control;
+using Lurkers.Environment.Hearing;
+using Lurkers.Environment.Taste;
 using Lurkers.Inventory;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public class Hotbar : MonoBehaviour
+namespace Lurkers.UI
 {
-    [SerializeField] Image[] hotbarSlot = new Image[4];
-    private string[] itemIDs = new string[4];
-    private ItemData[] items = new ItemData[4];
-    [SerializeField] Sprite emptySprite, Plank, Rope;
-    [SerializeField] ItemData flaskItem, flaskItem2, Other;  //will be set to placeholder sprite for now
-    [SerializeField] InventorySystem inventorySystem;
-
-    private void Start()
+    public class Hotbar : MonoBehaviour
     {
-        //populating inventory temporarily for testing
-        inventorySystem.Add(flaskItem);
-        inventorySystem.Add(flaskItem2);
-        inventorySystem.Add(Other);
-        //if not populated already: 
-        for (int i = 0; i < hotbarSlot.Length; i++)
-        {
-            if (i < inventorySystem.inventory.Count)
-            {
-                InventoryItemData item = inventorySystem.inventory[i];
-                hotbarSlot[i].sprite = item.data.GetIcon();
-                hotbarSlot[i].color = new Color(1, 1, 1, 1);
-            }
-            else
-            {
-                //if empty:
-                hotbarSlot[i].sprite = emptySprite;
-                Color color = hotbarSlot[i].color;
-                color.a = 0f;
-                hotbarSlot[i].color = color;
+        [SerializeField] Image[] hotbarSlots = new Image[4];
+        [SerializeField] private float scaleRate = 5f;
+        [SerializeField] private float finalScaleSize = 1.5f;
+        [SerializeField] private AudioSource hotbarAudioSource;
+        [SerializeField] private AudioClip solutionMixSFX;
+        [SerializeField] private AudioClip flaskFillSFX;
+        [SerializeField] private AudioClip pickupSFX;
 
-            }
+        private Coroutine activeCoroutine;
+        private ModifierStation curModifierStation;
+        private PlayerThrow playerThrow;
+        
+        private void Start()
+        {
+            UpdateHotbar();
+            playerThrow = FindObjectOfType<PlayerThrow>();
         }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-         if (Input.GetKeyDown(KeyCode.Alpha1))
-         {
-            Debug.Log(inventorySystem.ToString());
-         }
-        // else if (Input.GetKeyDown(KeyCode.Alpha2))
-        // {
-        //     foreach(Image image in hotbarSlot)
-        //     {
-        //         Color c = image.color;
-        //         if (image.sprite == emptySprite)
-        //         {
-        //             image.sprite = Rope;
-        //             c.a = 100;
-        //             image.color = c;
-        //             break;
-        //         }
-        //     }
-        // }
-        // else if (Input.GetKeyDown(KeyCode.Alpha3))
-        // {
-        //     for (int i = 0; i < hotbarSlot.Length; i++)
-        //     {
-        //         Color c = hotbarSlot[i].color;
-        //         if (hotbarSlot[i].sprite == Plank)
-        //         {
-        //             hotbarSlot[i].sprite = emptySprite;
-        //             c.a = 0;
-        //             hotbarSlot[i].color = c;
-        //             break;
-        //         }
-        //     }
-        // }
-        // else if (Input.GetKeyDown(KeyCode.Alpha4))
-        // {
-        //     for (int i = 0; i < hotbarSlot.Length; i++)
-        //     {
-        //         Color c = hotbarSlot[i].color;
-        //         if (hotbarSlot[i].sprite == Rope)
-        //         {
-        //             hotbarSlot[i].sprite = emptySprite;
-        //             c.a = 0;
-        //             hotbarSlot[i].color = c;
-        //             break;
-        //         }
-        //     }
-        // }
-    }
-
-
-    public void addItem(ItemData itemToAdd)
-    {
-        int counter = 0;
-        foreach (Image image in hotbarSlot)
+        private void Update()
         {
-            Color c = image.color;
-            if (image.sprite == emptySprite)
+            InventoryItemData item;
+            // check for number input for throw
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                image.sprite = itemToAdd.icon;
-                itemIDs[counter] = itemToAdd.id;
-                items[counter] = itemToAdd;
-                c.a = 100;
-                image.color = c;
-                break;
+                item = InventorySystem.Instance.GetIndexInventory(0);
+                if (item != null)
+                {
+                    Flask flask = item.data as Flask;
+                    GameObject obj = Instantiate(flask.prefab);
+                    obj.GetComponent<Spillage>();
+                    playerThrow.Equip(obj);
+                    flask.full = false;
+                    InventorySystem.Instance.SetIndexInventory(0, flask);
+                }
             }
-            counter++;
-        }
-    }
-
-    public void removeItem(ItemData itemToDelete)
-    {
-        for (int i = 0; i < hotbarSlot.Length; i++)
-        {
-            Color c = hotbarSlot[i].color;
-            if (hotbarSlot[i].sprite == itemToDelete.icon)
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                hotbarSlot[i].sprite = emptySprite;
-                itemIDs[i] = null;
-                items[i] = itemToDelete;
-                c.a = 0;
-                hotbarSlot[i].color = c;
-                break;
+                item = InventorySystem.Instance.GetIndexInventory(1);
+                if (item != null)
+                {
+                    Flask flask = item.data as Flask;
+                    playerThrow.Equip(flask.prefab);
+                    flask.full = false;
+                    InventorySystem.Instance.SetIndexInventory(1, flask);
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                item = InventorySystem.Instance.GetIndexInventory(2);
+                if (item != null)
+                {
+                    Flask flask = item.data as Flask;
+                    playerThrow.Equip(flask.prefab);
+                    flask.full = false;
+                    InventorySystem.Instance.SetIndexInventory(2, flask);
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                item = InventorySystem.Instance.GetIndexInventory(3);
+                if (item != null)
+                {
+                    Flask flask = item.data as Flask;
+                    playerThrow.Equip(flask.prefab);
+                    flask.full = false;
+                    InventorySystem.Instance.SetIndexInventory(3, flask);
+                }
             }
         }
-    }
 
-    public bool hbContains(string itemID)
-    {
-        if (itemIDs.Contains(itemID))
+        private void OnEnable()
         {
-            return true;
+            InventorySystem.onUpdateInventory += UpdateHotbar;
+            ModifierStation.onBeginSelectHotbarItem += AnimateItems;
+            ModifierStation.onLeaveStation += LeaveModifierStation;
+            ItemClick.onClick += SelectHotbarItem;
+            ItemClick.onSolutionMix += PlaySolutionMixSFX;
+            RefillStation.onFillFlask += PlayFlaskFillSFX;
+            ItemObject.onPickup += PlayPickupSFX;
         }
-        else
+
+        private void OnDisable()
         {
-            return false;
+            InventorySystem.onUpdateInventory -= UpdateHotbar;
+            ModifierStation.onBeginSelectHotbarItem -= AnimateItems;
+            ModifierStation.onLeaveStation -= LeaveModifierStation;
+            ItemClick.onClick -= SelectHotbarItem;
+            ItemClick.onSolutionMix -= PlaySolutionMixSFX;
+            RefillStation.onFillFlask -= PlayFlaskFillSFX;
+            ItemObject.onPickup -= PlayPickupSFX;
         }
 
-    }
-
-    public ItemData getItem(string itemID)
-    {
-        for (int i = 0; i < hotbarSlot.Length; i++)
+        private void PlayPickupSFX()
         {
-            if (itemIDs[i] == itemID)
+            hotbarAudioSource.PlayOneShot(pickupSFX);
+        }
+
+        private void PlaySolutionMixSFX()
+        {
+            hotbarAudioSource.PlayOneShot(solutionMixSFX);
+        }
+
+        private void PlayFlaskFillSFX()
+        {
+            hotbarAudioSource.PlayOneShot(flaskFillSFX);
+        }
+
+        private void LeaveModifierStation()
+        {
+            curModifierStation = null;
+            if (activeCoroutine != null)
             {
-                return items[i];
+                StopCoroutine(activeCoroutine);
             }
-            //Debug.Log("upd " + i + " " + hotbarSlot[i].sprite);
+
+            for (int i = 0; i < hotbarSlots.Length; ++i)
+            {
+                hotbarSlots[i].transform.localScale = new Vector3(1f, 1f, 1f);
+            }
         }
-        return null;
-    }
-    public void updateHotBar(int index, ItemData item)
-    {
-        //Debug.Log("putting" + item.GetIcon() + " into " + index);
-        hotbarSlot[index].sprite = item.GetIcon();
-        hotbarSlot[index].color = new Color(1, 1, 1, 1);
+
+        private void SelectHotbarItem(ItemData item)
+        {
+            if (curModifierStation != null)
+            {
+                curModifierStation.MultiplyComponents((item as Flask).GetFlavor());
+            }
+        }
+
+        private void AnimateItems(ModifierStation station)
+        {
+            curModifierStation = station;
+
+            if (activeCoroutine != null)
+            {
+                StopCoroutine(activeCoroutine);
+            }
+            activeCoroutine = StartCoroutine(BounceCoroutine());
+        }
+
+        private IEnumerator BounceCoroutine()
+        {
+            float finalScale = finalScaleSize;
+            while (true)
+            {
+                float scale = hotbarSlots[0].transform.localScale.x;
+                float newScale = Mathf.Lerp(scale, finalScale, Time.deltaTime * scaleRate);
+                if ((scale / finalScaleSize) >= 0.9f)
+                {
+                    // scale down
+                    finalScale = 1f;
+                    newScale = Mathf.Lerp(scale, finalScale, Time.deltaTime * scaleRate);
+                }
+                else if ((1.0f / scale) >= 0.9f)
+                {
+                    // scale up
+                    finalScale = finalScaleSize;
+                    newScale = Mathf.Lerp(scale, finalScale, Time.deltaTime * scaleRate);
+                }
+
+                for (int i = 0; i < hotbarSlots.Length; ++i)
+                {
+                    hotbarSlots[i].transform.localScale = new Vector3(newScale, newScale, 1f);
+                }
+
+                yield return null;
+            }
+        }
+
+        private void UpdateHotbar()
+        {
+            for (int i = 0; i < hotbarSlots.Length; ++i)
+            {
+                if (i < InventorySystem.Instance.GetInventoryList().Count)
+                {
+                    InventoryItemData item = InventorySystem.Instance.GetIndexInventory(i);
+                    hotbarSlots[i].sprite = item.data.GetIcon();
+                    
+                    Flask flask = item.data as Flask;
+                    hotbarSlots[i].color = flask.GetColor();
+                }
+                else
+                {
+                    //if empty:
+                    Color color = hotbarSlots[i].color;
+                    color.a = 0f;
+                    hotbarSlots[i].color = color;
+                }
+            }
+        }
     }
 }

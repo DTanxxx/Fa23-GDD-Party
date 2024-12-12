@@ -4,12 +4,16 @@ using UnityEngine;
 using Lurkers.Environment.Vision;
 using UnityEngine.UI;
 using Lurkers.Inventory;
+using Lurkers.Environment.Taste;
+using Lurkers.Taste;
+using TMPro;
 
 namespace Lurkers.UI
 {
     public class InteractivePopup : MonoBehaviour
     {
         [SerializeField] private Vector2 spawnOffset = new Vector2(0, 100);
+        [SerializeField] private TextMeshProUGUI flavorBreakdownText;
 
         private Image popupImage;
         private Camera cam;
@@ -29,8 +33,14 @@ namespace Lurkers.UI
             Vault.onLeaveVault += HidePopup;
             DetectItem.onLeaveItem += HidePopup;
             DetectItem.onApproachItem += ShowNormalPopup;
-            IngredientSupply.onApproachStation += ShowNormalPopup;
-            IngredientSupply.onLeaveStation += HidePopup;
+            RefillStation.onApproachRefill += ShowNormalPopup;
+            RefillStation.onDisplayFlavorData += ShowFlavorBreakdown;
+            RefillStation.onLeaveRefill += HidePopup;
+            RefillStation.onLeaveRefill += HideFlavorBreakdown;
+            ModifierStation.onApproachStation += ShowNormalPopup;
+            ModifierStation.onLeaveStation += HidePopup;
+            ItemClick.onEnterHover += OnHoverHotbarItem;
+            ItemClick.onExitHover += HideFlavorBreakdown;
         }
 
         private void OnDisable()
@@ -41,8 +51,14 @@ namespace Lurkers.UI
             Vault.onLeaveVault -= HidePopup;
             DetectItem.onLeaveItem -= HidePopup;
             DetectItem.onApproachItem -= ShowNormalPopup;
-            IngredientSupply.onApproachStation -= ShowNormalPopup;
-            IngredientSupply.onLeaveStation -= HidePopup;
+            RefillStation.onApproachRefill -= ShowNormalPopup;
+            RefillStation.onDisplayFlavorData -= ShowFlavorBreakdown;
+            RefillStation.onLeaveRefill -= HidePopup;
+            RefillStation.onLeaveRefill -= HideFlavorBreakdown;
+            ModifierStation.onApproachStation -= ShowNormalPopup;
+            ModifierStation.onLeaveStation -= HidePopup;
+            ItemClick.onEnterHover -= OnHoverHotbarItem;
+            ItemClick.onExitHover -= HideFlavorBreakdown;
         }
 
         private void Update()
@@ -70,9 +86,33 @@ namespace Lurkers.UI
             transform.position = cam.WorldToScreenPoint(this.spawnPos) + new Vector3(spawnOffset.x, spawnOffset.y, 0);
         }
 
+        private void OnHoverHotbarItem(ItemData item)
+        {
+            if ((item as Flask).GetFlavor() != null)
+            {
+                ShowFlavorBreakdown((item as Flask).GetFlavor());
+            }
+        }
+
+        private void ShowFlavorBreakdown(Flavor flav)
+        {
+            if (flav == null)
+            {
+                return;
+            }
+
+            flavorBreakdownText.enabled = true;
+            flavorBreakdownText.text = $"Sweet: {flav.sweet}\nBitter: {flav.bitter}\nSour: {flav.sour}\nSalty: {flav.salty}\nUmami: {flav.umami}";
+        }
+
         private void HidePopup()
         {
             popupImage.enabled = false;
+        }
+
+        private void HideFlavorBreakdown()
+        {
+            flavorBreakdownText.enabled = false;
         }
     }
 }
